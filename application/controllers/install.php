@@ -374,7 +374,7 @@ class Install extends CI_Controller {
 					$source = APPPATH.'config/configtmp.tmp';
 					
 					$sp = fopen($source, 'rb');
-					$tp = fopen($target, 'wb');
+					$tp = fopen($target, 'w');
 					
 					$replaced = FALSE;
 					

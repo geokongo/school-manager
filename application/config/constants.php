@@ -36,5 +36,5 @@ define('FOPEN_WRITE_CREATE',					'ab');
 define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
-define('NAME', 'McFinley Geoffrey');
+define('NAME', 'Oliver School');
 /*g/constants.php */
