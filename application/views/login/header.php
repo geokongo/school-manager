@@ -1,18 +1,30 @@
-<?php echo doctype('html5'); ?>
+<!DOCTYPE html>
 <html>
-<head>
-<title><?php $title = "St. Elizabeth Kameji Academy"; echo $title; ?></title>
-
-
+<head><title></title>
 </head>
 <body>
-<div id="logo">
-St. Elizabeth Kameji Academy</div>
-<div id="color1"></div>
-<div id="container"> <!-- Main Container -->    
+<header>
 
-<div class="bubble"> <!-- Bubble -->
-<div class="rectangle"><h2>Login</h2></div>
-<div class="triangle-l"></div> <!-- Left triangle -->
-<div class="triangle-r"></div> <!-- Right triangle --> <!-- Rectangle with a title -->
-<div class="info">
+<?php 
+
+echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".base_url()."style/css.css\">";
+echo "<p>".NAME."</p>";
+
+/*
+echo "<ul><li class=\"button\"><a href=\"";
+echo base_url();
+echo "admin\"";
+echo ">Dashboard</a></li>";
+*/
+?>
+
+<!--
+<li class="button"><a href="<?php echo base_url(); ?>admissions/addnew">Admission</a></li>
+<li class="button"><a href="<?php echo base_url(); ?>admissions/view">Student Details</a></li>
+<li class="button"><a href="<?php echo base_url(); ?>admissions/update">Update Records</a></li>
+-->
+</ul>
+
+
+</header>
+

@@ -1,5 +1,10 @@
-<div id="footerl">
-<br><br>
-</div>
-</body>
-</html>
+
+<footer>
+
+<?php 
+
+echo "copyright(c) Darlington Inc.</p>";
+
+?>
+
+</footer>
