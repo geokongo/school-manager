@@ -8,7 +8,7 @@
 <?php 
 
 echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".base_url()."style/css.css\">";
-echo "<p>Sample School Academy.</p>";
+echo "<p>".NAME."</p>";
 
 echo "<ul><li class=\"button\"><a href=\"";
 echo base_url();
