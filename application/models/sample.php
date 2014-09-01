@@ -24,7 +24,8 @@ class sample extends CI_Model {
 						  password VARCHAR(100)
 						  ) ");
 		
-		$sql = $this->db->query(" INSERT INTO $tablename SET name = $info['username'], password = $info['password'] ");
+		$sql = $this->db->query(" INSERT INTO $tablename SET name = '{$info['username']}', password = '{$info['password']}' ");
+		
 		return $sql;
 		
 	
