@@ -19,9 +19,9 @@ class Install extends CI_Controller {
 			$password = $this->input->post('password');
 			$database = $this->input->post('database');
 		
-			$source = APPPATH."config/datbase.php";
+			$source = APPPATH."config/database.php";
 			
-			$target = APPPATH."config/maranda.php";
+			$target = APPPATH."config/database.tmp";
 			
 			//copy operation
 			$sp = fopen($source, 'r');
@@ -39,7 +39,7 @@ class Install extends CI_Controller {
 				if(stripos($line, $test) !== FALSE)
 				{
 					$host = 'myownhost';
-					$var = '= \''.$host.'\'';
+					$var = ' = \''.$host.'\';';
 
 					$line = $test.$var.PHP_EOL;
 					
@@ -52,7 +52,7 @@ class Install extends CI_Controller {
 				if(stripos($line, $test) !== FALSE)
 				{
 					$username = 'myownusername';
-					$var = '= \''.$username.'\'';
+					$var = ' = \''.$username.'\';';
 
 					$line = $test.$var.PHP_EOL;
 					
@@ -65,7 +65,7 @@ class Install extends CI_Controller {
 				if(stripos($line, $test) !== FALSE)
 				{
 					$password = 'myownpassword';
-					$var = '= \''.$password.'\'';
+					$var = ' = \''.$password.'\';';
 
 					$line = $test.$var.PHP_EOL;
 					
@@ -78,7 +78,7 @@ class Install extends CI_Controller {
 				if(stripos($line, $test) !== FALSE)
 				{
 					$database = 'myowndatabase';
-					$var = '= \''.$database.'\'';
+					$var = ' = \''.$database.'\';';
 
 					$line = $test.$var.PHP_EOL;
 					
@@ -91,7 +91,7 @@ class Install extends CI_Controller {
 				if(stripos($line, $test) !== FALSE)
 				{
 					$dbdriver = 'myowndbdriver';
-					$var = '= \''.$dbdriver.'\'';
+					$var = ' = \''.$dbdriver.'\';';
 
 					$line = $test.$var.PHP_EOL;
 					
