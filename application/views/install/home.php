@@ -38,6 +38,14 @@
 					  );
 	echo form_input($attrib4)."<p>";
 	
+	echo form_label('Dbdriver', 'dbdriver');
+	
+	$attrib4 = array( 'name' => 'dbdriver',
+					  'id' => 'dbdriver',
+					  'size' => 20
+					  );
+	echo form_input($attrib4)."<p>";
+	
 	echo form_submit('submit', 'Submit');
 	echo form_close();
 
