@@ -475,7 +475,7 @@ class Install extends CI_Controller {
 					unlink($source);
 					rename($target, $source);
 					
-					redirect('login');
+					redirect('login', 'refresh');
 					
 				}
 				
