@@ -1,4 +1,4 @@
 <?php 
-define('NAME',							'Oliver Geoffrey');
+define('NAME',							'Sample School Academy');
 
 
