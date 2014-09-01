@@ -129,10 +129,98 @@ class Install extends CI_Controller {
 				
 				if($res)
 				{
-				
-					echo "Database Testing successful. Thank you.<p>";
-				}
+					$source = APPPATH."config/autoload.php";
 			
+					$target = APPPATH."config/autoloadtmp.php";
+
+					//copy operation
+					$sp = fopen($source, 'r');
+					$tp = fopen($target, 'w');
+					
+					$replaced = FALSE;
+					$rewrite = FALSE;
+					
+					while( !feof($sp))
+					{
+						$line = fgets($sp);
+						
+						
+						$test = '$autoload[\'libraries\']';
+
+						if(stripos($line, $test) !== FALSE)
+						{
+						
+							preg_match_all("/'[^']+'/", $line, $array);
+							
+							$newline = '$autoload[\'libraries\'] = array(\'database\', \'';
+							$value_to_insert = 'database';
+							
+							for($x = 0; $x < count($array); $x++)
+							{
+								array_shift($array[$x]);
+								
+								
+								for($y = 0; $y < count($array[$x]); $y++)
+								{	
+									if(($y + 1) < count($array[$x]))
+									{
+										if($value_to_insert !== str_replace(array('\'', '"'), '', $array[$x][$y]))
+										{
+											$newline .= str_replace(array('\'', '"'), '', $array[$x][$y]).'\', \'';
+											
+										}
+									
+									}
+									else //to ensure the last value doesn't have a comma
+									{
+										if($value_to_insert !== str_replace(array('\'', '"'), '', $array[$x][$y]))
+										{
+											$newline .= str_replace(array('\'', '"'), '', $array[$x][$y]).'\'';
+											
+										}
+									
+									}
+									
+								}
+							
+							}
+							
+							$newline .= ' );'.PHP_EOL;
+							
+							$line = $newline;
+						
+						}
+						
+						fwrite($tp, $line);
+						
+					}
+					
+					fclose($sp);
+					fclose($tp);
+					
+					//will not overwrite the file if we didn't replace anything
+					/*
+					if($replaced)
+					{
+						//delete source file and rename target file
+						unlink($source);
+						rename($target, $source);
+						
+						$rewrite = TRUE;
+						
+					}
+					
+					else
+					{
+						unlink($target);
+					
+					}
+						
+					
+					}
+					*/
+				}
+				
 			}
 			
 		}
