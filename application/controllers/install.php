@@ -10,7 +10,7 @@ class Install extends CI_Controller {
 	
 	}
 
-	public function database()
+	public function configuration()
 	{
 		if($this->input->post('actionf') == 'database')
 		{
@@ -123,7 +123,7 @@ class Install extends CI_Controller {
 			
 			if($rewrite)
 			{
-				//$this->load->library('database');
+				$this->load->database();
 				$this->load->model('sample');
 				$res = $this->sample->test_db();
 				
@@ -137,8 +137,7 @@ class Install extends CI_Controller {
 					$sp = fopen($source, 'r');
 					$tp = fopen($target, 'w');
 					
-					$replaced = FALSE;
-					$rewrite = FALSE;
+					$replaced = TRUE;
 					
 					while( !feof($sp))
 					{
@@ -164,20 +163,42 @@ class Install extends CI_Controller {
 								{	
 									if(($y + 1) < count($array[$x]))
 									{
-										if($value_to_insert !== str_replace(array('\'', '"'), '', $array[$x][$y]))
+										
+
+										if($value_to_insert == str_ireplace(array('\'', '"'), '', $array[$x][$y]))
 										{
-											$newline .= str_replace(array('\'', '"'), '', $array[$x][$y]).'\', \'';
-											
+											$newline .= str_ireplace(array('\'', '"'), '', $array[$x][$y]).'\', \'';
+
+											$replaced = FALSE;
+
 										}
+										else
+										{
+											$newline .= str_ireplace(array('\'', '"'), '', $array[$x][$y]).'\', \'';
+
+										
+										}
+										
+
 									
 									}
 									else //to ensure the last value doesn't have a comma
 									{
-										if($value_to_insert !== str_replace(array('\'', '"'), '', $array[$x][$y]))
+										
+										
+										if($value_to_insert == str_ireplace(array('\'', '"'), '', $array[$x][$y]))
 										{
-											$newline .= str_replace(array('\'', '"'), '', $array[$x][$y]).'\'';
+											$newline .= str_ireplace(array('\'', '"'), '', $array[$x][$y]).'\'';
+											$replaced = FALSE;
 											
 										}
+										else
+										{
+											$newline .= str_ireplace(array('\'', '"'), '', $array[$x][$y]).'\'';
+										
+										}
+										
+										
 									
 									}
 									
@@ -199,27 +220,215 @@ class Install extends CI_Controller {
 					fclose($tp);
 					
 					//will not overwrite the file if we didn't replace anything
-					/*
+					
 					if($replaced)
 					{
 						//delete source file and rename target file
 						unlink($source);
 						rename($target, $source);
 						
-						$rewrite = TRUE;
+						$this->load->view('admin/header');
+						$this->load->view('install/step2');
+						$this->load->view('admin/footer');
 						
 					}
 					
 					else
 					{
 						unlink($target);
-					
-					}
 						
+						$this->load->view('admin/header');
+						$this->load->view('install/step2');
+						$this->load->view('admin/footer');
 					
 					}
-					*/
+					
+					
+					
+					
 				}
+				
+			}
+			
+		}
+		
+		if($this->input->post('actionf') == 'url')
+		{
+			$url = strtolower($this->input->post('url'));
+			$institution = mysql_real_escape_string(ucwords($this->input->post('institution')));
+			$folder = strtolower($this->input->post('folder'));
+			
+				$source = APPPATH."config/constants.php";
+				$target = APPPATH."config/constants.tmp";
+				
+				$sp = fopen($source, 'rb+');
+				$tp = fopen($target, 'w');
+				
+				$insert_pos = 0;
+				$exists = FALSE;
+				$newline = 'define(\'NAME\', \''.$institution.'\');'.PHP_EOL;
+				
+				$test1 = 'define(\'NAME\'';
+				$test2 = 'define(\'FOPEN_READ_WRITE_CREATE_STRICT\'';
+				
+			while( !feof($sp))
+			{
+				$line = fgets($sp);
+				
+				if(stripos($line, $test1) !== FALSE)
+				{
+					$line = $newline;
+					$exists = TRUE;
+				}
+				
+				if(stripos($line, $test2) !== FALSE)
+				{
+					$insert_pos = ftell($sp);
+					
+				}
+				else
+				{
+					$var = '';
+					$var .= $line;
+				
+				}
+				
+				fwrite($tp, $line);
+			
+			}
+			
+			if($exists)
+			{
+				fclose($sp);
+				fclose($tp);
+				
+				//delete source file and rename target file
+				unlink($source);
+				rename($target, $source);
+				
+			}
+			else
+			{
+				fseek($sp, $insert_pos);
+				fwrite($sp, $newline);
+			
+				fclose($sp);
+				fclose($tp);
+				
+				$exists = TRUE;
+			
+			}
+			
+			if($exists === TRUE)
+			{
+				$something_done = FALSE;
+				$source = FCPATH.'.htaccess';
+				$target = FCPATH.'htaccess.tmp';
+				
+				$sp = fopen($source, 'rb');
+				$tp = fopen($target, 'wb');
+				$replaced = FALSE;
+				
+				while( !feof($sp))
+				{
+					$line = fgets($sp);
+					
+					if(stripos($line, 'RewriteBase') !== FALSE)
+					{
+						$line = 'RewriteBase /'.$folder.'/'.PHP_EOL;
+						
+						$replaced = TRUE;
+					
+					}
+					
+					fwrite($tp, $line);
+					
+				}
+				
+				fclose($sp);
+				fclose($tp);
+				
+				//will not overwrite the file if we didn't replace anything
+				if($replaced)
+				{
+					//delete source file and rename target file
+					unlink($source);
+					rename($target, $source);
+					
+					$something_done = TRUE;
+					
+				}
+				
+				else
+				{
+					unlink($target);
+					
+					$something_done = TRUE;
+				}
+				
+				if($something_done == TRUE)
+				{
+					$something_done_again = FALSE;
+					
+					$source = APPPATH.'config/config.php';
+					$source = APPPATH.'config/configtmp.tmp';
+					
+					$sp = fopen($source, 'rb');
+					$tp = fopen($target, 'wb');
+					
+					$replaced = FALSE;
+					
+					$test = '$config[\'base_url\']';
+					$newline = '$config[\'base_url\']	= \''.$url.'\';'.PHP_EOL;
+
+					
+					while( !feof($sp))
+					{
+						$line = fgets($sp);
+						
+						if(stripos($line, $test) !== FALSE)
+						{
+							$line = $newline;
+							$replaced = TRUE;
+						}
+						
+						fwrite($tp, $line);
+					
+					}
+					
+					fclose($sp);
+					fclose($tp);
+					
+					//will not overwrite the file if we didn't replace anything
+					if($replaced === TRUE)
+					{
+						//delete source file and rename target file
+						unlink($source);
+						rename($target, $source);
+						
+						//$something_done_again = TRUE;
+						
+						echo "We changed the file";
+						
+					}
+					
+					else
+					{
+						unlink($target);
+						
+						//$something_done_again = TRUE;
+						echo "We did not change the file";
+					}
+					
+					//if$something_done_again == TRUE)
+					//{
+						//
+					
+					//}
+				
+				
+				}
+				
 				
 			}
 			

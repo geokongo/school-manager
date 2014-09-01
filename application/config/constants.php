@@ -1,6 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-include_once 'constant.php';
+//include_once 'constant.php';
 /*
 |--------------------------------------------------------------------------
 | File and Directory Modes
@@ -36,7 +36,5 @@ define('FOPEN_WRITE_CREATE',					'ab');
 define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
-
-
-/* End of file constants.php */
-/* Location: ./application/config/constants.php */
+define('NAME', 'McFinley Geoffrey');
+/*g/constants.php */

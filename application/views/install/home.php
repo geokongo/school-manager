@@ -4,7 +4,7 @@
 
 	echo "Cofigure the Database Settings below<p>";
 	
-	echo form_open('install/database');
+	echo form_open('install/configuration');
 	echo form_hidden('actionf', 'database');
 	echo form_label('Hostname', 'hostname');
 	
