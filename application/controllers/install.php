@@ -368,13 +368,12 @@ class Install extends CI_Controller {
 				
 				if($something_done == TRUE)
 				{
-					$something_done_again = FALSE;
 					
 					$source = APPPATH.'config/config.php';
-					$source = APPPATH.'config/configtmp.tmp';
+					$target = APPPATH.'config/config.tmp';
 					
 					$sp = fopen($source, 'rb');
-					$tp = fopen($target, 'w');
+					$tp = fopen($target, 'wb');
 					
 					$replaced = FALSE;
 					
@@ -384,15 +383,15 @@ class Install extends CI_Controller {
 					
 					while( !feof($sp))
 					{
-						$line = fgets($sp);
+						$value = fgets($sp);
 						
-						if(stripos($line, $test) !== FALSE)
+						if(stripos($value, $test) !== FALSE)
 						{
-							$line = $newline;
+							$value = $newline;
 							$replaced = TRUE;
 						}
 						
-						fwrite($tp, $line);
+						fwrite($tp, $value);
 					
 					}
 					
@@ -406,9 +405,9 @@ class Install extends CI_Controller {
 						unlink($source);
 						rename($target, $source);
 						
-						//$something_done_again = TRUE;
-						
-						echo "We changed the file";
+						$this->load->view('admin/header');
+						$this->load->view('install/account');
+						$this->load->view('admin/footer');
 						
 					}
 					
@@ -416,22 +415,36 @@ class Install extends CI_Controller {
 					{
 						unlink($target);
 						
-						//$something_done_again = TRUE;
-						echo "We did not change the file";
+						echo $test;
+						echo $newline;
 					}
-					
-					//if$something_done_again == TRUE)
-					//{
-						//
-					
-					//}
-				
 				
 				}
 				
-				
 			}
 			
+		}
+		
+		
+		if($this->input->post('actionf') == 'account')
+		{
+			$info['f_name'] = $this->input->post('f_name');
+			$info['l_name'] = $this->input->post('l_name');
+			$info['username'] = $this->input->post('username');
+			$info['password'] = $this->input->post('password');
+			
+			$this->load->model('sample');
+			$res = $this->sample->users($info);
+			
+			if($res)	//set default controler to login
+			{
+				
+			
+			}
+			
+			
+			
+		
 		}
 		
 	}
