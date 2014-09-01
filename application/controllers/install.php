@@ -436,8 +436,58 @@ class Install extends CI_Controller {
 			$this->load->model('sample');
 			$res = $this->sample->users($info);
 			
-			if($res)	//set default controler to login
+			if($res)	//set default controller to login
 			{
+				
+				$source = APPPATH.'config/routes.php';
+				$target = APPPATH.'config/routes.tmp';
+				
+				$sp = fopen($source, 'rb');
+				$tp = fopen($target, 'wb');
+				
+				$replaced = FALSE;
+				
+				$test = '$route[\'default_controller\']';
+				$newline = '$route[\'default_controller\'] = "login";'.PHP_EOL;
+
+				
+				while( !feof($sp))
+				{
+					$line = fgets($sp);
+					
+					if(stripos($line, $test) !== FALSE)
+					{
+						$line = $newline;
+						$replaced = TRUE;
+					}
+					
+					fwrite($tp, $line);
+				
+				}
+				
+				fclose($sp);
+				fclose($tp);
+				
+				//will not overwrite the file if we didn't replace anything
+				if($replaced === TRUE)
+				{
+					//delete source file and rename target file
+					unlink($source);
+					rename($target, $source);
+					
+					redirect('login');
+					
+				}
+				
+				else
+				{
+					unlink($target);
+					
+					echo $test;
+					echo $newline;
+					
+					echo "We never did anything";
+				}
 				
 			
 			}

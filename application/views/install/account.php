@@ -36,15 +36,15 @@
 					  'id' => 'password',
 					  'size' => 20
 					  );
-	echo form_input($attrib4)."<p>";
+	echo form_password($attrib4)."<p>";
 	
 	echo form_label('Confirm Password ', 'cpassword');
 	
 	$attrib5 = array( 'name' => 'cpassword',
 					  'id' => 'cpassword',
-					  'size' => 35
+					  'size' => 20
 					  );
-	echo form_input($attrib5)."<p>";
+	echo form_password($attrib5)."<p>";
 	
 	echo form_submit('submit', 'Submit');
 	echo form_close();
