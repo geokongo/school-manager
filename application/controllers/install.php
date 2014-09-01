@@ -18,16 +18,18 @@ class Install extends CI_Controller {
 			$username = $this->input->post('username');
 			$password = $this->input->post('password');
 			$database = $this->input->post('database');
+			$dbdriver = $this->input->post('dbdriver');
 		
 			$source = APPPATH."config/database.php";
 			
-			$target = APPPATH."config/database.tmp";
+			$target = APPPATH."config/databasetmp.php";
 			
 			//copy operation
 			$sp = fopen($source, 'r');
 			$tp = fopen($target, 'w');
 			
 			$replaced = FALSE;
+			$rewrite = FALSE;
 			
 			while( !feof($sp))
 			{
@@ -38,8 +40,7 @@ class Install extends CI_Controller {
 
 				if(stripos($line, $test) !== FALSE)
 				{
-					$host = 'myownhost';
-					$var = ' = \''.$host.'\';';
+					$var = ' = \''.$hostname.'\';';
 
 					$line = $test.$var.PHP_EOL;
 					
@@ -51,7 +52,6 @@ class Install extends CI_Controller {
 
 				if(stripos($line, $test) !== FALSE)
 				{
-					$username = 'myownusername';
 					$var = ' = \''.$username.'\';';
 
 					$line = $test.$var.PHP_EOL;
@@ -64,7 +64,6 @@ class Install extends CI_Controller {
 
 				if(stripos($line, $test) !== FALSE)
 				{
-					$password = 'myownpassword';
 					$var = ' = \''.$password.'\';';
 
 					$line = $test.$var.PHP_EOL;
@@ -77,7 +76,6 @@ class Install extends CI_Controller {
 
 				if(stripos($line, $test) !== FALSE)
 				{
-					$database = 'myowndatabase';
 					$var = ' = \''.$database.'\';';
 
 					$line = $test.$var.PHP_EOL;
@@ -90,7 +88,6 @@ class Install extends CI_Controller {
 
 				if(stripos($line, $test) !== FALSE)
 				{
-					$dbdriver = 'myowndbdriver';
 					$var = ' = \''.$dbdriver.'\';';
 
 					$line = $test.$var.PHP_EOL;
@@ -114,6 +111,8 @@ class Install extends CI_Controller {
 				unlink($source);
 				rename($target, $source);
 				
+				$rewrite = TRUE;
+				
 			}
 			
 			else
@@ -122,7 +121,19 @@ class Install extends CI_Controller {
 			
 			}
 			
+			if($rewrite)
+			{
+				//$this->load->library('database');
+				$this->load->model('sample');
+				$res = $this->sample->test_db();
+				
+				if($res)
+				{
+				
+					echo "Database Testing successful. Thank you.<p>";
+				}
 			
+			}
 			
 		}
 		
