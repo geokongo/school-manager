@@ -36,22 +36,7 @@
  *from the addnew control panel 
  *This loops uniquely identify steps in the registrstion process and call the appropriate loop 
  */ 
-	public function json()
-	{
-		if($this->input->post('actionflag'))
-		{
-			echo $this->input->post('actionflag')."<p>";
-			echo $this->input->post('f_name')."<p>";
-			echo $this->input->post('m_name')."<p>";
-			echo $this->input->post('l_name')."<p>";
-		
-		}
-		else
-		{
-			echo "Nop.";
-		
-		}
-	}
+	
  
 	public function addnew() 
 	{

@@ -24,7 +24,8 @@ $(document).ready(function() {
 
 	});
 
-	$('a').click(function() {
+	$('li.button > a').click(function() {
+		$('#main').remove();
 		$('#loader').show();
 		
 
