@@ -10,7 +10,7 @@
 	
 	echo form_open('admissions/addnew');
 	
-	echo form_hidden('actionflag', 'step1');
+	echo form_hidden('actionflag', 'step1', 'id="actionflag"');
 	
 	echo form_label('Admission Number', 'adm');
 	

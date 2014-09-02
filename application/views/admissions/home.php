@@ -1,10 +1,24 @@
 <div id="main">
 
+<script type="text/javascript">
+
+$('form').click(function() {
+	alert('Hey');
+	return false;
+
+});
+
+</script>
+
 <?php 
 echo "Yeah! You there, this is the Admissions Dashboard Homepage<p>";
 echo "As an Admissions Office, you can do any of the following.<p>";
 
 ?>
+
+<div id="banner"> </div>
+
+
 <ul>
 <style>
 ul li {

@@ -36,6 +36,23 @@
  *from the addnew control panel 
  *This loops uniquely identify steps in the registrstion process and call the appropriate loop 
  */ 
+	public function json()
+	{
+		if($this->input->post('actionflag'))
+		{
+			echo $this->input->post('actionflag')."<p>";
+			echo $this->input->post('f_name')."<p>";
+			echo $this->input->post('m_name')."<p>";
+			echo $this->input->post('l_name')."<p>";
+		
+		}
+		else
+		{
+			echo "Nop.";
+		
+		}
+	}
+ 
 	public function addnew() 
 	{
 	
@@ -67,47 +84,47 @@
 				$m_name = $_POST['m_name'];
 				$l_name = $_POST['l_name'];
 			
-			$this->load->model('admissions/admission');
-			$res = $this->admission->insert10($adm);
-		
-			if($res->num_rows() > 0 ) 
-			{
-				echo "This Admission number has already been used!";
-				exit;
-			}
-			else 
-			{
 				$this->load->model('admissions/admission');
-				$res2 = $this->admission->insert11($adm, $f_name, $m_name, $l_name);
+				$res = $this->admission->insert10($adm);
 			
-			}
-			if($res2) 
-			{
+				if($res->num_rows() > 0 ) 
+				{
+					echo "This Admission number has already been used!";
+					exit;
+				}
+				else 
+				{
+					$this->load->model('admissions/admission');
+					$res2 = $this->admission->insert11($adm, $f_name, $m_name, $l_name);
+				
+				}
+				if($res2) 
+				{
 
-				$this->session->set_userdata('admission', $adm);
-				$data['adm'] = $adm;
-				
-				$info['actionf'] = 'get_classes';
-				
-				$this->load->model('admissions/admission');
-				$classes = $this->admission->get($info);
-				
-					$class = $classes->row();
-					$info['class'] = $class->CLASS;
-					$info['actionf'] = 'get_streams';
+					$this->session->set_userdata('admission', $adm);
+					$data['adm'] = $adm;
+					
+					$info['actionf'] = 'get_classes';
 					
 					$this->load->model('admissions/admission');
-					$streams = $this->admission->get($info);
+					$classes = $this->admission->get($info);
 					
-				$data['classes'] = $classes;
-				$data['streams'] = $streams;
+						$class = $classes->row();
+						$info['class'] = $class->CLASS;
+						$info['actionf'] = 'get_streams';
+						
+						$this->load->model('admissions/admission');
+						$streams = $this->admission->get($info);
+						
+					$data['classes'] = $classes;
+					$data['streams'] = $streams;
+					
+					$this->load->view('admissions/header');
+					$this->load->view('admissions/addnew2', $data);
+					$this->load->view('admissions/footer');
 				
-				$this->load->view('admissions/header');
-				$this->load->view('admissions/addnew2', $data);
-				$this->load->view('admissions/footer');
-			
+				}
 			}
-		}
 		
 		
 			if($_POST['actionflag'] == 'step2')
