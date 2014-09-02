@@ -5,6 +5,7 @@
 echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".base_url()."style/css.css\">";
 ?>
 <script src="<?php echo base_url(); ?>scripts/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="<?php echo base_url(); ?>scripts/scripts.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
 <header>
@@ -36,16 +37,7 @@ $(document).ready(function() {
 		$('#main').html(empty);
 		$('#loader').show();
 		
-		$.ajax({
-			url: url,
-			type: 'POST',
-			data: form_data,
-			success: function(msg) {
-				$('#loader').hide();
-				$('#main').prepend(msg);
-			
-			}
-		});
+		step1(url, form_data);
 		
 		return false;
 	});
