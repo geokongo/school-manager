@@ -62,53 +62,107 @@
 */ 
 		if($_POST)
 		{
-			if($_POST['actionflag'] == 'step1') 
+			if($this->input->post('actionflag') == 'step1') 
 			{
-				$adm = $_POST['adm'];
-				$f_name = $_POST['f_name'];
-				$m_name = $_POST['m_name'];
-				$l_name = $_POST['l_name'];
-			
-				$this->load->model('admissions/admission');
-				$res = $this->admission->insert10($adm);
-			
-				if($res->num_rows() > 0 ) 
+				if($this->input->post('is_ajax'))
 				{
-					echo "This Admission number has already been used!";
-					exit;
-				}
-				else 
-				{
-					$this->load->model('admissions/admission');
-					$res2 = $this->admission->insert11($adm, $f_name, $m_name, $l_name);
+					$adm = $this->input->post('adm');
+					$f_name = strtoupper($this->input->post('f_name'));
+					$m_name = strtoupper($this->input->post('m_name'));
+					$l_name = strtoupper($this->input->post('l_name'));
 				
-				}
-				if($res2) 
-				{
-
-					$this->session->set_userdata('admission', $adm);
-					$data['adm'] = $adm;
-					
-					$info['actionf'] = 'get_classes';
-					
 					$this->load->model('admissions/admission');
-					$classes = $this->admission->get($info);
+					$res = $this->admission->insert10($adm);
+				
+					if($res->num_rows() > 0 ) 
+					{
+						echo "This Admission number has already been used!";
+						exit;
+					}
+					else 
+					{
+						$this->load->model('admissions/admission');
+						$res2 = $this->admission->insert11($adm, $f_name, $m_name, $l_name);
 					
-						$class = $classes->row();
-						$info['class'] = $class->CLASS;
-						$info['actionf'] = 'get_streams';
+					}
+					if($res2) 
+					{
+
+						$this->session->set_userdata('admission', $adm);
+						$data['adm'] = $adm;
+						
+						$info['actionf'] = 'get_classes';
 						
 						$this->load->model('admissions/admission');
-						$streams = $this->admission->get($info);
+						$classes = $this->admission->get($info);
 						
-					$data['classes'] = $classes;
-					$data['streams'] = $streams;
+							$class = $classes->row();
+							$info['class'] = $class->CLASS;
+							$info['actionf'] = 'get_streams';
+							
+							$this->load->model('admissions/admission');
+							$streams = $this->admission->get($info);
+							
+						$data['classes'] = $classes;
+						$data['streams'] = $streams;
+						
+						$this->load->view('admissions/addnew2', $data);
 					
-					$this->load->view('admissions/header');
-					$this->load->view('admissions/addnew2', $data);
-					$this->load->view('admissions/footer');
+					}
 				
 				}
+				
+				else
+				{
+				
+					$adm = $this->input->post('adm');
+					$f_name = strtoupper($this->input->post('f_name'));
+					$m_name = strtoupper($this->input->post('m_name'));
+					$l_name = strtoupper($this->input->post('l_name'));
+				
+					$this->load->model('admissions/admission');
+					$res = $this->admission->insert10($adm);
+				
+					if($res->num_rows() > 0 ) 
+					{
+						echo "This Admission number has already been used!";
+						exit;
+					}
+					else 
+					{
+						$this->load->model('admissions/admission');
+						$res2 = $this->admission->insert11($adm, $f_name, $m_name, $l_name);
+					
+					}
+					if($res2) 
+					{
+
+						$this->session->set_userdata('admission', $adm);
+						$data['adm'] = $adm;
+						
+						$info['actionf'] = 'get_classes';
+						
+						$this->load->model('admissions/admission');
+						$classes = $this->admission->get($info);
+						
+							$class = $classes->row();
+							$info['class'] = $class->CLASS;
+							$info['actionf'] = 'get_streams';
+							
+							$this->load->model('admissions/admission');
+							$streams = $this->admission->get($info);
+							
+						$data['classes'] = $classes;
+						$data['streams'] = $streams;
+						
+						$this->load->view('admissions/header');
+						$this->load->view('admissions/addnew2', $data);
+						$this->load->view('admissions/footer');
+					
+					}
+					
+				}
+				
 			}
 		
 		

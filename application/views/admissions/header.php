@@ -28,7 +28,8 @@ $(document).ready(function() {
 			f_name: $('#f_name').val(),
 			m_name: $('#m_name').val(),
 			l_name: $('#l_name').val(),
-			actionflag: $('input[type=hidden]').val()
+			actionflag: $('input[type=hidden]').val(),
+			is_ajax: 1
 		};
 		
 		var empty = '';
@@ -41,7 +42,7 @@ $(document).ready(function() {
 			data: form_data,
 			success: function(msg) {
 				$('#loader').hide();
-				$('#main').html(msg);
+				$('#main').prepend(msg);
 			
 			}
 		});
