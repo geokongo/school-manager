@@ -25,7 +25,7 @@ $(document).ready(function() {
 	});
 
 	$('a').click(function() {
-		alert('Hey');
+		$('#loader').show();
 		
 
 	});
@@ -94,3 +94,6 @@ echo ">Dashboard</a></li>";
 
 </header>
 
+<div id="loader">
+<div id="ajaxloader"></div>
+</div>
