@@ -9,21 +9,9 @@ echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".base_url()."style/css.
 <body>
 <header>
 
-
-
-
 <script type="text/javascript">
 $(document).ready(function() {
-
-	$('form').submit(function(e) {
-
-		alert($('#f_name').val());
-		
-		
-
-
-	});
-
+	
 	$('li.button > a').click(function() {
 		$('#main').remove();
 		$('#loader').show();
@@ -34,6 +22,7 @@ $(document).ready(function() {
 
 	$('#submit').click( function() {
 		
+		var url = $('form').attr('action');
 		var form_data = {
 			adm: $('#adm').val(),
 			f_name: $('#f_name').val(),
@@ -42,11 +31,16 @@ $(document).ready(function() {
 			actionflag: $('input[type=hidden]').val()
 		};
 		
+		var empty = '';
+		$('#main').html(empty);
+		$('#loader').show();
+		
 		$.ajax({
-			url: "<?php echo base_url('admissions/addnew'); ?>",
+			url: url,
 			type: 'POST',
 			data: form_data,
 			success: function(msg) {
+				$('#loader').hide();
 				$('#main').html(msg);
 			
 			}
