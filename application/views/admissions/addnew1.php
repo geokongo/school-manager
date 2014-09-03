@@ -1,28 +1,5 @@
-<section>
+<section id="content">
 
-<script type="text/javascript">
-$(document).ready(function() {
-	
-	$('#step1').click( function() {
-		
-		var url = $('form').attr('action');
-		var form_data = {
-			adm: $('#adm').val(),
-			f_name: $('#f_name').val(),
-			m_name: $('#m_name').val(),
-			l_name: $('#l_name').val(),
-			actionflag: $('input[type=hidden]').val(),
-			is_ajax: 1
-		};
-		
-		step1(url, form_data);
-		
-	});
-
-
-});
-
-</script>
 <?php
 if(isset($error))
 {

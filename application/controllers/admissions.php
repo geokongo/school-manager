@@ -64,6 +64,7 @@
 		{
 			if($this->input->post('actionflag') == 'step1') 
 			{
+			
 				if($this->input->post('is_ajax'))
 				{
 					$input['adm'] = $this->input->post('adm');
@@ -71,10 +72,9 @@
 					$input['f_name'] = strtoupper($this->input->post('f_name'));
 					$input['m_name'] = strtoupper($this->input->post('m_name'));
 					$input['l_name'] = strtoupper($this->input->post('l_name'));
-				
+					
 					$this->load->model('admissions/admission');
 					$res = $this->admission->insert($input);
-					
 					
 					if($res->num_rows() > 0 ) 
 					{
@@ -84,28 +84,31 @@
 					}
 					else 
 					{
+						$input['actionf'] = 'basic_insert';
 						$this->load->model('admissions/admission');
-						$res2 = $this->admission->insert11($adm, $f_name, $m_name, $l_name);
+						$res2 = $this->admission->insert($input);
 					
 					
 						if($res2) 
 						{
-
-							$this->session->set_userdata('admission', $adm);
-							$data['adm'] = $adm;
+							$sess['adm'] = $input['adm'];
+							$this->session->set_userdata('sess', $sess);
 							
-							$info['actionf'] = 'get_classes';
+							$input['action'] = 'get';
+							$input['actionf'] = 'get_classes';
 							
 							$this->load->model('admissions/admission');
-							$classes = $this->admission->get($info);
+							$classes = $this->admission->insert($input);
 							
 								$class = $classes->row();
-								$info['class'] = $class->CLASS;
-								$info['actionf'] = 'get_streams';
+								$input['class'] = $class->CLASS;
+								$input['action'] = 'get';
+								$input['actionf'] = 'get_streams';
 								
 								$this->load->model('admissions/admission');
-								$streams = $this->admission->get($info);
-								
+								$streams = $this->admission->insert($input);
+							
+							$data['success'] = 1;							
 							$data['classes'] = $classes;
 							$data['streams'] = $streams;
 							
@@ -119,14 +122,15 @@
 				
 				else
 				{
-				
-					$adm = $this->input->post('adm');
-					$f_name = strtoupper($this->input->post('f_name'));
-					$m_name = strtoupper($this->input->post('m_name'));
-					$l_name = strtoupper($this->input->post('l_name'));
-				
+					
+					$input['adm'] = $this->input->post('adm');
+					$input['actionf'] = 'step1';
+					$input['f_name'] = strtoupper($this->input->post('f_name'));
+					$input['m_name'] = strtoupper($this->input->post('m_name'));
+					$input['l_name'] = strtoupper($this->input->post('l_name'));
+					
 					$this->load->model('admissions/admission');
-					$res = $this->admission->insert10($adm);
+					$res = $this->admission->insert($input);
 				
 					if($res->num_rows() > 0 ) 
 					{
@@ -139,26 +143,26 @@
 					else 
 					{
 						$this->load->model('admissions/admission');
-						$res2 = $this->admission->insert11($adm, $f_name, $m_name, $l_name);
+						$res2 = $this->admission->insert($input);
 					
 					
 						if($res2) 
 						{
-
-							$this->session->set_userdata('admission', $adm);
-							$data['adm'] = $adm;
+							$sess['adm'] = $input['adm'];
+							$this->session->set_userdata('sess', $sess);
 							
-							$info['actionf'] = 'get_classes';
+							$input['action'] = 'get';
+							$input['actionf'] = 'get_classes';
 							
 							$this->load->model('admissions/admission');
-							$classes = $this->admission->get($info);
+							$classes = $this->admission->insert($input);
 							
 								$class = $classes->row();
-								$info['class'] = $class->CLASS;
-								$info['actionf'] = 'get_streams';
+								$input['class'] = $class->CLASS;
+								$input['actionf'] = 'get_streams';
 								
 								$this->load->model('admissions/admission');
-								$streams = $this->admission->get($info);
+								$streams = $this->admission->insert($input);
 								
 							$data['classes'] = $classes;
 							$data['streams'] = $streams;
@@ -178,6 +182,42 @@
 		
 			if($this->input->post('actionflag') == 'step2')
 			{	
+				if($this->input->post('actionf') == 'get_streams')
+				{
+					$input['class'] = $this->input->post('class');
+					$input['action'] = 'get';
+					$input['actionf'] = 'get_streams';
+					
+					$this->load->model('admissions/admission');
+					$res = $this->admission->insert($input);
+					
+					if($res)
+					{
+						if($res->num_rows() > 0)
+						{
+							$html = "<p>Streams: <select name=\"stream\" id=\"stream\">";
+							
+							foreach($res->result() as $row)
+							{
+								$html .= "<option value=\"{$row->STREAMS}\">{$row->STREAMS}</option>";
+							
+							}
+							
+							$html .= "</select></p>";
+							
+							echo $html;
+						
+						}
+						else
+						{
+							echo "This class has no registered streams";
+						
+						}
+						
+					}
+				
+				}
+				
 				if($this->input->post('is_ajax'))
 				{
 					$adm = $this->session->userdata('admission');

@@ -13,10 +13,48 @@ class admission extends CI_Model {
 		{
 			$tablename = "basic";
 			//we will first check if there is a similar admission number in database and advise as apropriate
-			$sql = $this->db->query("SELECT * FROM $tablename WHERE ADM = $adm ");
+			$sql = $this->db->query("SELECT * FROM $tablename WHERE ADM = {$input['adm']} ");
 			return $sql;
 			
 		}
+		
+		if($input['actionf'] == 'basic_insert')
+		{
+			$tablename = "basic";
+			//we will now proceed to enter dat into the database
+			
+			$sql = $this->db->query(" INSERT INTO $tablename (adm, f_name, m_name, l_name) 
+									  VALUES('{$input['adm']}', '{$input['f_name']}', '{$input['m_name']}', '{$input['l_name']}')");
+			return $sql;
+		
+		}
+		
+		if($input['action'] == 'get')
+		{
+			$bt = '_';
+			
+			if($input['actionf'] == 'get_classes')
+			{
+			
+				$sql = $this->db->get('classes');
+				
+				return $sql;
+			
+			}
+		
+			if($input['actionf'] == 'get_streams')
+			{
+				$streams = 'streams';
+				$tablename = $input['class'].$bt.$streams;
+				
+				$sql = $this->db->get($tablename);
+				
+				return $sql;
+		
+			}
+		
+		}
+		
 	}
 	
 	public function insert11($adm, $f_name, $m_name, $l_name) 

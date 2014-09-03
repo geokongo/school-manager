@@ -1,76 +1,23 @@
-<section>
-<script type="text/javascript">
-$(document).ready(function() {
+<section id="content">
+
+<?php
+	if(isset($error))
+	{
+		echo "<div id=\"error\" style=\" display: block; \">Error. Please try again.</div>";
+
+	}
 	
-	$('#step1').click( function() {
-		
-		var content = $('section').html();
-		var url = $('form').attr('action');
-		var form_data = {
-			adm: $('#adm').val(),
-			f_name: $('#f_name').val(),
-			m_name: $('#m_name').val(),
-			l_name: $('#l_name').val(),
-			actionflag: $('input[type=hidden]').val(),
-			is_ajax: 1
-		};
-		
-		
-		
-		step1(url, form_data, content);
-		
-	});
+	if(isset($success))
+	{
+		echo "<div id=\"success\" style=\" display: block; \">Success. You entered the basic details successfully.</div>";
+	
+	}
 
 
-});
-
-</script>
+?>
 
 <div id="main">
 <?php 
-
-?>
-	
-	<script src="<?php echo base_url(); ?>scripts/jquery-1.7.2.js"></script>
-	<script src="<?php echo base_url(); ?>scripts/jquery.ui.datepicker.js"></script>
-	<script src="<?php echo base_url(); ?>scripts/jquery.ui.core.js"></script>
-	<script src="<?php echo base_url(); ?>scripts/jquery.ui.widget.js"></script>
-	
-	<script>
-	$(function() {
-		$( "#datepicker" ).datepicker({
-			showOn: "button",
-			buttonImage: "<?php echo base_url(); ?>images/calendar.gif",
-			buttonImageOnly: true
-		});
-	});
-	</script>
-	
-	<script type="text/javascript">
-		
-		$('#caa').change( function() {
-		
-			var form_data = {
-				class1: $('#caa').val(),
-				actionf: 'get_streams'
-			};
-			
-			$.ajax({
-				url: "<?php echo base_url('admissions/get'); ?>",
-				type: 'POST',
-				data: form_data,
-				success: function(msg) {
-					$('#streams').html(msg);
-				
-				}
-			});
-		});
-	
-	</script>
-	
-	
-
-<?php
 	
 	echo "<img src=\"".base_url()."images/admission.png\" /><p>";
 	echo "<img src=\"".base_url()."images/underline.jpg\" /><p>";
@@ -78,7 +25,9 @@ $(document).ready(function() {
 	echo heading('Admission', 2);
 	echo heading('Step 2- Personal Details', 3);
 	
-	echo "<h4>You Admission Number is\t".$this->session->userdata('admission')."<p></h4>";
+	$output = $this->session->userdata('sess');
+	
+	echo "<h4>You Admission Number is\t".$output['adm']."<p></h4>";
 	
 	echo form_open('admissions/addnew');
 	echo form_hidden('actionflag', 'step2');
@@ -117,21 +66,6 @@ $(document).ready(function() {
 	?>
 	
 	<input type="text" id="doa" name="doa" size="30" value="<?php $formats = array('l, F jS, Y'); foreach($formats as $format) echo "" . date($format) . "\n";?>" required /><p>
-	
-	<?php
-	
-	/*
-	$this->load->helper('date');
-	$datestring = "Year: %Y Month: %m Day: %d - %h:%i %a";
-	$time = time();
-
-	echo mdate($datestring, $time);
-	
-	echo "<p>";
-	*/
-	?>
-	
-	
 	
 	
 	<?php
@@ -211,7 +145,7 @@ $(document).ready(function() {
 	echo form_input($attrib7);
 	echo "<p>";
 	
-	echo form_submit('submit', 'Save and Proceed');
+	echo form_submit('submit', 'Save and Proceed', 'id=step2');
 	
 	echo form_close();
 	

@@ -1,19 +1,20 @@
 function step1(url, form_data)
 {
-	var content = $('section').html();
-	var empty = '';
+	
 	$('div#main').remove();
 	$('#loader').show();
 	
 	$.ajax({
 		url: url,
 		type: 'POST',
-		data: form_data,
 		async: false,
+		data: form_data,
 		success: function(val) {
 			
 			$('#loader').hide();
 			$('section').html(val);
+			
+			return false;
 		
 		}
 		
@@ -21,4 +22,25 @@ function step1(url, form_data)
 
 }
 
-f
+function step2(url, form_data)
+{
+	$('div#main').remove();
+	$('#loader').show();
+	
+	$.ajax({
+		url: url,
+		type: 'POST',
+		async: false,
+		data: form_data,
+		success: function(val) {
+			
+			$('#loader').hide();
+			$('section').html(val);
+			
+			return false;
+		
+		}
+		
+	});
+
+}
