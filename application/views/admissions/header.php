@@ -13,7 +13,7 @@ echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".base_url()."style/css.
 <script type="text/javascript">
 $(document).ready( function() {
 	
-	$("document").on('click', 'li.button > a', function() {
+	$("body").on('click', 'li.button > a', function() {
 		$('#main').remove();
 		$('#loader').show();
 		
