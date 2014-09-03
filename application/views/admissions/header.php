@@ -21,27 +21,7 @@ $(document).ready(function() {
 	});
 
 
-	$('#step1').click( function() {
-		
-		var content = $('section').html();
-		var url = $('form').attr('action');
-		var form_data = {
-			adm: $('#adm').val(),
-			f_name: $('#f_name').val(),
-			m_name: $('#m_name').val(),
-			l_name: $('#l_name').val(),
-			actionflag: $('input[type=hidden]').val(),
-			is_ajax: 1
-		};
-		
-		var empty = '';
-		$('div#main').remove();
-		$('#loader').show();
-		
-		step1(url, form_data, content);
-		
-		return false;
-	});
+	
 });
 	
 </script>

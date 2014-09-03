@@ -7,12 +7,16 @@
  */
 class admission extends CI_Model {
 	
-	public function insert10($adm) 
+	public function insert($input) 
 	{
-		$tablename = "basic";
-		//we will first check if there is a similar admission number in database and advise as apropriate
-		$sql = $this->db->query("SELECT * FROM $tablename WHERE ADM = $adm ");
-		return $sql;
+		if($input['actionf'] == 'step1')
+		{
+			$tablename = "basic";
+			//we will first check if there is a similar admission number in database and advise as apropriate
+			$sql = $this->db->query("SELECT * FROM $tablename WHERE ADM = $adm ");
+			return $sql;
+			
+		}
 	}
 	
 	public function insert11($adm, $f_name, $m_name, $l_name) 

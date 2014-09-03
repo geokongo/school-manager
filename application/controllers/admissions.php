@@ -66,17 +66,20 @@
 			{
 				if($this->input->post('is_ajax'))
 				{
-					$adm = $this->input->post('adm');
-					$f_name = strtoupper($this->input->post('f_name'));
-					$m_name = strtoupper($this->input->post('m_name'));
-					$l_name = strtoupper($this->input->post('l_name'));
+					$input['adm'] = $this->input->post('adm');
+					$input['actionf'] = 'step1';
+					$input['f_name'] = strtoupper($this->input->post('f_name'));
+					$input['m_name'] = strtoupper($this->input->post('m_name'));
+					$input['l_name'] = strtoupper($this->input->post('l_name'));
 				
 					$this->load->model('admissions/admission');
-					$res = $this->admission->insert10($adm);
-				
+					$res = $this->admission->insert($input);
+					
+					
 					if($res->num_rows() > 0 ) 
 					{
-						$data['error'] = 'yes';
+						$data['error'] = 1;
+						
 						$this->load->view('admissions/addnew1', $data);
 					}
 					else 
@@ -84,32 +87,32 @@
 						$this->load->model('admissions/admission');
 						$res2 = $this->admission->insert11($adm, $f_name, $m_name, $l_name);
 					
-					}
-					if($res2) 
-					{
+					
+						if($res2) 
+						{
 
-						$this->session->set_userdata('admission', $adm);
-						$data['adm'] = $adm;
-						
-						$info['actionf'] = 'get_classes';
-						
-						$this->load->model('admissions/admission');
-						$classes = $this->admission->get($info);
-						
-							$class = $classes->row();
-							$info['class'] = $class->CLASS;
-							$info['actionf'] = 'get_streams';
+							$this->session->set_userdata('admission', $adm);
+							$data['adm'] = $adm;
+							
+							$info['actionf'] = 'get_classes';
 							
 							$this->load->model('admissions/admission');
-							$streams = $this->admission->get($info);
+							$classes = $this->admission->get($info);
 							
-						$data['classes'] = $classes;
-						$data['streams'] = $streams;
+								$class = $classes->row();
+								$info['class'] = $class->CLASS;
+								$info['actionf'] = 'get_streams';
+								
+								$this->load->model('admissions/admission');
+								$streams = $this->admission->get($info);
+								
+							$data['classes'] = $classes;
+							$data['streams'] = $streams;
+							
+							$this->load->view('admissions/addnew2', $data);
 						
-						$this->load->view('admissions/header');
-						$this->load->view('admissions/addnew2', $data);
-						$this->load->view('admissions/footer');
-					
+						}
+						
 					}
 					
 				}
@@ -127,40 +130,45 @@
 				
 					if($res->num_rows() > 0 ) 
 					{
-						echo "This Admission number has already been used!";
-						exit;
+						$data['error'] = 1;
+						
+						$this->load->view('admissions/header');
+						$this->load->view('admissions/addnew1',$data);
+						$this->load->view('admissions/footer');
 					}
 					else 
 					{
 						$this->load->model('admissions/admission');
 						$res2 = $this->admission->insert11($adm, $f_name, $m_name, $l_name);
 					
-					}
-					if($res2) 
-					{
+					
+						if($res2) 
+						{
 
-						$this->session->set_userdata('admission', $adm);
-						$data['adm'] = $adm;
-						
-						$info['actionf'] = 'get_classes';
-						
-						$this->load->model('admissions/admission');
-						$classes = $this->admission->get($info);
-						
-							$class = $classes->row();
-							$info['class'] = $class->CLASS;
-							$info['actionf'] = 'get_streams';
+							$this->session->set_userdata('admission', $adm);
+							$data['adm'] = $adm;
+							
+							$info['actionf'] = 'get_classes';
 							
 							$this->load->model('admissions/admission');
-							$streams = $this->admission->get($info);
+							$classes = $this->admission->get($info);
 							
-						$data['classes'] = $classes;
-						$data['streams'] = $streams;
+								$class = $classes->row();
+								$info['class'] = $class->CLASS;
+								$info['actionf'] = 'get_streams';
+								
+								$this->load->model('admissions/admission');
+								$streams = $this->admission->get($info);
+								
+							$data['classes'] = $classes;
+							$data['streams'] = $streams;
+							
+							$this->load->view('admissions/header');
+							$this->load->view('admissions/addnew2', $data);
+							$this->load->view('admissions/footer');
 						
-						$this->load->view('admissions/header');
-						$this->load->view('admissions/addnew2', $data);
-						$this->load->view('admissions/footer');
-					
+						}
+						
 					}
 					
 				}
@@ -168,25 +176,51 @@
 			}
 		
 		
-			if($_POST['actionflag'] == 'step2')
+			if($this->input->post('actionflag') == 'step2')
 			{	
-				$adm = $this->session->userdata('admission');
-				$dob = $_POST['dob'];
-				$pob = $_POST['pob'];
-				$doa = $_POST['doa'];
-				$caa = $_POST['caa'];
-				$county = $_POST['county'];
-				$gender = $_POST['gender'];
-				$nationality = $_POST['nationality'];
-					
-				$this->load->model('admissions/admission');
-				$res = $this->admission->insert12($adm, $dob, $pob, $doa, $caa, $county, $gender, $nationality);
-				
-				if($res) 
+				if($this->input->post('is_ajax'))
 				{
-					$this->load->view('admissions/header');
-					$this->load->view('admissions/addnew3');
-					$this->load->view('admissions/footer');
+					$adm = $this->session->userdata('admission');
+					$dob = $_POST['dob'];
+					$pob = $_POST['pob'];
+					$doa = $_POST['doa'];
+					$caa = $_POST['caa'];
+					$county = $_POST['county'];
+					$gender = $_POST['gender'];
+					$nationality = $_POST['nationality'];
+						
+					$this->load->model('admissions/admission');
+					$res = $this->admission->insert12($adm, $dob, $pob, $doa, $caa, $county, $gender, $nationality);
+					
+					if($res) 
+					{
+						$this->load->view('admissions/header');
+						$this->load->view('admissions/addnew3');
+						$this->load->view('admissions/footer');
+					}
+				
+				}
+				else
+				{
+					$adm = $this->session->userdata('admission');
+					$dob = $_POST['dob'];
+					$pob = $_POST['pob'];
+					$doa = $_POST['doa'];
+					$caa = $_POST['caa'];
+					$county = $_POST['county'];
+					$gender = $_POST['gender'];
+					$nationality = $_POST['nationality'];
+						
+					$this->load->model('admissions/admission');
+					$res = $this->admission->insert12($adm, $dob, $pob, $doa, $caa, $county, $gender, $nationality);
+					
+					if($res) 
+					{
+						$this->load->view('admissions/header');
+						$this->load->view('admissions/addnew3');
+						$this->load->view('admissions/footer');
+					}
+					
 				}
 			
 			}
