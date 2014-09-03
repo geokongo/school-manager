@@ -1,3 +1,21 @@
+
+<section id="content">
+
+<?php
+	if(isset($error))
+	{
+		echo "<div id=\"error\" style=\" display: block; \">{$error}</div>";
+
+	}
+	
+	if(isset($success))
+	{
+		echo "<div id=\"success\" style=\" display: block; \">{$success}</div>";
+	
+	}
+
+
+?>
 <div id="main">
 
 <?php 
@@ -91,3 +109,4 @@
 
 
 </div>
+</section>

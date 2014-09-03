@@ -626,51 +626,102 @@
 				
 			}
 			
-			if($_POST['actionflag'] == 'step2')
+			if($this->input->post('actionflag') == 'step2')
 			{
-				$adm = $this->session->userdata('admission');
-				$actionf = $_POST['actionflag'];
+				if($this->input->post('is_ajax'))
+				{
+					$output = $this->session->userdata('sess');
+					$input['adm'] = $output['adm'];
+					$input['actionf'] = $this->input->post('actionflag');
 
-				if(isset($_POST['pdetails']))
+					if($this->input->post('pdetails'))
+					{
+						$input['tablename'] = 'personal';
+						
+						$this->load->model('admissions/admission');
+						$data['personal'] = $this->admission->view($input);
+						
+						$input['tablename'] = 'contacts';
+						
+						$this->load->model('admissions/admission');
+						$data['contacts'] = $this->admission->view($input);
+						
+					}
+					
+					if($this->input->post('pgdetails'))
+					{
+						$input['tablename'] = 'father_details';
+						
+						$this->load->model('admissions/admission');
+						$data['father_details'] = $this->admission->view($input);
+						
+						$input['tablename'] = 'mother_details';
+						
+						$this->load->model('admissions/admission');
+						$data['mother_details'] = $this->admission->view($input);
+						
+						$input['tablename'] = 'guardian_details';
+						
+						$this->load->model('admissions/admission');
+						$data['guardian_details'] = $this->admission->view($input);
+					
+					}
+					
+					$data['success'] = "Success. Find the student info below.";
+					$this->load->view('admissions/view3', $data);
+				
+				}
+				else
 				{
-					$tablename = 'personal';
 					
-					$this->load->model('admissions/admission');
-					$data['personal'] = $this->admission->view($actionf, $tablename, $adm);
+					$output = $this->session->userdata('sess');
+					$input['adm'] = $output['adm'];
+					$input['actionf'] = $this->input->post('actionflag');
+
+					if($this->input->post('pdetails'))
+					{
+						$input['tablename'] = 'personal';
+						
+						$this->load->model('admissions/admission');
+						$data['personal'] = $this->admission->view($input);
+						
+						$input['tablename'] = 'contacts';
+						
+						$this->load->model('admissions/admission');
+						$data['contacts'] = $this->admission->view($input);
+						
+					}
 					
-					$tablename = 'contacts';
+					if($this->input->post('pgdetails'))
+					{
+						$input['tablename'] = 'father_details';
+						
+						$this->load->model('admissions/admission');
+						$data['father_details'] = $this->admission->view($input);
+						
+						$input['tablename'] = 'mother_details';
+						
+						$this->load->model('admissions/admission');
+						$data['mother_details'] = $this->admission->view($input);
+						
+						$input['tablename'] = 'guardian_details';
+						
+						$this->load->model('admissions/admission');
+						$data['guardian_details'] = $this->admission->view($input);
 					
-					$this->load->model('admissions/admission');
-					$data['contacts'] = $this->admission->view($actionf, $tablename, $adm);
+					}
 					
+					$data['success'] = "Success. Find the student info below.";
+					
+					$this->load->view('admissions/header');
+					$this->load->view('admissions/view3', $data);
+					$this->load->view('admissions/footer');
+				
 				}
 				
-				if(isset($_POST['pgdetails']))
-				{
-					$tablename = 'father_details';
-					
-					$this->load->model('admissions/admission');
-					$data['father_details'] = $this->admission->view($actionf, $tablename, $adm);
-					
-					$tablename = 'mother_details';
-					
-					$this->load->model('admissions/admission');
-					$data['mother_details'] = $this->admission->view($actionf, $tablename, $adm);
-					
-					$tablename = 'guardian_details';
-					
-					$this->load->model('admissions/admission');
-					$data['guardian_details'] = $this->admission->view($actionf, $tablename, $adm);
-				
-				}
-				
-				$this->load->view('admissions/header');
-				$this->load->view('admissions/view3', $data);
-				$this->load->view('admissions/footer');
-			
 			}
+			
 		}
-	
 	
 	}
 	

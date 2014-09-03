@@ -24,11 +24,12 @@
 	
 	echo heading('Student Details', 3);
 	
-	echo $this->session->userdata('f_name')." ";
-	echo $this->session->userdata('m_name')." ";
-	echo $this->session->userdata('l_name')."<p>";
+	$output = $this->session->userdata('sess');
+	echo $output['f_name']." ";
+	echo $output['m_name']." ";
+	echo $output['l_name']."<p>";
 	
-	echo "Admission Number ".$this->session->userdata('admission')."<p>";
+	echo "Admission Number ".$output['adm']."<p>";
 	
 	if(isset($personal))
 	{

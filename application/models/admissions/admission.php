@@ -121,43 +121,43 @@ class admission extends CI_Model {
 		
 		}
 		
-		if($actionf == 'step2')
+		if($input['actionf'] == 'step2')
 		{
-			if($tablename == 'personal')
+			if($input['tablename'] == 'personal')
 			{
-				$sql = $this->db->query(" SELECT * FROM $tablename WHERE ADM = '$adm' ");
+				$sql = $this->db->query(" SELECT * FROM {$input['tablename']} WHERE ADM = '{$input['adm']}' ");
 				
 				return $sql;
 				
 			}
 			
-			if($tablename == 'contacts')
+			if($input['tablename'] == 'contacts')
 			{
-				$sql = $this->db->query(" SELECT * FROM $tablename WHERE ADM = '$adm' ");
+				$sql = $this->db->query(" SELECT * FROM {$input['tablename']} WHERE ADM = '{$input['adm']}' ");
 				
 				return $sql;
 			
 			}
 			
-			if($tablename == 'father_details')
+			if($input['tablename'] == 'father_details')
 			{
-				$sql = $this->db->query(" SELECT * FROM $tablename WHERE ADM = '$adm' ");
+				$sql = $this->db->query(" SELECT * FROM {$input['tablename']} WHERE ADM = '{$input['adm']}' ");
 				
 				return $sql;
 				
 			}
 			
-			if($tablename == 'mother_details')
+			if($input['tablename'] == 'mother_details')
 			{
-				$sql = $this->db->query(" SELECT * FROM $tablename WHERE ADM = '$adm' ");
+				$sql = $this->db->query(" SELECT * FROM {$input['tablename']} WHERE ADM = '{$input['adm']}' ");
 				
 				return $sql;
 			
 			}
 			
-			if($tablename == 'guardian_details')
+			if($input['tablename'] == 'guardian_details')
 			{
-				$sql = $this->db->query(" SELECT * FROM $tablename WHERE ADM = '$adm' ");
+				$sql = $this->db->query(" SELECT * FROM {$input['tablename']} WHERE ADM = '{$input['adm']}' ");
 				
 				return $sql;
 			

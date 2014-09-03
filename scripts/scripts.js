@@ -1,152 +1,157 @@
-function step1(url, form_data)
+function insert(url, form_data)
 {
-	
-	$('div#main').remove();
-	$('#loader').show();
-	
-	$.ajax({
-		url: url,
-		type: 'POST',
-		data: form_data,
-		success: function(val) {
+	if(action == 'step1')
+	{
+		$('div#main').remove();
+		$('#loader').show();
+		
+		$.ajax({
+			url: url,
+			type: 'POST',
+			data: form_data,
+			success: function(val) {
+				
+				$('#loader').hide();
+				$('#content').html(val);
+				
+				return false;
 			
-			$('#loader').hide();
-			$('#content').html(val);
+			}
 			
-			return false;
+		});
 		
-		}
+	}
+
+	if(action == 'step2')
+	{
+
+		$('div#main').remove();
+		$('#loader').show();
 		
-	});
-
-}
-
-function step2(url, form_data)
-{
-	$('div#main').remove();
-	$('#loader').show();
-	
-	$.ajax({
-		url: url,
-		type: 'POST',
-		data: form_data,
-		success: function(val) {
+		$.ajax({
+			url: url,
+			type: 'POST',
+			data: form_data,
+			success: function(val) {
+				
+				$('#loader').hide();
+				$('#content').html(val);
+				
+				return false;
 			
-			$('#loader').hide();
-			$('#content').html(val);
+			}
 			
-			return false;
+		});
 		
-		}
+	}
+
+	if(action == 'step3')
+	{
+
+		$('div#main').remove();
+		$('#loader').show();
 		
-	});
-
-}
-
-function step3(url, form_data)
-{
-	$('div#main').remove();
-	$('#loader').show();
-	
-	$.ajax({
-		url: url,
-		type: 'POST',
-		data: form_data,
-		success: function(val) {
+		$.ajax({
+			url: url,
+			type: 'POST',
+			data: form_data,
+			success: function(val) {
+				
+				$('#loader').hide();
+				$('#content').html(val);
+				
+				return false;
 			
-			$('#loader').hide();
-			$('#content').html(val);
+			}
 			
-			return false;
+		});
 		
-		}
+	}
+
+	if(action == 'step4')
+	{
+		$('div#main').remove();
+		$('#loader').show();
 		
-	});
-
-}
-
-function step4(url, form_data)
-{
-	$('div#main').remove();
-	$('#loader').show();
-	
-	$.ajax({
-		url: url,
-		type: 'POST',
-		data: form_data,
-		success: function(val) {
+		$.ajax({
+			url: url,
+			type: 'POST',
+			data: form_data,
+			success: function(val) {
+				
+				$('#loader').hide();
+				$('#content').html(val);
+				
+				return false;
 			
-			$('#loader').hide();
-			$('#content').html(val);
+			}
+		
+		});
+		
+	}
+
+	if(action == 'step5')
+	{
+		$('div#main').remove();
+		$('#loader').show();
+		
+		$.ajax({
+			url: url,
+			type: 'POST',
+			data: form_data,
+			success: function(val) {
+				$('#loader').hide();
+				$('#content').html(val);
+				
+				return false;
 			
-			return false;
-		
-		}
-	
-	});
-
-}
-
-function step5(url, form_data)
-{
-	$('div#main').remove();
-	$('#loader').show();
-	
-	$.ajax({
-		url: url,
-		type: 'POST',
-		data: form_data,
-		success: function(val) {
-			$('#loader').hide();
-			$('#content').html(val);
+			}
 			
-			return false;
+		});
 		
-		}
+	}
+
+	if(action == 'step6')
+	{
+		$('div#main').remove();
+		$('#loader').show();
 		
-	});
-
-}
-
-function step6(url, form_data)
-{
-	$('div#main').remove();
-	$('#loader').show();
-	
-	$.ajax({
-		url: url,
-		type: 'POST',
-		data: form_data,
-		success: function(val) {
-			$('#loader').hide();
-			$('#content').html(val);
+		$.ajax({
+			url: url,
+			type: 'POST',
+			data: form_data,
+			success: function(val) {
+				$('#loader').hide();
+				$('#content').html(val);
+				
+				return false;
 			
-			return false;
-		
-		}
-		
-	});
-
-}
-
-function step7(url, form_data)
-{
-	$('div#main').remove();
-	$('#loader').show();
-	
-	$.ajax({
-		url: url,
-		type: 'POST',
-		data: form_data,
-		success: function(val) {
-			$('#loader').hide();
-			$('#content').html(val);
+			}
 			
-			return false;
+		});
 		
-		}
+	}
+
+	if(action == 'step7')
+	{
+		$('div#main').remove();
+		$('#loader').show();
 		
-	});
+		$.ajax({
+			url: url,
+			type: 'POST',
+			data: form_data,
+			success: function(val) {
+				$('#loader').hide();
+				$('#content').html(val);
+				
+				return false;
+			
+			}
+			
+		});
+		
+	}
 
 }
 
@@ -154,6 +159,27 @@ function view(action, url, form_data)
 {
 	
 	if( action == 'step1')
+	{
+		$('div#main').remove();
+		$('#loader').show();
+		
+		$.ajax({
+			url: url,
+			type: 'POST',
+			data: form_data,
+			success: function(val) {
+				$('#loader').hide();
+				$('#content').html(val);
+				
+				return false;
+			
+			}
+		
+		});
+	
+	}
+	
+	if(action == 'step2')
 	{
 		$('div#main').remove();
 		$('#loader').show();

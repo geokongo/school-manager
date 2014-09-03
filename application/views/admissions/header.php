@@ -21,7 +21,7 @@ $(document).ready( function() {
 	});
 		
 	$("#content").on('submit', 'form#step1', function() {
-		
+		var action = $('input[type=hidden]').val();
 		var url = $('form').attr('action');
 		var form_data = {
 			is_ajax: 1,
@@ -29,16 +29,15 @@ $(document).ready( function() {
 			f_name: $('#f_name').val(),
 			m_name: $('#m_name').val(),
 			l_name: $('#l_name').val(),
-			actionflag: $('input[type=hidden]').val()
+			actionflag: action
 		};
 		
-		step1(url, form_data);
+		insert(action, url, form_data);
 		
 	});
 	
 	$("#content").on('change', 'select#caa', function() {
 		var actionf = 'get_streams';
-		
 		var form_data = {
 			class1: $('#caa').val(),
 			actionf: actionf,
@@ -62,7 +61,7 @@ $(document).ready( function() {
 
 
 	$("#content").on('submit', 'form#step2', function() {
-		
+			var action = $('input[type=hidden]').val();
 			var url = $('form').attr('action');
 			var form_data = {
 				dob: $('#dob').val(),
@@ -73,47 +72,47 @@ $(document).ready( function() {
 				county: $('#county').val(),
 				gender: $('#gender').val(),
 				nationality: $('#nationality').val(),
-				actionflag: $('input[type=hidden]').val(),
+				actionflag: action,
 				is_ajax: 1
 			};
 			
-		step2(url, form_data);
+		insert(action, url, form_data);
 		
 	});
 	
 	$('#content').on('submit', 'form#step3', function() {
-		
+			var action = $('input[type=hidden]').val();
 			var url = $('form').attr('action');
 			var form_data = {
 				pa: $('#pa').val(),
 				pc: $('#pc').val(),
 				town: $('#town').val(),
-				actionflag: $('input[type=hidden]').val(),
+				actionflag: action,
 				is_ajax: 1
 			};
 		
-		step3(url, form_data);
+		insert(action, url, form_data);
 	
 	});
 	
 	$('#content').on('submit', 'form#step4', function() {
-	
+			var action = $('input[type=hidden]').val();
 			var url = $('form').attr('action');
 			var form_data = {
-				actionflag: $('input[type=hidden]').val(),
+				actionflag: action,
 				is_ajax: 1
 			
 			};
 		
-		step4(url, form_data);
+		insert(action, url, form_data);
 	
 	});
 	
 	$('#content').on('submit', 'form#step5', function() {
-		
+			var action = $('input[type=hidden]').val();
 			var url = $('form').attr('action');
 			var form_data = {
-				actionflag: $('input[type=hidden]').val(),
+				actionflag: action,
 				f_name: $('#f_name').val(),
 				l_name: $('#l_name').val(),
 				paddress: $('#paddress').val(),
@@ -124,15 +123,15 @@ $(document).ready( function() {
 			
 			};
 		
-		step5(url, form_data);
+		insert(action, url, form_data);
 	
 	});
 	
 	$('#content').on('submit', 'form#step6', function() {
-		
+		var action = $('input[type=hidden]').val();
 		var url = $('form').attr('action');
 		var form_data = {
-				actionflag: $('input[type=hidden]').val(),
+				actionflag: action,
 				f_name: $('#f_name').val(),
 				l_name: $('#l_name').val(),
 				paddress: $('#paddress').val(),
@@ -143,15 +142,15 @@ $(document).ready( function() {
 			
 			};
 		
-		step6(url, form_data);
+		insert(action, url, form_data);
 	
 	});
 	
 	$('#content').on('submit', 'form#step7', function() {
-		
+		var action = $('input[type=hidden]').val();
 		var url = $('form').attr('action');
 		var form_data = {
-				actionflag: $('input[type=hidden]').val(),
+				actionflag: action,
 				f_name: $('#f_name').val(),
 				l_name: $('#l_name').val(),
 				paddress: $('#paddress').val(),
@@ -162,7 +161,7 @@ $(document).ready( function() {
 			
 			};
 		
-		step7(url, form_data);
+		insert(action, url, form_data);
 	
 	});
 	
@@ -173,14 +172,30 @@ $(document).ready(function() {
 	
 	$('#content').on('submit', 'form#view1', function() {
 			
-			var action = 'step1';
+			var action = $('input[type=hidden]').val();
 			var url = $('form').attr('action');
 			var form_data = {
-				actionflag: $('input[type=hidden]').val(),
+				actionflag: action,
 				is_ajax: 1,
 				adm: $('#adm').val()
 			
 			};
+		view(action, url, form_data);
+	
+	});
+	
+	$('#content').on('submit', 'form#view2', function() {
+		
+			var action = $('input[type=hidden]').val();
+			var url = $('form').attr('action');
+			var form_data = {
+				actionflag: action,
+				is_ajax: 1,
+				pdetails: $('#pdetails').val(),
+				pgdetails: $('#pgdetails').val()
+				
+			};
+		
 		view(action, url, form_data);
 	
 	});
