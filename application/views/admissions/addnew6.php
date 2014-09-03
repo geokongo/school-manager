@@ -1,3 +1,20 @@
+<section id="content">
+
+<?php
+	if(isset($error))
+	{
+		echo "<div id=\"error\" style=\" display: block; \">Error. Please try again.</div>";
+
+	}
+	
+	if(isset($success))
+	{
+		echo "<div id=\"success\" style=\" display: block; \">Success. You entered the details successfully.</div>";
+	
+	}
+
+
+?>
 <div id="main">
 <?php 
 	
@@ -8,7 +25,8 @@
 	echo heading('Admission', 2);
 	echo heading('Step 6 - Mother\'s Details', 3);
 	
-	echo "<h4>You Admission Number is\t".$this->session->userdata('admission')."<p></h4>";
+	$output = $this->session->userdata('sess');
+	echo "<h4>You Admission Number is\t".$output['adm']."<p></h4>";
 	
 	echo form_open('admissions/addnew');
 	echo form_hidden('actionflag', 'step6');
@@ -61,10 +79,11 @@
 					  );
 	echo form_input($attrib6);
 	echo "<p>";
-	echo form_submit( 'submit', 'Save and Proceed');
+	echo form_submit( 'submit', 'Save and Proceed', 'id="step6"');
 	
 	echo form_close();
 	
 ?>
 
 </div>
+</section>

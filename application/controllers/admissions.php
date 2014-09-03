@@ -333,79 +333,189 @@
 
 			}
 			
-			if($_POST['actionflag'] == 'step4')
+			if($this->input->post('actionflag') == 'step4')
 			{	
-				$this->load->view('admissions/header');
-				$this->load->view('admissions/addnew5');
-				$this->load->view('admissions/footer');
-			
+				if($this->input->post('is_ajax'))
+				{
+					$data['success'] = 1;
+					$this->load->view('admissions/addnew5', $data);
+				
+				}
+				else
+				{
+					$data['success'] = 1;
+					
+					$this->load->view('admissions/header');
+					$this->load->view('admissions/addnew5', $data);
+					$this->load->view('admissions/footer');
+				
+				}
+				
 			}
 			
-			if($_POST['actionflag'] == 'step5')
+			if($this->input->post('actionflag') == 'step5')
 			{
-				$adm = $this->session->userdata('admission');
-				$f_name = $_POST['f_name'];
-				$l_name = $_POST['l_name'];
-				$paddress = $_POST['paddress'];
-				$pcode = $_POST['pcode'];
-				$phone = $_POST['phone'];
-				$email = $_POST['email'];
-				
-				$this->load->model('admissions/admission');
-				$res = $this->admission->insert15($adm, $f_name, $l_name, $paddress, $pcode, $phone, $email);
-				
-				if($res) 
+				if($this->input->post('is_ajax'))
 				{
-					$this->load->view('admissions/header');
-					$this->load->view('admissions/addnew6');
-					$this->load->view('admissions/footer');
+					$output = $this->session->userdata('sess');
+					$input['adm'] = $output['adm'];
+					$input['f_name'] = $this->input->post('f_name');
+					$input['l_name'] = $this->input->post('l_name');
+					$input['paddress'] = $this->input->post('paddress');
+					$input['pcode'] = $this->input->post('pcode');
+					$input['phone'] = $this->input->post('pcode');
+					$input['email'] = $this->input->post('email');
+					$input['actionf'] = 'fdetails';
+					
+					$this->load->model('admissions/admission');
+					$res = $this->admission->insert($input);
+					
+					if($res) 
+					{
+						$data['success'] = 1;
+						$this->load->view('admissions/addnew6', $data);
+						
+					}
+				
+				}
+				else
+				{
+					$output = $this->session->userdata('sess');
+					$input['adm'] = $output['adm'];
+					$input['f_name'] = $this->input->post('f_name');
+					$input['l_name'] = $this->input->post('l_name');
+					$input['paddress'] = $this->input->post('paddress');
+					$input['pcode'] = $this->input->post('pcode');
+					$input['phone'] = $this->input->post('pcode');
+					$input['email'] = $this->input->post('email');
+					$input['actionf'] = 'fdetails';
+					
+					$this->load->model('admissions/admission');
+					$res = $this->admission->insert($input);
+					
+					if($res) 
+					{
+						$data['success'] = 1;
+						$this->load->view('admissions/header');
+						$this->load->view('admissions/addnew6', $data);
+						$this->load->view('admissions/footer');
+						
+					}
+				
 				}
 				
 			}
 			
-			if($_POST['actionflag'] == 'step6')
+			if($this->input->post('actionflag') == 'step6')
 			{	
-				$adm = $this->session->userdata('admission');
-				$f_name = $_POST['f_name'];
-				$l_name = $_POST['l_name'];
-				$paddress = $_POST['paddress'];
-				$pcode = $_POST['pcode'];
-				$phone = $_POST['phone'];
-				$email = $_POST['email'];
-				
-				$this->load->model('admissions/admission');
-				$res = $this->admission->insert16($adm, $f_name, $l_name, $paddress, $pcode, $phone, $email);
-				
-				if($res) 
+				if($this->input->post('is_ajax'))
 				{
-					$this->load->view('admissions/header');
-					$this->load->view('admissions/addnew7');
-					$this->load->view('admissions/footer');
+					$output = $this->session->userdata('sess');
+					$input['adm'] = $output['adm'];
+					$input['f_name'] = $this->input->post('f_name');
+					$input['l_name'] = $this->input->post('l_name');
+					$input['paddress'] = $this->input->post('paddress');
+					$input['pcode'] = $this->input->post('pcode');
+					$input['phone'] = $this->input->post('pcode');
+					$input['email'] = $this->input->post('email');
+					$input['actionf'] = 'mdetails';
+					
+					$this->load->model('admissions/admission');
+					$res = $this->admission->insert($input);
+					
+					if($res) 
+					{
+						$data['success'] = 1;
+						$this->load->view('admissions/header');
+						$this->load->view('admissions/addnew7', $data);
+						$this->load->view('admissions/footer');
+						
+					}
+				
+				}
+				else
+				{
+					$output = $this->session->userdata('sess');
+					$input['adm'] = $output['adm'];
+					$input['f_name'] = $this->input->post('f_name');
+					$input['l_name'] = $this->input->post('l_name');
+					$input['paddress'] = $this->input->post('paddress');
+					$input['pcode'] = $this->input->post('pcode');
+					$input['phone'] = $this->input->post('pcode');
+					$input['email'] = $this->input->post('email');
+					$input['actionf'] = 'mdetails';
+					
+					$this->load->model('admissions/admission');
+					$res = $this->admission->insert($input);
+					
+					if($res) 
+					{
+						$data['success'] = 1;
+						$this->load->view('admissions/header');
+						$this->load->view('admissions/addnew7', $data);
+						$this->load->view('admissions/footer');
+						
+					}
+					
 				}
 				
 			}
 			
-			if($_POST['actionflag'] == 'step7')
+			if($this->input->post('actionflag') == 'step7')
 			{	
-				$adm = $this->session->userdata('admission');
-				$f_name = $_POST['f_name'];
-				$l_name = $_POST['l_name'];
-				$paddress = $_POST['paddress'];
-				$pcode = $_POST['pcode'];
-				$phone = $_POST['phone'];
-				$email = $_POST['email'];
-				
-				$this->load->model('admissions/admission');
-				$res = $this->admission->insert17($adm, $f_name, $l_name, $paddress, $pcode, $phone, $email);
-				
-				if($res) 
+				if($this->input->post('is_ajax'))
 				{
-					echo "You have finished the registration process";
-					exit;
+					$output = $this->session->userdata('sess');
+					$input['adm'] = $output['adm'];
+					$input['f_name'] = $this->input->post('f_name');
+					$input['l_name'] = $this->input->post('l_name');
+					$input['paddress'] = $this->input->post('paddress');
+					$input['pcode'] = $this->input->post('pcode');
+					$input['phone'] = $this->input->post('pcode');
+					$input['email'] = $this->input->post('email');
+					$input['actionf'] = 'gdetails';
+					
+					$this->load->model('admissions/admission');
+					$res = $this->admission->insert($input);
+					
+					if($res) 
+					{
+						$data['success'] = 1;
+						$this->load->view('admissions/addnew1', $data);
+						
+					}
+				
+				}
+				else
+				{
+					$output = $this->session->userdata('sess');
+					$input['adm'] = $output['adm'];
+					$input['f_name'] = $this->input->post('f_name');
+					$input['l_name'] = $this->input->post('l_name');
+					$input['paddress'] = $this->input->post('paddress');
+					$input['pcode'] = $this->input->post('pcode');
+					$input['phone'] = $this->input->post('pcode');
+					$input['email'] = $this->input->post('email');
+					$input['actionf'] = 'gdetails';
+					
+					$this->load->model('admissions/admission');
+					$res = $this->admission->insert($input);
+					
+					if($res) 
+					{
+						$data['success'] = 1;
+						$this->load->view('admissions/header');
+						$this->load->view('admissions/addnew1', $data);
+						$this->load->view('admissions/footer');
+						
+					}
+					
 				}
 			
 			}
+			
 		}
+		
 	}
 
 	public function get()

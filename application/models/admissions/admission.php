@@ -74,18 +74,17 @@ class admission extends CI_Model {
 		
 		}
 		
-	}
-	
-	
-
-	
-	public function insert15($adm, $f_name, $l_name, $paddress, $pcode, $phone, $email) 
-	{
-		$tablename = "father_details";
-		$sql = $this->db->query(" INSERT INTO $tablename (ADM, f_name, l_name, PADDRESS, PCODE, PHONE, EMAIL) 
-									  VALUES ('$adm', '$f_name', '$l_name', '$paddress', '$pcode', '$phone', '$email')");
-		return $sql;
-	
+		if($input['actionf'] == 'fdetails')
+		{
+			
+			$tablename = "father_details";
+			
+			$sql = $this->db->query(" INSERT INTO $tablename (ADM, f_name, l_name, PADDRESS, PCODE, PHONE, EMAIL) 
+										  VALUES ('{$input['adm']}', '{$input['f_name']}', '{$input['l_name']}', '{$input['paddress']}', '{$input['pcode']}', '{$input['phone']}', '{$input['email']}')");
+			return $sql;
+		
+		}
+		
 	}
 	
 	public function insert16($adm, $f_name, $l_name, $paddress, $pcode, $phone, $email) 

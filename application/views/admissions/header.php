@@ -29,7 +29,7 @@ $(document).ready( function() {
 			f_name: $('#f_name').val(),
 			m_name: $('#m_name').val(),
 			l_name: $('#l_name').val(),
-			actionflag: $('input[type=hidden]').val(),
+			actionflag: $('input[type=hidden]').val()
 		};
 		
 		step1(url, form_data);
@@ -83,17 +83,49 @@ $(document).ready( function() {
 	
 	$('#content').on('click', '#step3', function() {
 		
-		var url = $('form').attr('action');
-		var form_data = {
-			pa: $('#pa').val(),
-			pc: $('#pc').val(),
-			town: $('#town').val(),
-			actionflag: $('input[type=hidden]').val(),
-			is_ajax: 1
-		};
+			var url = $('form').attr('action');
+			var form_data = {
+				pa: $('#pa').val(),
+				pc: $('#pc').val(),
+				town: $('#town').val(),
+				actionflag: $('input[type=hidden]').val(),
+				is_ajax: 1
+			};
 		
-	step3(url, form_data);
+		step3(url, form_data);
+	
+	});
+	
+	$('#content').on('click', '#step4', function() {
+	
+			var url = $('form').attr('action');
+			var form_data = {
+				actionflag: $('input[type=hidden]').val(),
+				is_ajax: 1
+			
+			};
 		
+		step4(url, form_data);
+	
+	});
+	
+	$('#content').on('click', '#step5', function() {
+		
+			var url = $('form').attr('action');
+			var form_data = {
+				actionflag: $('input[type=hidden]').val(),
+				f_name: $('#f_name').val(),
+				l_name: $('#l_name').val(),
+				paddress: $('#paddress').val(),
+				pcode: $('#pcode').val(),
+				phone: $('#phone').val(),
+				email: $('#email').val(),
+				is_ajax: 1
+			
+			};
+		
+		step5(url, form_data);
+	
 	});
 	
 });
