@@ -64,16 +64,20 @@ class admission extends CI_Model {
 			return $sql;
 		
 		}
-	}
-	
-	public function insert13($adm, $pa, $pc, $town) 
-	{
+		
+		if($input['actionf'] == 'cdetails')
+		{
 			$tablename = "contacts";
 			$sql = $this->db->query(" INSERT INTO $tablename (ADM, PADDRESS, PCODE, TOWN) 
-									  VALUES ('$adm', '$pa', '$pc', '$town')");
+									  VALUES ('{$input['adm']}', '{$input['pa']}', '{$input['pc']}', '{$input['town']}')");
 			return $sql;
-	
+		
+		}
+		
 	}
+	
+	
+
 	
 	public function insert15($adm, $f_name, $l_name, $paddress, $pcode, $phone, $email) 
 	{

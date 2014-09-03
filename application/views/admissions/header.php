@@ -81,6 +81,21 @@ $(document).ready( function() {
 		
 	});
 	
+	$('#content').on('click', '#step3', function() {
+		
+		var url = $('form').attr('action');
+		var form_data = {
+			pa: $('#pa').val(),
+			pc: $('#pc').val(),
+			town: $('#town').val(),
+			actionflag: $('input[type=hidden]').val(),
+			is_ajax: 1
+		};
+		
+	step3(url, form_data);
+		
+	});
+	
 });
 </script>
 

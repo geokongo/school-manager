@@ -258,7 +258,7 @@
 				else
 				{
 					$output = $this->session->userdata('sess');
-					$input['adm'] = $sess['adm'];
+					$input['adm'] = $output['adm'];
 					$input['dob'] = $this->input->post('dob');
 					$input['pob'] = $this->input->post('pob');
 					$input['doa'] = $this->input->post('doa');
@@ -284,23 +284,51 @@
 			
 			}
 			
-			if($_POST['actionflag'] == 'step3')
+			if($this->input->post('actionflag') == 'step3')
 			{	
-				$adm = $this->session->userdata('admission');
-				$pa = $_POST['pa'];
-				$pc = $_POST['pc'];
-				$town = $_POST['town'];
-				
-				$this->load->model('admissions/admission');
-				$res = $this->admission->insert13($adm, $pa, $pc, $town);
-				
-				if($res) 
+				if($this->input->post('is_ajax'))
 				{
+					$output = $this->session->userdata('sess');
+					$input['adm'] = $output['adm'];
+					$input['pa'] = $this->input->post('pa');
+					$input['pc'] = $this->input->post('pc');
+					$input['town'] = $this->input->post('town');
+					$input['actionf'] = 'cdetails';
 					
-					$this->load->view('admissions/header');
-					$this->load->view('admissions/addnew4');
-					$this->load->view('admissions/footer');
+					$this->load->model('admissions/admission');
+					$res = $this->admission->insert($input);
+					
+					if($res) 
+					{
+						$data['success'] = 1;
+						$this->load->view('admissions/addnew4', $data);
+					
+					}
+
 				
+				}
+				else
+				{
+				
+					$output = $this->session->userdata('sess');
+					$input['adm'] = $output['adm'];
+					$input['pa'] = $this->input->post('pa');
+					$input['pc'] = $this->input->post('pc');
+					$input['town'] = $this->input->post('town');
+					$input['actionf'] = 'cdetails';
+					
+					$this->load->model('admissions/admission');
+					$res = $this->admission->insert($input);
+					
+					if($res) 
+					{
+						$data['success'] = 1;
+						$this->load->view('admissions/header');
+						$this->load->view('admissions/addnew4', $data);
+						$this->load->view('admissions/footer');
+					
+					}
+					
 				}
 
 			}

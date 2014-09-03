@@ -1,3 +1,20 @@
+<section id="content">
+
+<?php
+	if(isset($error))
+	{
+		echo "<div id=\"error\" style=\" display: block; \">Error. Please try again.</div>";
+
+	}
+	
+	if(isset($success))
+	{
+		echo "<div id=\"success\" style=\" display: block; \">Success. You entered the Contact details successfully.</div>";
+	
+	}
+
+
+?>
 <div id="main">
 <?php 
 	
@@ -22,3 +39,4 @@
 ?>
 
 </div>
+</section>
