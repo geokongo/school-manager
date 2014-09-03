@@ -71,31 +71,47 @@
 					$m_name = strtoupper($this->input->post('m_name'));
 					$l_name = strtoupper($this->input->post('l_name'));
 				
-					$data = array( 'nested' => array(array('ADM' => $this->input->post('adm'),
-														'FName' => $f_name,
-														'MName' => $m_name,
-														'LName' => $l_name ),
-												
-													array('ADM' => $this->input->post('adm'),
-														'FName' => $f_name,
-														'MName' => $m_name,
-														'LName' => $l_name )
-														),
-									
-									'is_ajax' => 'yes'
-									
-								);
-								
-									
-									
-								
-					
-					
-					$this->output
-							->set_content_type('application/json')
-							->set_output(json_encode(array( 'data' => $data)));
-					
+					$this->load->model('admissions/admission');
+					$res = $this->admission->insert10($adm);
 				
+					if($res->num_rows() > 0 ) 
+					{
+						$data['error'] = 'yes';
+						$this->load->view('admissions/addnew1', $data);
+					}
+					else 
+					{
+						$this->load->model('admissions/admission');
+						$res2 = $this->admission->insert11($adm, $f_name, $m_name, $l_name);
+					
+					}
+					if($res2) 
+					{
+
+						$this->session->set_userdata('admission', $adm);
+						$data['adm'] = $adm;
+						
+						$info['actionf'] = 'get_classes';
+						
+						$this->load->model('admissions/admission');
+						$classes = $this->admission->get($info);
+						
+							$class = $classes->row();
+							$info['class'] = $class->CLASS;
+							$info['actionf'] = 'get_streams';
+							
+							$this->load->model('admissions/admission');
+							$streams = $this->admission->get($info);
+							
+						$data['classes'] = $classes;
+						$data['streams'] = $streams;
+						
+						$this->load->view('admissions/header');
+						$this->load->view('admissions/addnew2', $data);
+						$this->load->view('admissions/footer');
+					
+					}
+					
 				}
 				
 				else

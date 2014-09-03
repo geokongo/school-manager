@@ -1,3 +1,13 @@
+<section>
+<?php
+if(isset($error))
+{
+	echo "<div id=\"error\" style=\" display: block; \">Error. This Admission number has already been used. Please choose a different Admission Number</div>";
+
+}
+
+?>
+
 <div id="main">
 <?php 
 	
@@ -48,10 +58,11 @@
 					  
 	echo form_input($attrib4);
 	echo "<p>";
-	echo form_submit('submit', 'Save and Proceed', 'id="submit"');
+	echo form_submit('submit', 'Save and Proceed', 'id="step1"');
 	echo form_close();
 
 	
 	?>
 	
 </div>
+</section>

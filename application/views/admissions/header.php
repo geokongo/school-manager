@@ -21,8 +21,9 @@ $(document).ready(function() {
 	});
 
 
-	$('#submit').click( function() {
+	$('#step1').click( function() {
 		
+		var content = $('section').html();
 		var url = $('form').attr('action');
 		var form_data = {
 			adm: $('#adm').val(),
@@ -34,10 +35,10 @@ $(document).ready(function() {
 		};
 		
 		var empty = '';
-		$('#main').html(empty);
+		$('div#main').remove();
 		$('#loader').show();
 		
-		step1(url, form_data);
+		step1(url, form_data, content);
 		
 		return false;
 	});
@@ -63,7 +64,7 @@ $(document).ready(function() {
 
 </script>
 
-
+<div id="logout"><p><a href="#">Logout</a></p></div>
 <?php
 
 echo "<p>".NAME."</p>";
@@ -82,8 +83,6 @@ echo ">Dashboard</a></li>";
 
 </header>
 <div class="space"></div>
-<div id="error">Error</div>
-<div id="success">Success</div>
 
 <div id="loader">
 <div id="ajaxloader"></div>
