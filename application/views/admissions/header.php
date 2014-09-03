@@ -81,6 +81,9 @@ echo ">Dashboard</a></li>";
 
 
 </header>
+<div class="space"></div>
+<div id="error">Error</div>
+<div id="success">Success</div>
 
 <div id="loader">
 <div id="ajaxloader"></div>

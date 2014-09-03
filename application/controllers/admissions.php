@@ -71,15 +71,18 @@
 					$m_name = strtoupper($this->input->post('m_name'));
 					$l_name = strtoupper($this->input->post('l_name'));
 				
-					$data = array( array('ADM' => $this->input->post('adm'),
-									'FName' => $f_name,
-									'MName' => $m_name,
-									'LName' => $l_name
-									),
-									array('ADM' => $this->input->post('adm'),
-									'FName' => $f_name,
-									'MName' => $m_name,
-									'LName' => $l_name )
+					$data = array( 'nested' => array(array('ADM' => $this->input->post('adm'),
+														'FName' => $f_name,
+														'MName' => $m_name,
+														'LName' => $l_name ),
+												
+													array('ADM' => $this->input->post('adm'),
+														'FName' => $f_name,
+														'MName' => $m_name,
+														'LName' => $l_name )
+														),
+									
+									'is_ajax' => 'yes'
 									
 								);
 								

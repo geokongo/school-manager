@@ -1,3 +1,9 @@
+<?php
+    header("Content-type: text/css; charset: UTF-8");
+	$url = 55;
+?>
+
+
 body {
 	position: relative;
 	min-height: 565px;
@@ -46,7 +52,6 @@ header ul li  {
 	vertical-align: baseline;
 	height: 30px;
 	padding: 5px;
-	border-bottom: 1px solid #0099FF;
 
 }
 
@@ -58,6 +63,7 @@ header ul li a {
 #main {
 	margin: auto;
 	width: 900px;
+	padding-left: 10px;
 	height: 100%;
 
 }
@@ -79,17 +85,11 @@ nav {
 	width: 300px;
 }
 
-#main img:nth-child(2)
-{
-	width: 400px;
-
-}
-.space { height: 5px; width: 100%; }
 #error
 {
 	font-family: sans-serif;
 	height: 10px;
-	width: 805px;
+	width: 900px;
 	margin: auto;
 	border: 1px solid #800000;
 	background: #FFC0CB;
@@ -97,9 +97,8 @@ nav {
 	border-radius: 5px;
 	box-shadow: 0px 1px 1px #FFF inset;
 	background-repeat: no-repeat;
-	background-position: 100px 50%;
-	padding: 10px 10px 10px 120px;
-	background-image: url('../images/s_error.png');
+	background-position: 5px 50%;
+	padding: 10px 10px 10px 25px;
 	
 
 }
@@ -108,7 +107,7 @@ nav {
 {
 	font-family: sans-serif;
 	height: 10px;
-	width: 805px;
+	width: 900px;
 	margin: auto;
 	border: 1px solid #0099FF;
 	text-align: left;
@@ -116,9 +115,8 @@ nav {
 	background-color: #EBF8A4;
 	box-shadow: 0px 1px 1px #FFF inset;
 	background-repeat: no-repeat;
-	background-position: 100px 50%;
-	padding: 10px 10px 10px 120px;
-	background-image: url('../images/s_success.png');
+	background-position: 5px 50%;
+	padding: 10px 10px 10px 25px;
 	
 
 
