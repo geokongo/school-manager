@@ -84,7 +84,7 @@
 					}
 					else 
 					{
-						$input['actionf'] = 'basic_insert';
+						$input['actionf'] = 'basic_details';
 						$this->load->model('admissions/admission');
 						$res2 = $this->admission->insert($input);
 					
@@ -142,6 +142,7 @@
 					}
 					else 
 					{
+						$input['actionf'] = 'basic_details';
 						$this->load->model('admissions/admission');
 						$res2 = $this->admission->insert($input);
 					
@@ -159,11 +160,13 @@
 							
 								$class = $classes->row();
 								$input['class'] = $class->CLASS;
+								$input['action'] = 'get';
 								$input['actionf'] = 'get_streams';
 								
 								$this->load->model('admissions/admission');
 								$streams = $this->admission->insert($input);
-								
+							
+							$data['success'] = 1;							
 							$data['classes'] = $classes;
 							$data['streams'] = $streams;
 							
@@ -184,7 +187,8 @@
 			{	
 				if($this->input->post('actionf') == 'get_streams')
 				{
-					$input['class'] = $this->input->post('class');
+					
+					$input['class'] = $this->input->post('class1');
 					$input['action'] = 'get';
 					$input['actionf'] = 'get_streams';
 					
@@ -193,8 +197,10 @@
 					
 					if($res)
 					{
+						
 						if($res->num_rows() > 0)
 						{
+							
 							$html = "<p>Streams: <select name=\"stream\" id=\"stream\">";
 							
 							foreach($res->result() as $row)
@@ -206,58 +212,71 @@
 							$html .= "</select></p>";
 							
 							echo $html;
+							exit;
 						
 						}
 						else
 						{
-							echo "This class has no registered streams";
+							echo "<p style=\" color: #ff6666; \">This class has no registered streams</p>";
+							exit;
 						
 						}
 						
+					}
+					else if(!$res)
+					{
+						echo "<p style=\" color: #ff6666; \">This class has no registered streams</p>";
+						exit;
+					
 					}
 				
 				}
 				
 				if($this->input->post('is_ajax'))
 				{
-					$adm = $this->session->userdata('admission');
-					$dob = $_POST['dob'];
-					$pob = $_POST['pob'];
-					$doa = $_POST['doa'];
-					$caa = $_POST['caa'];
-					$county = $_POST['county'];
-					$gender = $_POST['gender'];
-					$nationality = $_POST['nationality'];
-						
+					$output = $this->session->userdata('sess');
+					$input['adm'] = $output['adm'];
+					$input['dob'] = $this->input->post('dob');
+					$input['pob'] = $this->input->post('pob');
+					$input['doa'] = $this->input->post('doa');
+					$input['caa'] = $this->input->post('caa');
+					$input['county'] = $this->input->post('county');
+					$input['gender'] = $this->input->post('gender');
+					$input['nationality'] = $this->input->post('nationality');
+					$input['actionf'] = 'pdetails';
+					
 					$this->load->model('admissions/admission');
-					$res = $this->admission->insert12($adm, $dob, $pob, $doa, $caa, $county, $gender, $nationality);
+					$res = $this->admission->insert($input);
 					
 					if($res) 
 					{
-						$this->load->view('admissions/header');
-						$this->load->view('admissions/addnew3');
-						$this->load->view('admissions/footer');
+						$data['success'] = 1;
+						$this->load->view('admissions/addnew3', $data);
 					}
 				
 				}
 				else
 				{
-					$adm = $this->session->userdata('admission');
-					$dob = $_POST['dob'];
-					$pob = $_POST['pob'];
-					$doa = $_POST['doa'];
-					$caa = $_POST['caa'];
-					$county = $_POST['county'];
-					$gender = $_POST['gender'];
-					$nationality = $_POST['nationality'];
-						
+					$output = $this->session->userdata('sess');
+					$input['adm'] = $sess['adm'];
+					$input['dob'] = $this->input->post('dob');
+					$input['pob'] = $this->input->post('pob');
+					$input['doa'] = $this->input->post('doa');
+					$input['caa'] = $this->input->post('caa');
+					$input['county'] = $this->input->post('county');
+					$input['gender'] = $this->input->post('gender');
+					$input['nationality'] = $this->input->post('nationality');
+					$input['actionf'] = 'pdetails';
+					
 					$this->load->model('admissions/admission');
-					$res = $this->admission->insert12($adm, $dob, $pob, $doa, $caa, $county, $gender, $nationality);
+					$res = $this->admission->insert($input);
 					
 					if($res) 
 					{
+						$data['success'] = 1;
+						
 						$this->load->view('admissions/header');
-						$this->load->view('admissions/addnew3');
+						$this->load->view('admissions/addnew3', $data);
 						$this->load->view('admissions/footer');
 					}
 					

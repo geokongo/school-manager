@@ -18,7 +18,7 @@ class admission extends CI_Model {
 			
 		}
 		
-		if($input['actionf'] == 'basic_insert')
+		if($input['actionf'] == 'basic_details')
 		{
 			$tablename = "basic";
 			//we will now proceed to enter dat into the database
@@ -29,7 +29,7 @@ class admission extends CI_Model {
 		
 		}
 		
-		if($input['action'] == 'get')
+		if(isset($input['action']) && $input['action'] == 'get')
 		{
 			$bt = '_';
 			
@@ -55,26 +55,15 @@ class admission extends CI_Model {
 		
 		}
 		
-	}
-	
-	public function insert11($adm, $f_name, $m_name, $l_name) 
-	{
-		$tablename = "basic";
-		//we will now proceed to enter dat into the database
+		if($input['actionf'] == 'pdetails')
+		{
+			$tablename = "personal";
+			
+			$sql = $this->db->query( "INSERT INTO $tablename (ADM, DOB, POB, DOA, COA, COUNTY, GENDER, NATIONALITY)
+								  VALUES ('{$input['adm']}', '{$input['dob']}', '{$input['pob']}', '{$input['doa']}', '{$input['caa']}', '{$input['county']}', '{$input['gender']}', '{$input['nationality']}')");
+			return $sql;
 		
-		$sql = $this->db->query(" INSERT INTO $tablename (adm, f_name, m_name, l_name) 
-								  VALUES('$adm', '$f_name', '$m_name', '$l_name')");
-		return $sql;
-	
-	}
-	
-	public function insert12($adm, $dob, $pob, $doa, $caa, $county, $gender, $nationality) 
-	{
-		$tablename = "personal";
-		$sql = $this->db->query( "INSERT INTO $tablename (ADM, DOB, POB, DOA, COA, COUNTY, GENDER, NATIONALITY)
-								  VALUES ('$adm', '$dob', '$pob', '$doa', '$caa', '$county', '$gender', '$nationality')");
-		return $sql;
-	
+		}
 	}
 	
 	public function insert13($adm, $pa, $pc, $town) 

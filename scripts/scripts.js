@@ -7,12 +7,11 @@ function step1(url, form_data)
 	$.ajax({
 		url: url,
 		type: 'POST',
-		async: false,
 		data: form_data,
 		success: function(val) {
 			
 			$('#loader').hide();
-			$('section').html(val);
+			$('#content').html(val);
 			
 			return false;
 		
@@ -30,12 +29,11 @@ function step2(url, form_data)
 	$.ajax({
 		url: url,
 		type: 'POST',
-		async: false,
 		data: form_data,
 		success: function(val) {
 			
 			$('#loader').hide();
-			$('section').html(val);
+			$('#content').html(val);
 			
 			return false;
 		
