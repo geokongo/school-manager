@@ -128,6 +128,44 @@ $(document).ready( function() {
 	
 	});
 	
+	$('#content').on('click', '#step6', function() {
+		
+		var url = $('form').attr('action');
+		var form_data = {
+				actionflag: $('input[type=hidden]').val(),
+				f_name: $('#f_name').val(),
+				l_name: $('#l_name').val(),
+				paddress: $('#paddress').val(),
+				pcode: $('#pcode').val(),
+				phone: $('#phone').val(),
+				email: $('#email').val(),
+				is_ajax: 1
+			
+			};
+		
+		step6(url, form_data);
+	
+	});
+	
+	$('#content').on('click', '#step7', function() {
+		
+		var url = $('form').attr('action');
+		var form_data = {
+			actionflag: $('input[type=hidden]').val(),
+			f_name: $('#f_name').val(),
+				l_name: $('#l_name').val(),
+				paddress: $('#paddress').val(),
+				pcode: $('#pcode').val(),
+				phone: $('#phone').val(),
+				email: $('#email').val(),
+				is_ajax: 1
+			
+			};
+		
+		step7(url, form_data);
+	
+	});
+	
 });
 </script>
 

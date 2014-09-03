@@ -3,13 +3,13 @@
 <?php
 	if(isset($error))
 	{
-		echo "<div id=\"error\" style=\" display: block; \">Error. Please try again.</div>";
+		echo "<div id=\"error\" style=\" display: block; \">{$error}</div>";
 
 	}
 	
 	if(isset($success))
 	{
-		echo "<div id=\"success\" style=\" display: block; \">Success. You uploaded the passport photo successfully.</div>";
+		echo "<div id=\"success\" style=\" display: block; \">{$success}</div>";
 	
 	}
 

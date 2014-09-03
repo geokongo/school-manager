@@ -85,27 +85,30 @@ class admission extends CI_Model {
 		
 		}
 		
+		if($input['actionf'] == 'mdetails')
+		{
+			
+			$tablename = "mother_details";
+			
+			$sql = $this->db->query(" INSERT INTO $tablename (ADM, f_name, l_name, PADDRESS, PCODE, PHONE, EMAIL) 
+										  VALUES ('{$input['adm']}', '{$input['f_name']}', '{$input['l_name']}', '{$input['paddress']}', '{$input['pcode']}', '{$input['phone']}', '{$input['email']}')");
+			return $sql;
+		
+		}
+		if($input['actionf'] == 'gdetails')
+		{
+			
+			$tablename = "guardian_details";
+			
+			$sql = $this->db->query(" INSERT INTO $tablename (ADM, f_name, l_name, PADDRESS, PCODE, PHONE, EMAIL) 
+										  VALUES ('{$input['adm']}', '{$input['f_name']}', '{$input['l_name']}', '{$input['paddress']}', '{$input['pcode']}', '{$input['phone']}', '{$input['email']}')");
+			return $sql;
+		
+		}
+		
 	}
 	
-	public function insert16($adm, $f_name, $l_name, $paddress, $pcode, $phone, $email) 
-	{
-		$tablename = "mother_details";
-		$sql = $this->db->query(" INSERT INTO $tablename (ADM, f_name, l_name, PADDRESS, PCODE, PHONE, EMAIL) 
-									  VALUES ('$adm', '$f_name', '$l_name', '$paddress', '$pcode', '$phone', '$email')");
-		return $sql;
 	
-	
-	}
-	
-	public function insert17($adm, $f_name, $l_name, $paddress, $pcode, $phone, $email) 
-	{
-		$tablename = "guardian_details";
-		$sql = $this->db->query(" INSERT INTO $tablename (ADM, f_name, l_name, PADDRESS, PCODE, PHONE, EMAIL) 
-									  VALUES ('$adm', '$f_name', '$l_name', '$paddress', '$pcode', '$phone', '$email')");
-		return $sql;
-	
-	
-	}
 	
 	public function view($actionf, $tablename, $adm) 
 	{

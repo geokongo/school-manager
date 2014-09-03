@@ -107,3 +107,45 @@ function step5(url, form_data)
 	});
 
 }
+
+function step6(url, form_data)
+{
+	$('div#main').remove();
+	$('#loader').show();
+	
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: form_data,
+		success: function(val) {
+			$('#loader').hide();
+			$('#content').html(val);
+			
+			return false;
+		
+		}
+		
+	});
+
+}
+
+function step7(url, form_data)
+{
+	$('div#main').remove();
+	$('#loader').show();
+	
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: form_data,
+		success: function(val) {
+			$('#loader').hide();
+			$('#content').html(val);
+			
+			return false;
+		
+		}
+		
+	});
+
+}

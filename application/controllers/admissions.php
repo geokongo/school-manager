@@ -78,7 +78,7 @@
 					
 					if($res->num_rows() > 0 ) 
 					{
-						$data['error'] = 1;
+						$data['error'] = "Error. This Admission Number is already in use. Please assign another.";
 						
 						$this->load->view('admissions/addnew1', $data);
 					}
@@ -108,7 +108,7 @@
 								$this->load->model('admissions/admission');
 								$streams = $this->admission->insert($input);
 							
-							$data['success'] = 1;							
+							$data['success'] = "Success. You entered the basic details successfully.";							
 							$data['classes'] = $classes;
 							$data['streams'] = $streams;
 							
@@ -134,7 +134,8 @@
 				
 					if($res->num_rows() > 0 ) 
 					{
-						$data['error'] = 1;
+						$data['error'] = "Error. This Admission Number is already in use. Please assign another.";
+
 						
 						$this->load->view('admissions/header');
 						$this->load->view('admissions/addnew1',$data);
@@ -166,7 +167,7 @@
 								$this->load->model('admissions/admission');
 								$streams = $this->admission->insert($input);
 							
-							$data['success'] = 1;							
+							$data['success'] = "Success. You entered the basic details successfully.";							
 							$data['classes'] = $classes;
 							$data['streams'] = $streams;
 							
@@ -250,7 +251,7 @@
 					
 					if($res) 
 					{
-						$data['success'] = 1;
+						$data['success'] = "Success. You entered the personal details successfully.";
 						$this->load->view('admissions/addnew3', $data);
 					}
 				
@@ -273,7 +274,7 @@
 					
 					if($res) 
 					{
-						$data['success'] = 1;
+						$data['success'] = "Success. You entered the personal details successfully.";
 						
 						$this->load->view('admissions/header');
 						$this->load->view('admissions/addnew3', $data);
@@ -300,7 +301,7 @@
 					
 					if($res) 
 					{
-						$data['success'] = 1;
+						$data['success'] = "Success. You entered the contact details successfully.";
 						$this->load->view('admissions/addnew4', $data);
 					
 					}
@@ -322,7 +323,7 @@
 					
 					if($res) 
 					{
-						$data['success'] = 1;
+						$data['success'] = "Success. You entered the contact details successfully.";
 						$this->load->view('admissions/header');
 						$this->load->view('admissions/addnew4', $data);
 						$this->load->view('admissions/footer');
@@ -337,13 +338,13 @@
 			{	
 				if($this->input->post('is_ajax'))
 				{
-					$data['success'] = 1;
+					$data['success'] = "Success. You uploaded the passport photo successfully.";
 					$this->load->view('admissions/addnew5', $data);
 				
 				}
 				else
 				{
-					$data['success'] = 1;
+					$data['success'] = "Success. You uploaded the passport photo successfully.";
 					
 					$this->load->view('admissions/header');
 					$this->load->view('admissions/addnew5', $data);
@@ -372,7 +373,7 @@
 					
 					if($res) 
 					{
-						$data['success'] = 1;
+						$data['success'] = "Success. You entered the father\'s details successfully." ;
 						$this->load->view('admissions/addnew6', $data);
 						
 					}
@@ -395,7 +396,7 @@
 					
 					if($res) 
 					{
-						$data['success'] = 1;
+						$data['success'] = "Success. You entered the father\'s details successfully." ;
 						$this->load->view('admissions/header');
 						$this->load->view('admissions/addnew6', $data);
 						$this->load->view('admissions/footer');
@@ -425,7 +426,7 @@
 					
 					if($res) 
 					{
-						$data['success'] = 1;
+						$data['success'] = "Success. You entered the mother\'s details successfully." ;
 						$this->load->view('admissions/header');
 						$this->load->view('admissions/addnew7', $data);
 						$this->load->view('admissions/footer');
@@ -450,7 +451,7 @@
 					
 					if($res) 
 					{
-						$data['success'] = 1;
+						$data['success'] = "Success. You entered the mother\'s details successfully." ;
 						$this->load->view('admissions/header');
 						$this->load->view('admissions/addnew7', $data);
 						$this->load->view('admissions/footer');
@@ -480,7 +481,7 @@
 					
 					if($res) 
 					{
-						$data['success'] = 1;
+						$data['success'] = "Success. You entered the guardian\'s details successfully." ;
 						$this->load->view('admissions/addnew1', $data);
 						
 					}
@@ -503,7 +504,7 @@
 					
 					if($res) 
 					{
-						$data['success'] = 1;
+						$data['success'] = "Success. You registered the student successfully. To view the details, use the view link above." ;
 						$this->load->view('admissions/header');
 						$this->load->view('admissions/addnew1', $data);
 						$this->load->view('admissions/footer');
