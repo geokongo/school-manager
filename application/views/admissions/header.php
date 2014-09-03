@@ -151,8 +151,8 @@ $(document).ready( function() {
 		
 		var url = $('form').attr('action');
 		var form_data = {
-			actionflag: $('input[type=hidden]').val(),
-			f_name: $('#f_name').val(),
+				actionflag: $('input[type=hidden]').val(),
+				f_name: $('#f_name').val(),
 				l_name: $('#l_name').val(),
 				paddress: $('#paddress').val(),
 				pcode: $('#pcode').val(),

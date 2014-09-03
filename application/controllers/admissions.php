@@ -373,7 +373,7 @@
 					
 					if($res) 
 					{
-						$data['success'] = "Success. You entered the father\'s details successfully." ;
+						$data['success'] = "Success. You entered the father's details successfully." ;
 						$this->load->view('admissions/addnew6', $data);
 						
 					}
@@ -396,7 +396,7 @@
 					
 					if($res) 
 					{
-						$data['success'] = "Success. You entered the father\'s details successfully." ;
+						$data['success'] = "Success. You entered the father's details successfully." ;
 						$this->load->view('admissions/header');
 						$this->load->view('admissions/addnew6', $data);
 						$this->load->view('admissions/footer');
@@ -426,10 +426,8 @@
 					
 					if($res) 
 					{
-						$data['success'] = "Success. You entered the mother\'s details successfully." ;
-						$this->load->view('admissions/header');
+						$data['success'] = "Success. You entered the mother's details successfully." ;
 						$this->load->view('admissions/addnew7', $data);
-						$this->load->view('admissions/footer');
 						
 					}
 				
@@ -451,7 +449,7 @@
 					
 					if($res) 
 					{
-						$data['success'] = "Success. You entered the mother\'s details successfully." ;
+						$data['success'] = "Success. You entered the mother's details successfully." ;
 						$this->load->view('admissions/header');
 						$this->load->view('admissions/addnew7', $data);
 						$this->load->view('admissions/footer');
@@ -481,7 +479,7 @@
 					
 					if($res) 
 					{
-						$data['success'] = "Success. You entered the guardian\'s details successfully." ;
+						$data['success'] = "Success. You registered the student successfully. To view the details, use the view link above." ;
 						$this->load->view('admissions/addnew1', $data);
 						
 					}
