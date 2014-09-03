@@ -23,3 +23,21 @@ function step1(url, form_data)
 
 
 }
+
+var form_data = {
+			class1: $('#caa').val(),
+			actionf: 'get_streams',
+			actionflag: $('input[type=hidden]').val()
+
+		};
+		
+		$.ajax({
+			url: $('form').attr('action'),
+			type: 'POST',
+			data: form_data,
+			success: function(msg) {
+				$('div#streams').html(msg);
+			
+			}
+			
+		});
