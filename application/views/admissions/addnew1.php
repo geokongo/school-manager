@@ -5,7 +5,6 @@ $(document).ready(function() {
 	
 	$('#step1').click( function() {
 		
-		var content = $('section').html();
 		var url = $('form').attr('action');
 		var form_data = {
 			adm: $('#adm').val(),
@@ -16,9 +15,7 @@ $(document).ready(function() {
 			is_ajax: 1
 		};
 		
-		
-		
-		step1(url, form_data, content);
+		step1(url, form_data);
 		
 	});
 
