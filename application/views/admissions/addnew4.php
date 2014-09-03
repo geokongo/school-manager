@@ -28,12 +28,13 @@
 	$output = $this->session->userdata('sess');
 	echo "<h4>You Admission Number is\t".$output['adm']."<p></h4>";
 	
-	echo form_open('admissions/addnew');
+	$array = array( 'id' => 'step4');
+	echo form_open('admissions/addnew', $array);
 	echo form_hidden('actionflag', 'step4');
 
 	echo form_upload();
 	echo "<p>";
-	echo form_submit('submit', 'Upload', 'id="step4"');
+	echo form_submit('submit', 'Upload');
 	echo form_close();
 	
 	

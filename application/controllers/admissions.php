@@ -552,42 +552,78 @@
 		
 		if($_POST)
 		{
-			if($_POST['actionflag'] == 'step1')
+			if($this->input->post('actionflag') == 'step1')
 			{
-				$actionf = $_POST['actionflag'];
-				$adm = $_POST['adm'];
-				$tablename = 'basic';
-				
-				$this->load->model('admissions/admission');
-				$res = $this->admission->view($actionf, $tablename, $adm);
-				
-				if($res->num_rows() == 0)
+				if($this->input->post('is_ajax'))
 				{
-					echo "A student with this Admission Number does not exist.<p>";
-					exit;
-				
-				}
-				
-				else
-				{
+					$input['actionf'] = $this->input->post('actionflag');
+					$input['adm'] = $this->input->post('adm');
 					
-					foreach($res->result() as $row)
+					$this->load->model('admissions/admission');
+					$res = $this->admission->view($input);
+					
+					if($res->num_rows() == 0)
 					{
-						$f_name = $row->f_name;
-						$m_name = $row->m_name;
-						$l_name = $row->l_name;
+						$data['error'] = "Error. A student with this Admission Number does not exist.";
+						$this->load->view('admissions/view1', $data);
+					
 					}
 					
-					$this->session->set_userdata('admission', $adm);
-					$this->session->set_userdata('f_name', $f_name);
-					$this->session->set_userdata('m_name', $m_name);
-					$this->session->set_userdata('l_name', $l_name);
-					
-					$this->load->view('admissions/header');
-					$this->load->view('admissions/view2');
-					$this->load->view('admissions/footer');
+					else
+					{
+						$sess['adm'] = $input['adm'];
+						foreach($res->result() as $row)
+						{
+							$sess['f_name'] = $row->f_name;
+							$sess['m_name'] = $row->m_name;
+							$sess['l_name'] = $row->l_name;
+						}
+						$this->session->set_userdata('sess', $sess);
+						
+						$data['success'] = "Success. Student found.";
+						$this->load->view('admissions/view2', $data);
 
+					}
+				
 				}
+				else
+				{
+					$input['actionf'] = $this->input->post('actionflag');
+					$input['adm'] = $this->input->post('adm');
+					
+					$this->load->model('admissions/admission');
+					$res = $this->admission->view($input);
+					
+					if($res->num_rows() == 0)
+					{
+						$data['error'] = "Error. A student with this Admission Number does not exist.";
+						$this->load->view('admissions/header');
+						$this->load->view('admissions/view1', $data);
+						$this->load->view('admissions/footer');
+					
+					}
+					
+					else
+					{
+						$sess['adm'] = $input['adm'];
+						foreach($res->result() as $row)
+						{
+							$sess['f_name'] = $row->f_name;
+							$sess['m_name'] = $row->m_name;
+							$sess['l_name'] = $row->l_name;
+						}
+						$this->session->set_userdata('sess', $sess);
+						
+						$data['success'] = "Success. Student found.";
+						
+						$this->load->view('admissions/header');
+						$this->load->view('admissions/view2', $data);
+						$this->load->view('admissions/footer');
+
+					}
+					
+				}
+				
 			}
 			
 			if($_POST['actionflag'] == 'step2')

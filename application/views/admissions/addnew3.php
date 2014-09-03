@@ -29,7 +29,8 @@
 	
 	echo "<h4>You Admission Number is\t".$output['adm']."<p></h4>";
 	
-	echo form_open('admissions/addnew');
+	$array = array( 'id' => 'step3');
+	echo form_open('admissions/addnew', $array);
 	echo form_hidden('actionflag', 'step3');
 
 	echo form_label('Postal Address:', 'pa');
@@ -59,7 +60,7 @@
 					  
 	echo form_input($attrib3);
 	echo "<p>";
-	echo form_submit( 'submit' , 'Save and Proceed', 'id="step3"');
+	echo form_submit( 'submit' , 'Save and Proceed');
 	
 	echo form_close();
 	

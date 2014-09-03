@@ -110,12 +110,12 @@ class admission extends CI_Model {
 	
 	
 	
-	public function view($actionf, $tablename, $adm) 
+	public function view($input) 
 	{
-		if($actionf == 'step1')
+		if($input['actionf'] == 'step1')
 		{
 			$tablename = 'basic';
-			$sql = $this->db->query(" SELECT * FROM $tablename WHERE ADM = '$adm' ");
+			$sql = $this->db->query(" SELECT * FROM $tablename WHERE ADM = '{$input['adm']}' ");
 			
 			return $sql;
 		

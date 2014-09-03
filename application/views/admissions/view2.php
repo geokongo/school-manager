@@ -1,3 +1,20 @@
+<section id="content">
+
+<?php
+	if(isset($error))
+	{
+		echo "<div id=\"error\" style=\" display: block; \">{$error}</div>";
+
+	}
+	
+	if(isset($success))
+	{
+		echo "<div id=\"success\" style=\" display: block; \">{$success}</div>";
+	
+	}
+
+
+?>
 <div id="main">
 
 <?php 
@@ -14,7 +31,9 @@
 	echo "Admission Number ".$this->session->userdata('admission')."<p>";
 	
 	echo "Select the Details to View.<p>";
-	echo form_open('admissions/view');
+	
+	$array = array( 'id' => 'view2' );
+	echo form_open('admissions/view', $array);
 	echo form_hidden('actionflag', 'step2');
 	
 	$attrib1 = array( 'name' => 'pdetails',
@@ -42,3 +61,4 @@
 
 
 </div>
+</section>

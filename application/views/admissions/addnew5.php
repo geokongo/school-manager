@@ -27,7 +27,8 @@
 	$output = $this->session->userdata('sess');
 	echo "<h4>You Admission Number is\t".$output['adm']."<p></h4>";
 	
-	echo form_open('admissions/addnew');
+	$array = array( 'id' => 'step5');
+	echo form_open('admissions/addnew', $array);
 	echo form_hidden('actionflag', 'step5');
 
 	echo form_label('First Name:', 'f_name');
@@ -78,7 +79,7 @@
 					  );
 	echo form_input($attrib6);
 	echo "<p>";
-	echo form_submit( 'submit', 'Save and Proceed', 'id="step5"');
+	echo form_submit( 'submit', 'Save and Proceed');
 	
 	echo form_close();
 	

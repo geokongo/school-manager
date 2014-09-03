@@ -20,7 +20,7 @@ $(document).ready( function() {
 
 	});
 		
-	$("#content").on('click', '#step1', function() {
+	$("#content").on('submit', 'form#step1', function() {
 		
 		var url = $('form').attr('action');
 		var form_data = {
@@ -36,7 +36,7 @@ $(document).ready( function() {
 		
 	});
 	
-	$("#content").on('change', '#caa', function() {
+	$("#content").on('change', 'select#caa', function() {
 		var actionf = 'get_streams';
 		
 		var form_data = {
@@ -61,7 +61,7 @@ $(document).ready( function() {
 	});
 
 
-	$("#content").on('click', '#step2', function() {
+	$("#content").on('submit', 'form#step2', function() {
 		
 			var url = $('form').attr('action');
 			var form_data = {
@@ -81,7 +81,7 @@ $(document).ready( function() {
 		
 	});
 	
-	$('#content').on('click', '#step3', function() {
+	$('#content').on('submit', 'form#step3', function() {
 		
 			var url = $('form').attr('action');
 			var form_data = {
@@ -96,7 +96,7 @@ $(document).ready( function() {
 	
 	});
 	
-	$('#content').on('click', '#step4', function() {
+	$('#content').on('submit', 'form#step4', function() {
 	
 			var url = $('form').attr('action');
 			var form_data = {
@@ -109,7 +109,7 @@ $(document).ready( function() {
 	
 	});
 	
-	$('#content').on('click', '#step5', function() {
+	$('#content').on('submit', 'form#step5', function() {
 		
 			var url = $('form').attr('action');
 			var form_data = {
@@ -128,7 +128,7 @@ $(document).ready( function() {
 	
 	});
 	
-	$('#content').on('click', '#step6', function() {
+	$('#content').on('submit', 'form#step6', function() {
 		
 		var url = $('form').attr('action');
 		var form_data = {
@@ -147,7 +147,7 @@ $(document).ready( function() {
 	
 	});
 	
-	$('#content').on('click', '#step7', function() {
+	$('#content').on('submit', 'form#step7', function() {
 		
 		var url = $('form').attr('action');
 		var form_data = {
@@ -168,6 +168,28 @@ $(document).ready( function() {
 	
 });
 </script>
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	$('#content').on('submit', 'form#view1', function() {
+			
+			var action = 'step1';
+			var url = $('form').attr('action');
+			var form_data = {
+				actionflag: $('input[type=hidden]').val(),
+				is_ajax: 1,
+				adm: $('#adm').val()
+			
+			};
+		view(action, url, form_data);
+	
+	});
+
+
+});
+
+</script>
+
 
 
 <div id="logout"><p><a href="#">Logout</a></p></div>

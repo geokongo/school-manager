@@ -26,7 +26,8 @@
 	echo heading('Admission', 2);
 	echo heading('Step 1- Basic Details', 3);
 	
-	echo form_open('admissions/addnew');
+	$array = array( 'id' => 'step1');
+	echo form_open('admissions/addnew', $array);
 	
 	echo form_hidden('actionflag', 'step1', 'id="actionflag"');
 	
@@ -66,7 +67,7 @@
 					  
 	echo form_input($attrib4);
 	echo "<p>";
-	echo form_submit('submit', 'Save and Proceed', 'id="step1"');
+	echo form_submit('submit', 'Save and Proceed');
 	echo form_close();
 
 	

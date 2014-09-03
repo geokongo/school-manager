@@ -149,3 +149,30 @@ function step7(url, form_data)
 	});
 
 }
+
+function view(action, url, form_data)
+{
+	
+	if( action == 'step1')
+	{
+		$('div#main').remove();
+		$('#loader').show();
+		
+		$.ajax({
+			url: url,
+			type: 'POST',
+			data: form_data,
+			success: function(val) {
+				$('#loader').hide();
+				$('#content').html(val);
+				
+				return false;
+			
+			}
+		
+		});
+	
+	}
+
+
+}
