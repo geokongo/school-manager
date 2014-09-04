@@ -55,6 +55,18 @@ function insert(action, url, form_data)
 				
 				return false;
 			
+			},
+			
+			error: function(err, desc, val) {
+				
+				var error = '<div id="error" style=" display: block; ">' + val + '</div>';
+				var initial_content = '<div id="main">' + content + '</div>';
+				$('#loader').hide();
+				$('#content').html(error);
+				$('#content').append(initial_content);
+				
+				return false;
+			
 			}
 			
 		});
@@ -75,6 +87,18 @@ function insert(action, url, form_data)
 				
 				$('#loader').hide();
 				$('#content').html(val);
+				
+				return false;
+			
+			},
+			
+			error: function(err, desc, val) {
+				
+				var error = '<div id="error" style=" display: block; ">' + val + '</div>';
+				var initial_content = '<div id="main">' + content + '</div>';
+				$('#loader').hide();
+				$('#content').html(error);
+				$('#content').append(initial_content);
 				
 				return false;
 			
@@ -100,6 +124,18 @@ function insert(action, url, form_data)
 				
 				return false;
 			
+			},
+			
+			error: function(err, desc, val) {
+				
+				var error = '<div id="error" style=" display: block; ">' + val + '</div>';
+				var initial_content = '<div id="main">' + content + '</div>';
+				$('#loader').hide();
+				$('#content').html(error);
+				$('#content').append(initial_content);
+				
+				return false;
+			
 			}
 		
 		});
@@ -118,6 +154,18 @@ function insert(action, url, form_data)
 			success: function(val) {
 				$('#loader').hide();
 				$('#content').html(val);
+				
+				return false;
+			
+			},
+			
+			error: function(err, desc, val) {
+				
+				var error = '<div id="error" style=" display: block; ">' + val + '</div>';
+				var initial_content = '<div id="main">' + content + '</div>';
+				$('#loader').hide();
+				$('#content').html(error);
+				$('#content').append(initial_content);
 				
 				return false;
 			
@@ -142,6 +190,18 @@ function insert(action, url, form_data)
 				
 				return false;
 			
+			},
+			
+			error: function(err, desc, val) {
+				
+				var error = '<div id="error" style=" display: block; ">' + val + '</div>';
+				var initial_content = '<div id="main">' + content + '</div>';
+				$('#loader').hide();
+				$('#content').html(error);
+				$('#content').append(initial_content);
+				
+				return false;
+			
 			}
 			
 		});
@@ -160,6 +220,18 @@ function insert(action, url, form_data)
 			success: function(val) {
 				$('#loader').hide();
 				$('#content').html(val);
+				
+				return false;
+			
+			},
+			
+			error: function(err, desc, val) {
+				
+				var error = '<div id="error" style=" display: block; ">' + val + '</div>';
+				var initial_content = '<div id="main">' + content + '</div>';
+				$('#loader').hide();
+				$('#content').html(error);
+				$('#content').append(initial_content);
 				
 				return false;
 			
