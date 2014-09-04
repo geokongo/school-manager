@@ -1,11 +1,11 @@
 function insert(action, url, form_data)
 {
-		$('div#main').remove();
-		$('#loader').show();
+	var content = $('#main').html();
+	$('div#main').remove();
+	$('#loader').show();
 
 	if(action == 'step1')
 	{
-		var content = $('#content').html();
 		$('div#main').remove();
 		$('#loader').show();
 		
@@ -22,10 +22,13 @@ function insert(action, url, form_data)
 			
 			},
 			
-			error: function() {
+			error: function(err, desc, val) {
 				
+				var error = '<div id="error" style=" display: block; ">' + val + '</div>';
+				var initial_content = '<div id="main">' + content + '</div>';
 				$('#loader').hide();
-				$('#content').html('err');
+				$('#content').html(error);
+				$('#content').append(initial_content);
 				
 				return false;
 			
