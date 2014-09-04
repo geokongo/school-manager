@@ -827,38 +827,52 @@
 					
 				}
 				
-				if(isset($_POST['pgdetails']))
+				if($this->input->post('pgdetails'))
 				{
-					$actionf = 'get_fdetails';
+					$input['actionf'] = 'get_fdetails';
 					
 					$this->load->model('admissions/admission');
-					$data['father_details'] = $this->admission->update($actionf);
+					$data['father_details'] = $this->admission->update($input);
 					
-					$actionf = 'get_mdetails';
-					
-					$this->load->model('admissions/admission');
-					$data['mother_details'] = $this->admission->update($actionf);
-					
-					$actionf = 'get_gdetails';
+					$input['actionf'] = 'get_mdetails';
 					
 					$this->load->model('admissions/admission');
-					$data['guardian_details'] = $this->admission->update($actionf);
+					$data['mother_details'] = $this->admission->update($input);
+					
+					$input['actionf'] = 'get_gdetails';
+					
+					$this->load->model('admissions/admission');
+					$data['guardian_details'] = $this->admission->update($input);
 				
 				}
 				
-				$this->load->view('admissions/header');
-				$this->load->view('admissions/update/view3', $data);
-				$this->load->view('admissions/footer');
+				$data['success'] = "Success. View the records below.";
+				
+				if($this->input->post('is_ajax'))
+				{
+					$this->load->view('admissions/update/view3', $data);
+				
+				}
+				
+				else
+				{
+				
+					$this->load->view('admissions/header');
+					$this->load->view('admissions/update/view3', $data);
+					$this->load->view('admissions/footer');
 			
+				}
+				
 			}
+			
 		}
 		
 		if($this->uri->segment(3) == 'personal')
 		{
-			$actionf = 'get_pdetails';
+			$input['actionf'] = 'get_pdetails';
 			
 			$this->load->model('admissions/admission');
-			$data['personal'] = $this->admission->update($actionf);
+			$data['personal'] = $this->admission->update($input);
 			
 			$this->load->view('admissions/header');
 			$this->load->view('admissions/update/pdetails', $data);

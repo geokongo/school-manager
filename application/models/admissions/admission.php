@@ -180,66 +180,66 @@ class admission extends CI_Model {
 		
 		}
 		
-		if($actionf == 'get_bdetails')
+		if($input['actionf'] == 'get_bdetails')
 		{
 			$tablename = 'basic';
 			
-			$sql = $this->db->where('ADM', $adm);
+			$sql = $this->db->where('ADM', $input['adm']);
 			$sql = $this->db->get($tablename);
 			
 			return $sql;
 		
 		}
 		
-		if($actionf == 'get_pdetails')
+		if($input['actionf'] == 'get_pdetails')
 		{
 			$tablename = 'personal';
 			
-			$sql = $this->db->where( 'ADM', $adm );
+			$sql = $this->db->where( 'ADM', $input['adm'] );
 			$sql = $this->db->get($tablename);
 			
 			return $sql;
 			
 		}
 		
-		if($actionf == 'get_contacts')
+		if($input['actionf'] == 'get_contacts')
 		{
 			$tablename = 'contacts';
 		
-			$sql = $this->db->where( 'ADM', $adm );
+			$sql = $this->db->where( 'ADM', $input['adm'] );
 			$sql = $this->db->get($tablename);
 		
 			return $sql;
 			
 		}
 			
-		if($actionf == 'get_fdetails')
+		if($input['actionf'] == 'get_fdetails')
 		{
 			$tablename = 'father_details';
 		
-			$sql = $this->db->where( 'ADM', $adm );
+			$sql = $this->db->where( 'ADM', $input['adm'] );
 			$sql = $this->db->get($tablename);
 		
 			return $sql;
 			
 		}
 		
-		if($actionf == 'get_mdetails')
+		if($input['actionf'] == 'get_mdetails')
 		{
 			$tablename = 'mother_details';
 		
-			$sql = $this->db->where( 'ADM', $adm );
+			$sql = $this->db->where( 'ADM', $input['adm'] );
 			$sql = $this->db->get($tablename);
 		
 			return $sql;
 		
 		}
 		
-		if($actionf == 'get_gdetails')
+		if($input['actionf'] == 'get_gdetails')
 		{
 			$tablename = 'guardian_details';
 		
-			$sql = $this->db->where( 'ADM', $adm );
+			$sql = $this->db->where( 'ADM', $input['adm'] );
 			$sql = $this->db->get($tablename);
 		
 			return $sql;
