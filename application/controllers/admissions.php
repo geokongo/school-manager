@@ -76,14 +76,7 @@
 					$this->load->model('admissions/admission');
 					$res = $this->admission->insert($input);
 					
-					if($res->num_rows() > 0 ) 
-					{
-						$data['error'] = "Error. This Admission Number is already in use. Please assign another.";
-						
-						$this->load->view('admissions/addnew1', $data);
-					}
-					else 
-					{
+					
 						$input['actionf'] = 'basic_details';
 						$this->load->model('admissions/admission');
 						$res2 = $this->admission->insert($input);
@@ -116,7 +109,7 @@
 						
 						}
 						
-					}
+					
 					
 				}
 				

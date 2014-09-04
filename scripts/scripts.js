@@ -1,7 +1,11 @@
-function insert(url, form_data)
+function insert(action, url, form_data)
 {
+		$('div#main').remove();
+		$('#loader').show();
+
 	if(action == 'step1')
 	{
+		var content = $('#content').html();
 		$('div#main').remove();
 		$('#loader').show();
 		
@@ -13,6 +17,15 @@ function insert(url, form_data)
 				
 				$('#loader').hide();
 				$('#content').html(val);
+				
+				return false;
+			
+			},
+			
+			error: function() {
+				
+				$('#loader').hide();
+				$('#content').html('err');
 				
 				return false;
 			
