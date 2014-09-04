@@ -48,7 +48,9 @@
 			
 			}
 			
-			echo form_open('admissions/update/mdetails_up');
+			$array = array('id' => 'mdetails_up');
+			echo form_open('admissions/update/mdetails_up', $array);
+			echo form_hidden('actionflag', 'mdetails_up');
 			echo "<table>";
 			echo "<tr><td>First Name</td><td>{$f_name}</td><td>Enter New Value</td><td>";
 			

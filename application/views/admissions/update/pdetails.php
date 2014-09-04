@@ -75,7 +75,9 @@
 	
 	echo "Admission Number ".$this->session->userdata('admission')."<p>";
 	
+	$array = array('id' => 'personal_up');
 	echo form_open('admissions/update/personal_up');
+	echo form_hidden('actionflag', 'personal_up');
 
 	foreach($personal->result() as $row)
 	{

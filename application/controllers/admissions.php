@@ -740,60 +740,90 @@
 		{
 			if($this->input->post('actionflag') == 'step1')
 			{
-				$actionf = $this->input->post('actionflag');
-				$adm = $this->input->post('adm');
-				$this->session->set_userdata('admission', $adm);
+				$input['actionf'] = $this->input->post('actionflag');
+				$input['adm'] = $this->input->post('adm');
+				
+				$sess['adm'] = $input['adm'];
+				$this->session->set_userdata('sess', $sess);
 				
 				$this->load->model('admissions/admission');
-				$res = $this->admission->update($actionf);
+				$res = $this->admission->update($input);
 				
-				if($res->num_rows() == 0)
-				{
-					echo "A student with this Admission Number does not exist.<p>";
-					exit;
 				
-				}
 				
 				if($res->num_rows() > 0)
 				{
 					
 					foreach($res->result() as $row)
 					{
-						
-						$this->session->set_userdata('f_name', $row->f_name);
-						$this->session->set_userdata('m_name', $row->m_name);
-						$this->session->set_userdata('l_name', $row->l_name);
-						
+						$sess['f_name'] = $row->f_name;
+						$sess['m_name'] = $row->m_name;
+						$sess['l_name'] = $row->l_name;
+						$this->session->set_userdata('sess', $sess);
+					
+					}
+					
+					$data['success'] = "Success. Student found.";
+
+					if($this->input->post('is_ajax'))
+					{
+						$this->load->view('admissions/update/view2', $data);
+					
+					}
+					
+					else
+					{
 						$this->load->view('admissions/header');
-						$this->load->view('admissions/update/view2');
+						$this->load->view('admissions/update/view2', $data);
 						$this->load->view('admissions/footer');
 					
 					}
 
 				}
+				
+				else
+				{
+					$data['error'] = "A student with this Admission Number does not exist. Choose another.";
+					
+					if($this->input->post('is_ajax'))
+					{
+						$this->load->view('admissions/update/choose_adm', $data);
+					
+					}
+					else
+					{
+						$this->load->view('admissions/header');
+						$this->load->view('admissions/update/choose_adm', $data);
+						$this->load->view('admissions/footer');
+					
+					}
+					
+				}
+				
 			}
 			
 			if($this->input->post('actionflag') == 'step2')
 			{
-				$adm = $this->session->userdata('admission');
-				$actionf = $this->input->post('actionflag');
+				$output = $this->session->userdata('sess');
+				$input['adm'] = $output['adm'];
+				$input['actionf'] = $this->input->post('actionflag');
 
-				if(isset($_POST['pdetails']))
+				if($this->input->post('pdetails'))
 				{
-					$actionf = 'get_bdetails';
+					$input['actionf'] = 'get_bdetails';
 					
 					$this->load->model('admissions/admission');
-					$data['basic'] = $this->admission->update($actionf);
+					$data['basic'] = $this->admission->update($input);
 					
-					$actionf = 'get_pdetails';
-					
-					$this->load->model('admissions/admission');
-					$data['personal'] = $this->admission->update($actionf);
-					
-					$actionf = 'get_contacts';
+					$input['actionf'] = 'get_pdetails';
 					
 					$this->load->model('admissions/admission');
-					$data['contacts'] = $this->admission->update($actionf);
+					$data['personal'] = $this->admission->update($input);
+					
+					$input['actionf'] = 'get_contacts';
+					
+					$this->load->model('admissions/admission');
+					$data['contacts'] = $this->admission->update($input);
 					
 				}
 				

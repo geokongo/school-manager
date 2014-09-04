@@ -5,7 +5,7 @@
 echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".base_url()."style/css.css\">";
 ?>
 <script src="<?php echo base_url(); ?>scripts/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="<?php echo base_url(); ?>scripts/scripts.js" type="text/javascript" charset="utf-8"></script>
+<script src="<?php echo base_url(); ?>scripts/js.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
 <header>
@@ -32,7 +32,7 @@ $(document).ready( function() {
 			actionflag: action
 		};
 		
-		insert(action, url, form_data);
+		ajax(action, url, form_data);
 		
 	});
 	
@@ -76,7 +76,7 @@ $(document).ready( function() {
 				is_ajax: 1
 			};
 			
-		insert(action, url, form_data);
+		ajax(action, url, form_data);
 		
 	});
 	
@@ -91,7 +91,7 @@ $(document).ready( function() {
 				is_ajax: 1
 			};
 		
-		insert(action, url, form_data);
+		ajax(action, url, form_data);
 	
 	});
 	
@@ -104,7 +104,7 @@ $(document).ready( function() {
 			
 			};
 		
-		insert(action, url, form_data);
+		ajax(action, url, form_data);
 	
 	});
 	
@@ -123,7 +123,7 @@ $(document).ready( function() {
 			
 			};
 		
-		insert(action, url, form_data);
+		ajax(action, url, form_data);
 	
 	});
 	
@@ -142,7 +142,7 @@ $(document).ready( function() {
 			
 			};
 		
-		insert(action, url, form_data);
+		ajax(action, url, form_data);
 	
 	});
 	
@@ -161,7 +161,7 @@ $(document).ready( function() {
 			
 			};
 		
-		insert(action, url, form_data);
+		ajax(action, url, form_data);
 	
 	});
 	
@@ -180,7 +180,7 @@ $(document).ready(function() {
 				adm: $('#adm').val()
 			
 			};
-		view(action, url, form_data);
+		ajax(action, url, form_data);
 	
 	});
 	
@@ -196,10 +196,144 @@ $(document).ready(function() {
 				
 			};
 		
-		view(action, url, form_data);
+		ajax(action, url, form_data);
 	
 	});
 
+
+});
+
+</script>
+<script type="text/javascript">
+$(document).ready(function() {
+
+	$('#content').on('submit', 'form#update_step1', function() {
+			var action = $('input[type=hidden]').val();
+			var url = $('form').attr('action');
+			var form_data = {
+				actionflag: action,
+				adm: $('#adm').val(),
+				is_ajax: 1
+			}
+		
+		ajax(action, url, form_data);
+	
+	});
+	
+	$('#content').on('submit', 'form#update_step2', function() {
+			var action = $('input[type=hidden]').val();
+			var url = $('form').attr('action');
+			var form_data = {
+				actionflag: action,
+				pdetails: $('#pdetails').val(),
+				pgdetails: $('#pgdetails').val(),
+				is_ajax: 1
+			}
+			
+		ajax(action, url, form_data);
+		
+	});
+	
+	$('#content').on('submit', 'form#basic_up', function() {
+			var action = $('input[type=hidden]').val();
+			var url = $('form').attr('action');
+			var form_data = {
+				f_name: $('#f_name').val(),
+				m_name: $('#m_name').val(),
+				l_name: $('#l_name').val(),
+				is_ajax: 1
+			}
+		
+		ajax(action, url, form_data);
+	
+	});
+	
+	$('#content').on('submit', 'form#personal_up', function() {
+			var action = $('input[type=hidden]').val();
+			var url = $('form').attr('action');
+			var form_data = {
+				dob: $('#dob').val(),
+				pob: $('#pob').val(),
+				doa: $('#doa').val(),
+				caa: $('#caa').val(),
+				county: $('#county').val(),
+				gender: $('#gender').val(),
+				nationality: $('#nationality').val(),
+				is_ajax: 1
+			
+			}
+			
+		ajax(action, url, form_data);
+	
+	});
+	
+	$('#content').on('submit', 'form#contacts_up', function() {
+			var action = $('input[type=hidden]').val();
+			var url = $('form').attr('action');
+			var form_data = {
+				paddress: $('#paddress').val(),
+				pcode: $('#pcode').val(),
+				town: $('#town').val(),
+				is_ajax: 1
+			
+			}
+		
+		ajax(action, url, form_data);
+	});
+	
+	$('#content').on('submit', 'form#fdetails_up', function() {
+			var action = $('input[type=hidden]').val();
+			var url = $('form').attr('action');
+			var form_data = {
+				f_name: $('#f_name').val(),
+				l_name: $('#l_name').val(),
+				paddress: $('#paddress').val(),
+				pcode: $('#pcode').val(),
+				phone: $('#phone').val(),
+				email: $('#email').val(),
+				is_ajax: 1
+			
+			}
+			
+		ajax(action, url, form_data);
+	
+	});
+
+		$('#content').on('submit', 'form#mdetails_up', function() {
+			var action = $('input[type=hidden]').val();
+			var url = $('form').attr('action');
+			var form_data = {
+				f_name: $('#f_name').val(),
+				l_name: $('#l_name').val(),
+				paddress: $('#paddress').val(),
+				pcode: $('#pcode').val(),
+				phone: $('#phone').val(),
+				email: $('#email').val(),
+				is_ajax: 1
+			
+			}
+			
+		ajax(action, url, form_data);
+	
+	});
+
+		$('#content').on('submit', 'form#gdetails_up', function() {
+			var action = $('input[type=hidden]').val();
+			var url = $('form').attr('action');
+			var form_data = {
+				f_name: $('#f_name').val(),
+				l_name: $('#l_name').val(),
+				paddress: $('#paddress').val(),
+				pcode: $('#pcode').val(),
+				phone: $('#phone').val(),
+				email: $('#email').val(),
+				is_ajax: 1
+			
+			}
+			
+		ajax(action, url, form_data);
+	
+	});
 
 });
 

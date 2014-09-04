@@ -24,7 +24,8 @@
 	
 	echo heading('Enter Admission Number in order to update records', 3);
 	
-	echo form_open('admissions/update');
+	$array = array( 'id' => 'update_step1' );
+	echo form_open('admissions/update', $array);
 	echo form_hidden('actionflag', 'step1');
 	
 	echo form_label('Enter Admission Number ', 'adm');

@@ -32,7 +32,9 @@
 	
 	echo "Admission Number ".$this->session->userdata('admission')."<p>";
 	
-	echo form_open('admissions/update/basic_up');
+	$array = array( 'id' => 'basic_up');
+	echo form_open('admissions/update/basic_up', $array);
+	echo form_hidden('actionflag', 'basic_up');
 
 	if(isset($basic))
 	{

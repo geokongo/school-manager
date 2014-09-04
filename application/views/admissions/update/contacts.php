@@ -32,8 +32,10 @@
 	
 	echo "Admission Number ".$this->session->userdata('admission')."<p>";
 	
+	$array = array('id' => 'contacts_up');
 	echo form_open('admissions/update/contacts_up');
-
+	echo form_hidden('actionflag', 'contacts_up');
+	
 	if(isset($contacts))
 	{
 		if($contacts->num_rows() > 0)

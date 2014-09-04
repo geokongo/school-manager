@@ -167,14 +167,13 @@ class admission extends CI_Model {
 	}
 	
 	
-	public function update($actionf)
+	public function update($input)
 	{
-		$adm = $this->session->userdata('admission');
 		
-		if($actionf == 'step1')
+		if($input['actionf'] == 'step1')
 		{
 			$tablename = 'basic';
-			$sql = $this->db->where( 'ADM', $adm );
+			$sql = $this->db->where( 'ADM', $input['adm'] );
 			$sql = $this->db->get($tablename);
 			
 			return $sql;
