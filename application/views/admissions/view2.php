@@ -19,40 +19,37 @@
 
 <?php 
 	
-	echo "<img src=\"".base_url()."images/admission.png\" /><p>";
-	echo "<img src=\"".base_url()."images/underline.jpg\" /><p>";
-	
-	echo heading('Student Details', 3);
 	$output = $this->session->userdata('sess');
+	
+	$array = array( 'id' => 'view2',
+					'class' => 'adm_form');
+	echo form_open('admissions/view', $array).'<header>';
+	
+	echo '<p>Student Details<br />';
 	echo $output['f_name']." ";
 	echo $output['m_name']." ";
-	echo $output['l_name']."<p>";
+	echo $output['l_name'].'<br />';
+	echo 'Admission Number '.$output['adm'].'<br />'; 
+	echo 'Select the Details to View</p></header>';
 	
-	echo "Admission Number ".$this->session->userdata('admission')."<p>";
-	
-	echo "Select the Details to View.<p>";
-	
-	$array = array( 'id' => 'view2' );
-	echo form_open('admissions/view', $array);
-	echo form_hidden('actionflag', 'step2');
+	echo form_hidden('actionflag', 'step2').'<span>';
 	
 	$attrib1 = array( 'name' => 'pdetails',
 					  'id' => 'pdetails',
-					  'value' => 'pdetails'
+					  'value' => 'pdetails',
+					  'class' => 'checkbox'
 					  );
-	echo form_checkbox($attrib1);
-	echo form_label('Personal Details', 'pdetails');
-	echo "<p>";
+	echo form_checkbox($attrib1).'</span>';
+	echo form_label('Personal Details', 'pdetails').'<span>';
 	
 	$attrib2 = array( 'name' => 'pgdetails',
 					  'id' => 'pgdetails',
-					  'value' => 'pgdetails'
+					  'value' => 'pgdetails',
 					  );
-	echo form_checkbox($attrib2);
+	echo form_checkbox($attrib2).'</span>';
 	echo form_label('Parent/Guardian Details', 'pgdetails');
-	echo "<p>";
-	
-	echo form_submit('submit', 'Go!');
+	echo form_label().'<span>';
+	echo form_submit('submit', 'Go!', 'class="button"').'</span>';
 	
 	echo form_close();
 	

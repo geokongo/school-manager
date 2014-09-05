@@ -19,24 +19,24 @@
 
 <?php 
 	
-	echo "<img src=\"".base_url()."images/admission.png\" /><p>";
-	echo "<img src=\"".base_url()."images/underline.jpg\" /><p>";
+	$array = array( 'id' => 'update_step1',
+					'class' => 'adm_form');
+	echo form_open('admissions/update', $array).'<header>';
 	
-	echo heading('Enter Admission Number in order to update records', 3);
+	echo '<p>Update Records<br />';
+	echo 'Enter Admission Number to Update Records</p></header>';
 	
-	$array = array( 'id' => 'update_step1' );
-	echo form_open('admissions/update', $array);
 	echo form_hidden('actionflag', 'step1');
 	
-	echo form_label('Enter Admission Number ', 'adm');
+	echo form_label('Enter Admission Number ', 'adm').'<span>';
 	
 	$attrib1 = array( 'name' => 'adm',
 					  'id' => 'adm',
 					  'size' => '20'
 					  );
-	echo form_input($attrib1);
-	echo "<p>";
-	echo form_submit('submit', 'Go!');
+	echo form_input($attrib1).'</span>';
+	echo form_label().'<span>';
+	echo form_submit('submit', 'Go!', 'class="button"').'</span>';
 	
 	echo form_close();
 	
