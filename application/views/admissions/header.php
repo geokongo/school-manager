@@ -338,6 +338,46 @@ $(document).ready(function() {
 });
 
 </script>
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	$('#content').on('click', 'a', function() {
+		
+		var url = $('a').attr('href');
+		var data = {
+			is_ajax: 1
+		}
+		$('#loader').show();
+		
+		$.ajax({
+			url: url,
+			type: 'POST',
+			data: data,
+			success: function(val) {
+				$('#loader').hide();
+				$('#content').html(val);
+				
+				return false;
+			
+			},
+			error: function() {
+			
+				var error = '<div id="error" style=" display: block; ">' + val + '</div>';
+				$('#loader').hide();
+				$('#content').prepend(error);
+				
+				return false;
+			
+			}
+		
+		});
+	
+	});
+
+
+});
+
+</script>
 
 
 

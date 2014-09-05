@@ -246,9 +246,8 @@ class admission extends CI_Model {
 		
 		}
 		
-		if($actionf == 'basic')
+		if($input['actionf'] == 'basic')
 		{
-			$adm = $this->session->userdata('admission');
 			$tablename = 'basic';
 			$names = $this->session->userdata('names');
 			
