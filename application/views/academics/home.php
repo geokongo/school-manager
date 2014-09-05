@@ -3,10 +3,6 @@
 
 echo heading('Welcome!', 2);
 
-?>
-<a href="<?php echo base_url(); ?>academics/settings">Settings</a>
-
-<?php
 
 echo heading('This is the Academics Department Dashboard', 3);
 

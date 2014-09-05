@@ -355,7 +355,7 @@ $(document).ready(function() {
 
 
 
-<div id="logout"><p><a href="#">Logout</a></p></div>
+<div id="logout"><p><a href="<?php echo base_url(); ?>logout">Logout</a></p></div>
 <?php
 
 echo "<p>".NAME."</p>";

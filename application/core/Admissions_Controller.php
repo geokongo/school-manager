@@ -5,7 +5,7 @@ class Admissions_Controller extends SM_Controller {
     {
         parent::__construct();
 
-        if ($this->session->userdata('usertype') != 'Admissions'){
+        if ($this->session->userdata('usertype') != 'admissions'){
             redirect('login','refresh');
         } 
 		

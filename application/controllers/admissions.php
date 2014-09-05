@@ -22,12 +22,6 @@
 		$this->load->view('admissions/footer');
 	}
 	
-	public function dashboard() 
-	{
-		$this->load->view('admissions/header');
-		$this->load->view('admissions/home');
-	}
-	
 
 /**
  *This method, addnew, handles all addnew queries

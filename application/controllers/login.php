@@ -46,44 +46,46 @@ class Login extends CI_Controller {
 			$pass = $_POST['password'];
 		
 			$this->load->model('login/log_in');
-			$data["results"] = $this->log_in->auth("$username");
+			$results = $this->log_in->auth("$username");
 		
-			foreach ($data['results'] as $row) 
+			if($results->num_rows() > 0)
 			{
+				$row = $results->row();
 				$name = $row->name;
 				$password = $row->password;
-				
-				
-			}
-		
-			if ($password != $pass) 
-			{
-				echo "Sorry, you entered the wrong password.<p>";
-				echo "Please try again";
-		
-				exit;
-			}
-			else 
-			{
-				if($name == 'admin')
+			
+				if ($password != $pass) 
 				{
-					$this->session->set_userdata('usertype', $name);
-					redirect('admin', 'refresh');
+					echo "Sorry, you entered the wrong password.<p>";
+					echo "Please try again";
+			
 				}
-				
-				if($name == 'admissions')
+				else 
 				{
-					$this->session->set_userdata('usertype', $name);
-					redirect('admissions', 'refresh');
-				}
-				
-				if($name == 'academics')
-				{
-					$this->session->set_userdata('usertype', $name);
-					redirect('academics', 'refresh');
+					if($name == 'admin')
+					{
+						$this->session->set_userdata('usertype', $name);
+						redirect('admin', 'refresh');
+					}
+					
+					if($name == 'admissions')
+					{
+						$this->session->set_userdata('usertype', $name);
+						redirect('admissions', 'refresh');
+					}
+					
+					if($name == 'academics')
+					{
+						$this->session->set_userdata('usertype', $name);
+						redirect('academics', 'refresh');
+					}
+					
 				}
 
 			}
+			
+			echo "No user {$username} found";
+			exit;
 			
 		}
 		
