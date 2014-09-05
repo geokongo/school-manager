@@ -6,16 +6,19 @@
  *This controller will handle all file requests from the academics user dashboard
  */
  
-class Academics extends CI_Controller {
+class Academics extends Academics_Controller {
 
 	//immediately after successful login, the index function logs in the user into the academics dashboard. This happens because at this time
 	//no variables have yet been defined so the rest of the functions will not be executed.
+	
+	
 	public function index() 
 	{
-		$this->load->view('academics/header');
-		$this->load->view('academics/home');
-		$this->load->view('academics/footer');
-	
+			$this->load->view('academics/header');
+			$this->load->view('academics/home');
+			$this->load->view('academics/footer');
+			
+		
 	}
 	
 	//This method will handle all requests that are related to the entering of results into the database

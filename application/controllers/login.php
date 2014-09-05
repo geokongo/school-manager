@@ -56,36 +56,37 @@ class Login extends CI_Controller {
 				
 			}
 		
-				if ($password != $pass) 
+			if ($password != $pass) 
+			{
+				echo "Sorry, you entered the wrong password.<p>";
+				echo "Please try again";
+		
+				exit;
+			}
+			else 
+			{
+				if($name == 'admin')
 				{
-					echo "Sorry, you entered the wrong password.<p>";
-					echo "Please try again";
-			
-					exit;
-				}
-				else 
-				{
-					if($username == 'admin')
-					{
-						redirect('admin', 'refresh');
-					}
-					
-					if($name == 'admissions')
-					{
-						redirect('admissions', 'refresh');
-					}
-					
-					if($name == 'academics')
-					{
-						redirect('academics', 'refresh');
-					}
-	
+					$this->session->set_userdata('usertype', $name);
+					redirect('admin', 'refresh');
 				}
 				
-		}
-	}
+				if($name == 'admissions')
+				{
+					$this->session->set_userdata('usertype', $name);
+					redirect('admissions', 'refresh');
+				}
+				
+				if($name == 'academics')
+				{
+					$this->session->set_userdata('usertype', $name);
+					redirect('academics', 'refresh');
+				}
 
-	
-	
+			}
+			
+		}
+		
+	}
 	
 }

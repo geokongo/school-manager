@@ -8,7 +8,7 @@
  * It also has the delete method
  * It will help to generate clean URLs
  */
- class admissions extends CI_Controller {
+ class Admissions extends Admissions_Controller {
  
 /**
  *This method, index, is the default and loads the login page into the admissions dashboard
@@ -514,6 +514,44 @@
 			}
 			
 		}
+		
+		if($_FILES)
+		{
+			//when the user selects and file, uploads it and then submits it, the $_FILES variable will be available.
+			//in the varibles below we set the upload folder path, the allowed file types, which we have set to .csv to avoid raw excel data 
+			//being inserted because this will ruin the database.
+			$config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'png|jpg|jpeg|gif';
+			$config['max_size'] = '10000';
+		
+			$this->load->library('upload', $config);
+		
+			if( ! $this->upload->do_upload())
+			{
+				//if the do_upload() function does not run successfully, it means theres is an error, therefore we redisplay the upload form with the appropriate error message.
+				$data['error'] = $this->upload->display_errors();
+				
+				$this->load->view('academics/header');
+				$this->load->view('academics/upload2', $data);
+				$this->load->view('academics/footer');
+		
+			}
+		
+			else
+			{
+				//this means the upload was successful and so we ask the user ti cinfirm entering the data into the database before we actually insert into mysql.
+				$data = array( 'upload_data' => $this->upload->data());
+				$this->session->set_userdata('file_path', $data['upload_data']['full_path']);
+				
+				$this->load->view('academics/header');
+				$this->load->view('academics/confirm');
+				$this->load->view('academics/footer');
+		
+			}
+		
+		
+		}
+	
 		
 	}
 
