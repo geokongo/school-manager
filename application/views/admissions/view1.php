@@ -20,22 +20,25 @@
 
 <?php 
 	
-	echo "<img src=\"".base_url()."images/admission.png\" /><p>";
-	echo "<img src=\"".base_url()."images/underline.jpg\" /><p>";
+	$array = array( 'id' => 'view1',
+					'class' => 'adm_form' );
+	echo form_open('admissions/view', $array).'<header>';
 	
-	$array = array( 'id' => 'view1' );
-	echo form_open('admissions/view', $array);
+	echo '<p>Student Details<br />';
+	echo 'Enter Admission Number to View Records</p></header>';
+	
+	
 	echo form_hidden('actionflag', 'step1');
 	
-	echo form_label('Enter Admission Number ', 'adm');
+	echo form_label('Admission Number: ', 'adm').'<span>';
 	
 	$attrib1 = array( 'name' => 'adm',
 					  'id' => 'adm',
 					  'size' => '20'
 					  );
-	echo form_input($attrib1);
-	echo "<p>";
-	echo form_submit('submit', 'Go!');
+	echo form_input($attrib1).'</span>';
+	echo form_label().'<span>';
+	echo form_submit('submit', 'Go!', 'class="button"').'</span>';
 	
 	echo form_close();
 	

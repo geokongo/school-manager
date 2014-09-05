@@ -21,66 +21,62 @@
 	echo "<img src=\"".base_url()."images/admission.png\" /><p>";
 	echo "<img src=\"".base_url()."images/underline.jpg\" /><p>";
 	
-	
-	echo heading('Admission', 2);
-	echo heading('Step 7 - Guardian\'s Details', 3);
-	
 	$output = $this->session->userdata('sess');
-	echo "<h4>You Admission Number is\t".$output['adm']."<p></h4>";
 	
-	$array = array( 'id' => 'step7');
-	echo form_open('admissions/addnew', $array);
+	$array = array( 'id' => 'step7',
+					'class' => 'adm_form');
+	echo form_open('admissions/addnew', $array).'<header>';
+	
+	echo '<p>Admission<br />';
+	echo "You Admission Number is\t".$output['adm']."<br />";
+	echo 'Step 7- Guardian\'s details</p></header>';
+	
 	echo form_hidden('actionflag', 'step7');
 
-	echo form_label('First Name:', 'f_name');
+	echo form_label('First Name:', 'f_name').'<span>';
 	
 	$attrib1 = array( 'name' => 'f_name',
 					  'id' => 'f_name',
 					  'size' => '20'
 					  );
-	echo form_input($attrib1);
-	echo "<p>";
-	echo form_label('Last Name:', 'l_name');
+	echo form_input($attrib1).'</span>';
+	echo form_label('Last Name:', 'l_name').'<span>';
 	
 	$attrib2 = array( 'name' => 'l_name',
 					  'id' => 'l_name',
 					  'size' => '20'
 					  );
-	echo form_input($attrib2);
-	echo "<p>";
-	echo form_label('Postal Address:', 'paddress');
+	echo form_input($attrib2).'</span>';
+	echo form_label('Postal Address:', 'paddress').'<span>';
 	
 	$attrib3 = array( 'name' => 'paddress',
 					  'id' => 'paddress',
 					  'size' => '20'
 					);
-	echo form_input($attrib3);
-	echo "<p>";
-	echo form_label('Postal Code:', 'pcode');
+	echo form_input($attrib3).'</span>';
+	echo form_label('Postal Code:', 'pcode').'<span>';
 	
 	$attrib4 = array( 'name' => 'pcode',
 					  'id' => 'pcode',
 					  'size' => '20'
 					  );
-	echo form_input($attrib4);
-	echo "<p>";
-	echo form_label('Phone Number:', 'phone');
+	echo form_input($attrib4).'</span>';
+	echo form_label('Phone Number:', 'phone').'<span>';
 	
 	$attrib5 = array( 'name' => 'phone',
 					  'id' => 'phone',
 					  'size' => '20'
 					  );
-	echo form_input($attrib5);
-	echo "<p>";
-	echo form_label('Email Address', 'email');
+	echo form_input($attrib5).'</span>';
+	echo form_label('Email Address', 'email').'<span>';
 	
 	$attrib6 = array( 'name' => 'email',
 					  'id' => 'email',
 					  'size' => '20'
 					  );
-	echo form_input($attrib6);
-	echo "<p>";
-	echo form_submit( 'submit', 'Save and Proceed');
+	echo form_input($attrib6).'</span>';
+	echo form_label().'<span>';
+	echo form_submit( 'submit', 'Save and Proceed', 'class="button"').'</span>';
 	
 	echo form_close();
 	

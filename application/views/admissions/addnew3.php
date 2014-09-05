@@ -22,18 +22,21 @@
 	echo "<img src=\"".base_url()."images/underline.jpg\" /><p>";
 	
 	
-	echo heading('Admission', 2);
-	echo heading('Step 3- Contact Details', 3);
 	
 	$output = $this->session->userdata('sess');
 	
-	echo "<h4>You Admission Number is\t".$output['adm']."<p></h4>";
 	
-	$array = array( 'id' => 'step3');
-	echo form_open('admissions/addnew', $array);
+	$array = array( 'id' => 'step3',
+					'class' => 'adm_form');
+	echo form_open('admissions/addnew', $array).'<header>';
+	
+	echo '<p>Admission<br />';
+	echo 'Step 3- Contact Details<br />';
+	echo 'You Admission Number is '.$output['adm'].'<p></header>';
+	
 	echo form_hidden('actionflag', 'step3');
 
-	echo form_label('Postal Address:', 'pa');
+	echo form_label('Postal Address:', 'pa').'<span>';
 	
 	$attrib1 = array( 'name' => 'pa',
 					  'id' => 'pa', 
@@ -41,8 +44,8 @@
 					  );
 	
 	echo form_input($attrib1);
-	echo "<p>";
-	echo form_label('Postal Code:', 'pc');
+	echo "</span>";
+	echo form_label('Postal Code:', 'pc').'<span>';
 	
 	$attrib2 = array( 'name' => 'pc',
 					  'id' => 'pc',
@@ -50,8 +53,8 @@
 					  );
 					  
 	echo form_input($attrib2);
-	echo "<p>";
-	echo form_label('Town', 'town');
+	echo "</span>";
+	echo form_label('Town', 'town').'<span>';
 	
 	$attrib3 = array( 'name' => 'town',
 					  'id' => 'town',
@@ -59,8 +62,9 @@
 					  );
 					  
 	echo form_input($attrib3);
-	echo "<p>";
-	echo form_submit( 'submit' , 'Save and Proceed');
+	echo "</span>";
+	echo form_label().'<span>';
+	echo form_submit( 'submit' , 'Save and Proceed', 'class="button"').'</span>';
 	
 	echo form_close();
 	

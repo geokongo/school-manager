@@ -21,20 +21,21 @@
 	echo "<img src=\"".base_url()."images/admission.png\" /><p>";
 	echo "<img src=\"".base_url()."images/underline.jpg\" /><p>";
 	
-	
-	echo heading('Admission', 2);
-	echo heading('Step 4- Upload a Passport Photo', 3);
-	
 	$output = $this->session->userdata('sess');
-	echo "<h4>You Admission Number is\t".$output['adm']."<p></h4>";
 	
-	$array = array( 'id' => 'step4');
-	echo form_open('admissions/addnew', $array);
+	$array = array( 'id' => 'step4',
+					'class' => 'adm_form');
+	echo form_open('admissions/addnew', $array).'<header>';
+	
+	echo '<p>Admission<br />';
+	echo "You Admission Number is\t".$output['adm']."<br />";
+	echo 'Step 4- Upload a Passport Photo</p></header>';
+	
 	echo form_hidden('actionflag', 'step4');
-
-	echo form_upload();
-	echo "<p>";
-	echo form_submit('submit', 'Upload');
+	echo form_label().'<span>';
+	echo form_upload().'</span>';
+	echo form_label().'<span>';
+	echo form_submit('submit', 'Upload', 'class="button"').'</span>';
 	echo form_close();
 	
 	

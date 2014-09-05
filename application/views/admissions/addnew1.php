@@ -19,19 +19,17 @@
 	<div id="main">
 	<?php 
 		
-		echo "<img src=\"".base_url()."images/admission.png\" /><p>";
-		echo "<img src=\"".base_url()."images/underline.jpg\" /><p>";
-
+		$array = array( 'id' => 'step1',
+						'class' => 'adm_form');
+		echo form_open('admissions/addnew', $array)."<header>";
 		
 		echo heading('Admission', 2);
-		echo heading('Step 1- Basic Details', 3);
+		echo heading('Step 1- Basic Details', 3)."</header>";
 		
-		$array = array( 'id' => 'step1');
-		echo form_open('admissions/addnew', $array);
 		
 		echo form_hidden('actionflag', 'step1', 'id="actionflag"');
 		
-		echo form_label('Admission Number', 'adm');
+		echo form_label('Admission Number:', 'adm')."<span>";
 		
 		$attrib1 = array( 'name' => 'adm',
 						  'id' => 'adm',
@@ -39,8 +37,8 @@
 						 );
 						 
 		echo form_input($attrib1);
-		echo "<p>";
-		echo form_label('First Name:', 'f_name');
+		echo "</span>";
+		echo form_label('First Name:', 'f_name')."<span>";
 		
 		$attrib2 = array( 'name' => 'f_name',
 						  'id' => 'f_name',
@@ -48,8 +46,8 @@
 						  );
 						  
 		echo form_input($attrib2);
-		echo "<p>";
-		echo form_label('Middle Name:', 'm_name');
+		echo "</span>";
+		echo form_label('Middle Name:', 'm_name')."<span>";
 		
 		$attrib3 = array( 'name' => 'm_name',
 						  'id' => 'm_name',
@@ -57,8 +55,8 @@
 						  );
 						  
 		echo form_input($attrib3);
-		echo "<p>";
-		echo form_label('Last Name:', 'l_name');
+		echo "</span>";
+		echo form_label('Last Name:', 'l_name')."<span>";
 		
 		$attrib4 = array( 'name' => 'l_name',
 						  'id' => 'l_name',
@@ -66,8 +64,10 @@
 						  );
 						  
 		echo form_input($attrib4);
-		echo "<p>";
-		echo form_submit('submit', 'Save and Proceed');
+		echo "</span>";
+		
+		echo form_label()."<span>";
+		echo form_submit('submit', 'Save and Proceed', 'class="button"')."</span>";
 		echo form_close();
 
 		

@@ -196,7 +196,7 @@
 						if($res->num_rows() > 0)
 						{
 							
-							$html = "<p>Streams: <select name=\"stream\" id=\"stream\">";
+							$html = "<label for=\"caa\">Streams: </label><span><select name=\"stream\" id=\"stream\">";
 							
 							foreach($res->result() as $row)
 							{
@@ -204,7 +204,7 @@
 							
 							}
 							
-							$html .= "</select></p>";
+							$html .= "</select></span>";
 							
 							echo $html;
 							exit;
