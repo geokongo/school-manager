@@ -360,7 +360,7 @@ $(document).ready(function() {
 				return false;
 			
 			},
-			error: function() {
+			error: function(err, desc, val) {
 			
 				var error = '<div id="error" style=" display: block; ">' + val + '</div>';
 				$('#loader').hide();

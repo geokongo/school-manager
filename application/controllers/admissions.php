@@ -1008,6 +1008,7 @@
 				$this->load->view('admissions/footer');
 			
 			}
+			
 		}
 		
 		if($this->uri->segment(3) == 'basic_up')
@@ -1110,6 +1111,8 @@
 		
 		if($this->uri->segment(3) == 'contacts_up')
 		{
+			$output = $this->session->userdata('sess');
+			$input['adm'] = $output['adm'];
 			$input['actionf'] = 'contacts';
 			
 			if($this->input->post('paddress'))
@@ -1180,6 +1183,8 @@
 		
 		if($this->uri->segment(3) == 'fdetails')
 		{
+			$output = $this->session->userdata('sess');
+			$input['adm'] = $output['adm'];
 			$input['actionf'] = 'get_fdetails';
 			
 			$this->load->model('admissions/admission');
@@ -1240,235 +1245,282 @@
 			
 			}
 			
-			$this->session->set_userdata('values', $values);
+			$this->load->model('admissions/admission');
+			$this->admission->update($input);
+			
+			$input['actionf'] = 'get_bdetails';
 			
 			$this->load->model('admissions/admission');
-			$this->admission->update($actionf);
+			$data['basic'] = $this->admission->update($input);
 			
-			$actionf = 'get_bdetails';
-			
-			$this->load->model('admissions/admission');
-			$data['basic'] = $this->admission->update($actionf);
-	
-			$actionf = 'get_pdetails';
+			$input['actionf'] = 'get_pdetails';
 			
 			$this->load->model('admissions/admission');
-			$data['personal'] = $this->admission->update($actionf);
+			$data['personal'] = $this->admission->update($input);
 			
-			$actionf = 'get_contacts';
-			
-			$this->load->model('admissions/admission');
-			$data['contacts'] = $this->admission->update($actionf);
-			
-		
-			$actionf = 'get_fdetails';
+			$input['actionf'] = 'get_contacts';
 			
 			$this->load->model('admissions/admission');
-			$data['father_details'] = $this->admission->update($actionf);
+			$data['contacts'] = $this->admission->update($input);
 			
-			$actionf = 'get_mdetails';
-			
-			$this->load->model('admissions/admission');
-			$data['mother_details'] = $this->admission->update($actionf);
-			
-			$actionf = 'get_gdetails';
+			$input['actionf'] = 'get_fdetails';
 			
 			$this->load->model('admissions/admission');
-			$data['guardian_details'] = $this->admission->update($actionf);
-		
+			$data['father_details'] = $this->admission->update($input);
 			
-			$this->load->view('admissions/header');
-			$this->load->view('admissions/update/view3', $data);
-			$this->load->view('admissions/footer');
-		
+			$input['actionf'] = 'get_mdetails';
+			
+			$this->load->model('admissions/admission');
+			$data['mother_details'] = $this->admission->update($input);
+			
+			$input['actionf'] = 'get_gdetails';
+			
+			$this->load->model('admissions/admission');
+			$data['guardian_details'] = $this->admission->update($input);
+			
+			$data['success'] = "Success";
+			
+			if($this->input->post('is_ajax'))
+			{
+				$this->load->view('admissions/update/view3', $data);
+			
+			}
+			else
+			{
+				$this->load->view('admissions/header');
+				$this->load->view('admissions/update/view3', $data);
+				$this->load->view('admissions/footer');
+			
+			}
+			
 		}
 		
 		if($this->uri->segment(3) == 'mdetails')
 		{
-			$actionf = 'get_mdetails';
+			$output = $this->session->userdata('sess');
+			$input['adm'] = $output['adm'];
+			$input['actionf'] = 'get_mdetails';
 			
 			$this->load->model('admissions/admission');
-			$data['mdetails'] = $this->admission->update($actionf);
+			$data['mdetails'] = $this->admission->update($input);
 			
-			$this->load->view('admissions/header');
-			$this->load->view('admissions/update/mdetails', $data);
-			$this->load->view('admissions/footer');
-		
+			$data['success'] = 'Success';
+			if($this->input->post('is_ajax'))
+			{
+				$this->load->view('admissions/update/mdetails', $data);
+			
+			}
+			else
+			{
+				$this->load->view('admissions/header');
+				$this->load->view('admissions/update/mdetails', $data);
+				$this->load->view('admissions/footer');
+			
+			}
+			
 		}
 		
 		if($this->uri->segment(3) == 'mdetails_up')
 		{
-			$actionf = 'mdetails';
-			$values = array();
+			$output = $this->session->userdata('sess');
+			$input['adm'] = $output['adm'];
+			$input['actionf'] = 'mdetails';
 			
 			if($this->input->post('f_name'))
 			{
-				$values['f_name'] = $this->input->post('f_name');
+				$input['f_name'] = $this->input->post('f_name');
 				
 			}
 			if($this->input->post('l_name'))
 			{
-				$values['l_name'] = $this->input->post('l_name');
+				$input['l_name'] = $this->input->post('l_name');
 			
 			}
 			if($this->input->post('paddress'))
 			{
-				$values['paddress'] = $this->input->post('paddress');
+				$input['paddress'] = $this->input->post('paddress');
 			
 			}
 			
 			if($this->input->post('pcode'))
 			{
-				$values['pcode'] = $this->input->post('pcode');
+				$input['pcode'] = $this->input->post('pcode');
 			
 			}
 			if($this->input->post('phone'))
 			{
-				$values['phone'] = $this->input->post('phone');
+				$input['phone'] = $this->input->post('phone');
 			
 			}
 			
 			if($this->input->post('email'))
 			{
-				$values['email'] = $this->input->post('email');
+				$input['email'] = $this->input->post('email');
 			
 			}
 			
-			$this->session->set_userdata('values', $values);
+			$this->load->model('admissions/admission');
+			$this->admission->update($input);
+			
+			$input['actionf'] = 'get_bdetails';
 			
 			$this->load->model('admissions/admission');
-			$this->admission->update($actionf);
+			$data['basic'] = $this->admission->update($input);
 			
-			$actionf = 'get_bdetails';
-			
-			$this->load->model('admissions/admission');
-			$data['basic'] = $this->admission->update($actionf);
-	
-			$actionf = 'get_pdetails';
+			$input['actionf'] = 'get_pdetails';
 			
 			$this->load->model('admissions/admission');
-			$data['personal'] = $this->admission->update($actionf);
+			$data['personal'] = $this->admission->update($input);
 			
-			$actionf = 'get_contacts';
-			
-			$this->load->model('admissions/admission');
-			$data['contacts'] = $this->admission->update($actionf);
-			
-		
-			$actionf = 'get_fdetails';
+			$input['actionf'] = 'get_contacts';
 			
 			$this->load->model('admissions/admission');
-			$data['father_details'] = $this->admission->update($actionf);
+			$data['contacts'] = $this->admission->update($input);
 			
-			$actionf = 'get_mdetails';
-			
-			$this->load->model('admissions/admission');
-			$data['mother_details'] = $this->admission->update($actionf);
-			
-			$actionf = 'get_gdetails';
+			$input['actionf'] = 'get_fdetails';
 			
 			$this->load->model('admissions/admission');
-			$data['guardian_details'] = $this->admission->update($actionf);
-		
+			$data['father_details'] = $this->admission->update($input);
 			
-			$this->load->view('admissions/header');
-			$this->load->view('admissions/update/view3', $data);
-			$this->load->view('admissions/footer');
-		
+			$input['actionf'] = 'get_mdetails';
+			
+			$this->load->model('admissions/admission');
+			$data['mother_details'] = $this->admission->update($input);
+			
+			$input['actionf'] = 'get_gdetails';
+			
+			$this->load->model('admissions/admission');
+			$data['guardian_details'] = $this->admission->update($input);
+			
+			$data['success'] = "Success";
+			
+			if($this->input->post('is_ajax'))
+			{
+				$this->load->view('admissions/update/view3', $data);
+			
+			}
+			else
+			{
+				$this->load->view('admissions/header');
+				$this->load->view('admissions/update/view3', $data);
+				$this->load->view('admissions/footer');
+			
+			}
+			
 		}
 		
 		if($this->uri->segment(3) == 'gdetails')
 		{
-			$actionf = 'get_gdetails';
+			$output = $this->session->userdata('sess');
+			$input['adm'] = $output['adm'];
+			$input['actionf'] = 'get_gdetails';
 			
 			$this->load->model('admissions/admission');
-			$data['gdetails'] = $this->admission->update($actionf);
+			$data['gdetails'] = $this->admission->update($input);
 			
-			$this->load->view('admissions/header');
-			$this->load->view('admissions/update/gdetails', $data);
-			$this->load->view('admissions/footer');
-		
+			$data['success'] = 'Success';
+			if($this->input->post('is_ajax'))
+			{
+				$this->load->view('admissions/update/gdetails', $data);
+			
+			}
+			else
+			{
+				$this->load->view('admissions/header');
+				$this->load->view('admissions/update/gdetails', $data);
+				$this->load->view('admissions/footer');
+			
+			}
+			
 		}
 		
 		if($this->uri->segment(3) == 'gdetails_up')
 		{
-			$actionf = 'gdetails';
-			$values = array();
+			$output = $this->session->userdata('sess');
+			$input['adm'] = $output['adm'];
+			$input['actionf'] = 'gdetails';
 			
 			if($this->input->post('f_name'))
 			{
-				$values['f_name'] = $this->input->post('f_name');
+				$input['f_name'] = $this->input->post('f_name');
 				
 			}
 			if($this->input->post('l_name'))
 			{
-				$values['l_name'] = $this->input->post('l_name');
+				$input['l_name'] = $this->input->post('l_name');
 			
 			}
 			if($this->input->post('paddress'))
 			{
-				$values['paddress'] = $this->input->post('paddress');
+				$input['paddress'] = $this->input->post('paddress');
 			
 			}
 			
 			if($this->input->post('pcode'))
 			{
-				$values['pcode'] = $this->input->post('pcode');
+				$input['pcode'] = $this->input->post('pcode');
 			
 			}
 			if($this->input->post('phone'))
 			{
-				$values['phone'] = $this->input->post('phone');
+				$input['phone'] = $this->input->post('phone');
 			
 			}
 			
 			if($this->input->post('email'))
 			{
-				$values['email'] = $this->input->post('email');
+				$input['email'] = $this->input->post('email');
 			
 			}
 			
-			$this->session->set_userdata('values', $values);
+			$this->load->model('admissions/admission');
+			$this->admission->update($input);
+			
+			$input['actionf'] = 'get_bdetails';
 			
 			$this->load->model('admissions/admission');
-			$this->admission->update($actionf);
+			$data['basic'] = $this->admission->update($input);
 			
-			$actionf = 'get_bdetails';
-			
-			$this->load->model('admissions/admission');
-			$data['basic'] = $this->admission->update($actionf);
-	
-			$actionf = 'get_pdetails';
+			$input['actionf'] = 'get_pdetails';
 			
 			$this->load->model('admissions/admission');
-			$data['personal'] = $this->admission->update($actionf);
+			$data['personal'] = $this->admission->update($input);
 			
-			$actionf = 'get_contacts';
-			
-			$this->load->model('admissions/admission');
-			$data['contacts'] = $this->admission->update($actionf);
-			
-		
-			$actionf = 'get_fdetails';
+			$input['actionf'] = 'get_contacts';
 			
 			$this->load->model('admissions/admission');
-			$data['father_details'] = $this->admission->update($actionf);
+			$data['contacts'] = $this->admission->update($input);
 			
-			$actionf = 'get_mdetails';
-			
-			$this->load->model('admissions/admission');
-			$data['mother_details'] = $this->admission->update($actionf);
-			
-			$actionf = 'get_gdetails';
+			$input['actionf'] = 'get_fdetails';
 			
 			$this->load->model('admissions/admission');
-			$data['guardian_details'] = $this->admission->update($actionf);
-		
+			$data['father_details'] = $this->admission->update($input);
 			
-			$this->load->view('admissions/header');
-			$this->load->view('admissions/update/view3', $data);
-			$this->load->view('admissions/footer');
-		
+			$input['actionf'] = 'get_mdetails';
+			
+			$this->load->model('admissions/admission');
+			$data['mother_details'] = $this->admission->update($input);
+			
+			$input['actionf'] = 'get_gdetails';
+			
+			$this->load->model('admissions/admission');
+			$data['guardian_details'] = $this->admission->update($input);
+			
+			$data['success'] = "Success";
+			
+			if($this->input->post('is_ajax'))
+			{
+				$this->load->view('admissions/update/view3', $data);
+			
+			}
+			else
+			{
+				$this->load->view('admissions/header');
+				$this->load->view('admissions/update/view3', $data);
+				$this->load->view('admissions/footer');
+			
+			}
+			
 		}
 
 	

@@ -249,167 +249,133 @@ class admission extends CI_Model {
 		if($input['actionf'] == 'basic')
 		{
 			$tablename = 'basic';
-			$names = $this->session->userdata('names');
 			
-			if(isset($names['f_name']))
+			if(isset($input['f_name']))
 			{
-				$f_name = $names['f_name'];
-				$data = array( 'f_name' => $f_name);
+				$data = array( 'f_name' => $input['f_name']);
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update($tablename, $data);
 				
 			}
 			
-			if(isset($names['m_name']))
+			if(isset($input['m_name']))
 			{
-				$m_name = $names['m_name'];
-				$data = array( 'm_name' => $m_name);
+				$data = array( 'm_name' => $input['m_name']);
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update($tablename, $data);
 				
 			}
 			
-			if(isset($names['l_name']))
+			if(isset($input['l_name']))
 			{
-				$l_name = $names['l_name'];
-				$data = array( 'l_name' => $l_name);
+				$data = array( 'l_name' => $input['l_name']);
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update( $tablename, $data);
 			
 			}
-			$this->session->unset_userdata('names');
-			
-			
 		
 		}
 		
-		if($actionf == 'contacts')
+		if($input['actionf'] == 'contacts')
 		{
-			$adm = $this->session->userdata('admission');
 			$tablename = 'contacts';
-			$values = $this->session->userdata('values');
 			
-			if(isset($values['paddress']))
+			if(isset($input['paddress']))
 			{
-				$paddress = $values['paddress'];
-				$data = array( 'PADDRESS' => $paddress);
+				$data = array( 'PADDRESS' => $input['paddress']);
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update($tablename, $data);
 				
 			}
 			
-			if(isset($values['pcode']))
+			if(isset($input['pcode']))
 			{
-				$pcode = $values['pcode'];
-				$data = array( 'PCODE' => $pcode);
+				$data = array( 'PCODE' => $input['pcode']);
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update($tablename, $data);
 				
 			}
 			
-			if(isset($values['town']))
+			if(isset($input['town']))
 			{
-				$town = $values['town'];
-				$data = array( 'TOWN' => $town);
+				$data = array( 'TOWN' => $input['town']);
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update( $tablename, $data);
 			
 			}
-			$this->session->unset_userdata('values');
 		
 		}
 		
-		if($actionf == 'personal' )
+		if($input['actionf'] == 'personal' )
 		{
 			$tablename = 'personal';
 			
-			if($this->session->userdata('dob'))
+			if($input['dob'])
 			{
-				$dob = $this->session->userdata('dob');
-				$data = array( 'DOB' => $dob );
+				$data = array( 'DOB' => $input['dob'] );
 				
-				$this->db->where('ADM', $adm);
+				$this->db->where('ADM', $input['adm']);
 				$this->db->update($tablename, $data);
-				
-				$this->session->unset_userdata('dob');
 				
 			}
 			
-			if($this->session->userdata('doa'))
+			if($input['doa'])
 			{
-				$doa = $this->session->userdata('doa');
-				$data = array( 'DOA' => $doa );
+				$data = array( 'DOA' => $input['doa'] );
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update($tablename, $data);
-				
-				$this->session->unset_userdata('doa');
 			
 			}
 			
-			if($this->session->userdata('pob'))
+			if($input['pob'])
 			{
-				$pob = $this->session->userdata('pob');
-				$data = array( 'POB' => $pob );
+				$data = array( 'POB' => $input['pob'] );
 				
-				$this->db->where( 'ADM', $adm );
+				$this->db->where( 'ADM', $input['adm'] );
 				$this->db->update( $tablename, $data);
-				
-				$this->session->unset_userdata('pob');
 			
 			}
 			
-			if($this->session->userdata('coa'))
+			if($input['coa'])
 			{
-				$coa = $this->session->userdata('coa');
-				$data = array( 'COA' => $coa );
+				$data = array( 'COA' => $input['coa'] );
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update($tablename, $data);
-				
-				$this->session->unset_userdata('coa');
 			
 			}
 			
-			if($this->session->userdata('county'))
+			if($input['county'])
 			{
-				$county = $this->session->userdata('county');
-				$data = array( 'COUNTY' => $county);
+				$data = array( 'COUNTY' => $input['county']);
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update($tablename, $data);
-				
-				$this->session->unset_userdata('county');
 			
 			}
 			
-			if($this->session->userdata('gender'))
+			if($input['gender'])
 			{
-				$gender = $this->session->userdata('gender');
-				$data = array( 'GENDER' => $gender);
+				$data = array( 'GENDER' => $input['gender']);
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update($tablename, $data);
-				
-				$this->session->unset_userdata('gender');
 			
 			}
 			
-			if($this->session->userdata('nationality'))
+			if($input['nationality'])
 			{
-				$nationality = $this->session->userdata('nationality');
-				$data = array( 'NATIONALITY' => $nationality);
+				$data = array( 'NATIONALITY' => $input['nationality']);
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update( $tablename, $data);
-				
-				$this->session->unset_userdata('nationality');
 			
 			}
 			
@@ -417,197 +383,190 @@ class admission extends CI_Model {
 		
 		}
 		
-		if($actionf == 'fdetails')
+		if($input['actionf'] == 'fdetails')
 		{
 			$tablename = 'father_details';
-			$values = $this->session->userdata('values');
-			
-			if(isset($values['f_name']))
+		
+			if(isset($input['f_name']))
 			{
-				$data = array( 'f_name' => $values['f_name'] );
+				$data = array( 'f_name' => $input['f_name'] );
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update( $tablename, $data);
 			
 			}
 			
-			if(isset($values['l_name']))
+			if(isset($input['l_name']))
 			{
-				$data = array( 'l_name' => $values['l_name'] );
+				$data = array( 'l_name' => $input['l_name'] );
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update( $tablename, $data);
 			
 			}
 			
-			if(isset($values['paddress']))
+			if(isset($input['paddress']))
 			{
-				$data = array( 'PADDRESS' => $values['paddress']);
+				$data = array( 'PADDRESS' => $input['paddress']);
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update($tablename, $data);
 			
 			}
 			
-			if(isset($values['pcode']))
+			if(isset($input['pcode']))
 			{
-				$data = array( 'PCODE' => $values['pcode'] );
+				$data = array( 'PCODE' => $input['pcode'] );
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update($tablename, $data );
 			
 			}
 			
-			if(isset($values['phone']))
+			if(isset($input['phone']))
 			{
-				$data = array( 'PHONE' => $values['phone'] );
+				$data = array( 'PHONE' => $input['phone'] );
 				
-				$this->db->where( 'ADM', $adm );
+				$this->db->where( 'ADM', $input['adm'] );
 				$this->db->update( $tablename, $data);
 			
 			}
 			
-			if(isset($values['email']))
+			if(isset($input['email']))
 			{
-				$data = array( 'EMAIL' => $values['email'] );
+				$data = array( 'EMAIL' => $input['email'] );
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update( $tablename, $data );
 			
 			}
 			
-			$this->session->unset_userdata('values');
 			return;
 			
 		}
 		
-		if($actionf == 'mdetails')
+		if($input['actionf'] == 'mdetails')
 		{
 			
 			$tablename = 'mother_details';
-			$values = $this->session->userdata('values');
 			
-			if(isset($values['f_name']))
+			if(isset($input['f_name']))
 			{
-				$data = array( 'f_name' => $values['f_name'] );
+				$data = array( 'f_name' => $input['f_name'] );
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update( $tablename, $data);
 			
 			}
 			
-			if(isset($values['l_name']))
+			if(isset($input['l_name']))
 			{
-				$data = array( 'l_name' => $values['l_name'] );
+				$data = array( 'l_name' => $input['l_name'] );
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update( $tablename, $data);
 			
 			}
 			
-			if(isset($values['paddress']))
+			if(isset($input['paddress']))
 			{
-				$data = array( 'PADDRESS' => $values['paddress']);
+				$data = array( 'PADDRESS' => $input['paddress']);
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update($tablename, $data);
 			
 			}
 			
-			if(isset($values['pcode']))
+			if(isset($input['pcode']))
 			{
-				$data = array( 'PCODE' => $values['pcode'] );
+				$data = array( 'PCODE' => $input['pcode'] );
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update($tablename, $data );
 			
 			}
 			
-			if(isset($values['phone']))
+			if(isset($input['phone']))
 			{
-				$data = array( 'PHONE' => $values['phone'] );
+				$data = array( 'PHONE' => $input['phone'] );
 				
-				$this->db->where( 'ADM', $adm );
+				$this->db->where( 'ADM', $input['adm'] );
 				$this->db->update( $tablename, $data);
 			
 			}
 			
-			if(isset($values['email']))
+			if(isset($input['email']))
 			{
-				$data = array( 'EMAIL' => $values['email'] );
+				$data = array( 'EMAIL' => $input['email'] );
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update( $tablename, $data );
 			
 			}
 			
-			$this->session->unset_userdata('values');
 			return;
-			
 		
 		}
 		
-		if($actionf == 'gdetails')
+		if($input['actionf'] == 'gdetails')
 		{
 			
 			$tablename = 'guardian_details';
-			$values = $this->session->userdata('values');
 			
-			if(isset($values['f_name']))
+			if(isset($input['f_name']))
 			{
-				$data = array( 'f_name' => $values['f_name'] );
+				$data = array( 'f_name' => $input['f_name'] );
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update( $tablename, $data);
 			
 			}
 			
-			if(isset($values['l_name']))
+			if(isset($input['l_name']))
 			{
-				$data = array( 'l_name' => $values['l_name'] );
+				$data = array( 'l_name' => $input['l_name'] );
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update( $tablename, $data);
 			
 			}
 			
-			if(isset($values['paddress']))
+			if(isset($input['paddress']))
 			{
-				$data = array( 'PADDRESS' => $values['paddress']);
+				$data = array( 'PADDRESS' => $input['paddress']);
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update($tablename, $data);
 			
 			}
 			
-			if(isset($values['pcode']))
+			if(isset($input['pcode']))
 			{
-				$data = array( 'PCODE' => $values['pcode'] );
+				$data = array( 'PCODE' => $input['pcode'] );
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update($tablename, $data );
 			
 			}
 			
-			if(isset($values['phone']))
+			if(isset($input['phone']))
 			{
-				$data = array( 'PHONE' => $values['phone'] );
+				$data = array( 'PHONE' => $input['phone'] );
 				
-				$this->db->where( 'ADM', $adm );
+				$this->db->where( 'ADM', $input['adm'] );
 				$this->db->update( $tablename, $data);
 			
 			}
 			
-			if(isset($values['email']))
+			if(isset($input['email']))
 			{
-				$data = array( 'EMAIL' => $values['email'] );
+				$data = array( 'EMAIL' => $input['email'] );
 				
-				$this->db->where( 'ADM', $adm);
+				$this->db->where( 'ADM', $input['adm']);
 				$this->db->update( $tablename, $data );
 			
 			}
 			
-			$this->session->unset_userdata('values');
 			return;
 			
 		}
