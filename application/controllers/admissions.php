@@ -979,7 +979,7 @@
 		
 		if($this->uri->segment(3) == 'basic_up')
 		{
-			$actionf = 'basic';
+			$input['actionf'] = 'basic';
 			$names = array();
 			
 			if($this->input->post('f_name'))
