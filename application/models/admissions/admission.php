@@ -316,7 +316,7 @@ class admission extends CI_Model {
 		{
 			$tablename = 'personal';
 			
-			if($input['dob'])
+			if(isset($input['dob']))
 			{
 				$data = array( 'DOB' => $input['dob'] );
 				
@@ -325,7 +325,7 @@ class admission extends CI_Model {
 				
 			}
 			
-			if($input['doa'])
+			if(isset($input['doa']))
 			{
 				$data = array( 'DOA' => $input['doa'] );
 				
@@ -334,7 +334,7 @@ class admission extends CI_Model {
 			
 			}
 			
-			if($input['pob'])
+			if(isset($input['pob']))
 			{
 				$data = array( 'POB' => $input['pob'] );
 				
@@ -343,7 +343,7 @@ class admission extends CI_Model {
 			
 			}
 			
-			if($input['coa'])
+			if(isset($input['coa']))
 			{
 				$data = array( 'COA' => $input['coa'] );
 				
@@ -352,7 +352,7 @@ class admission extends CI_Model {
 			
 			}
 			
-			if($input['county'])
+			if(isset($input['county']))
 			{
 				$data = array( 'COUNTY' => $input['county']);
 				
@@ -361,7 +361,7 @@ class admission extends CI_Model {
 			
 			}
 			
-			if($input['gender'])
+			if(isset($input['gender']))
 			{
 				$data = array( 'GENDER' => $input['gender']);
 				
@@ -370,7 +370,7 @@ class admission extends CI_Model {
 			
 			}
 			
-			if($input['nationality'])
+			if(isset($input['nationality']))
 			{
 				$data = array( 'NATIONALITY' => $input['nationality']);
 				

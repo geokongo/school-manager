@@ -869,7 +869,7 @@
 		
 		if($this->uri->segment(3) == 'personal')
 		{
-			$output = $this->input->userdata('sess');
+			$output = $this->session->userdata('sess');
 			$input['actionf'] = 'get_pdetails';
 			$input['adm'] = $output['adm'];
 			

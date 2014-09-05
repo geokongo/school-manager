@@ -2,7 +2,6 @@ function ajax(action, url, form_data)
 {
 	var content = $('#content').html();
 	
-	$('div#main').remove();
 	$('#loader').show();
 	
 	$.ajax({
