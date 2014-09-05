@@ -964,10 +964,12 @@
 		
 		if($this->uri->segment(3) == 'basic')
 		{
-			$actionf = 'get_bdetails';
+			$output = $this->session->userdata('sess');
+			$input['adm'] = $output['adm'];
+			$input['actionf'] = 'get_bdetails';
 			
 			$this->load->model('admissions/admission');
-			$data['basic'] = $this->admission->update($actionf);
+			$data['basic'] = $this->admission->update($input);
 			
 			$this->load->view('admissions/header');
 			$this->load->view('admissions/update/basic', $data);
