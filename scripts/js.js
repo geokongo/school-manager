@@ -1,14 +1,14 @@
 function ajax(action, url, form_data)
 {
 	var content = $('#content').html();
-	
+	$('#main').remove();
 	$('#loader').show();
 	
 	$.ajax({
 		url: url,
 		type: 'POST',
 		data: form_data,
-		success: function(val, desc, obj) {
+		success: function(val) {
 			$('#loader').hide();
 			$('#content').html(val);
 			
