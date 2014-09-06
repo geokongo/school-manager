@@ -450,7 +450,7 @@ color: #444;
     font-weight: bold;
 
 }
-.adm_form input {
+.adm_form  input {
 	font-size: 18px;
     width: 38%;
     padding: 0px 0px 0px 5px;
@@ -491,3 +491,74 @@ color: #444;
     background: #3EB1DD;
 }
 
+table {
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+}
+
+div#adm_table {
+    margin-left:auto;
+    margin-right:auto;
+    width: 600px;
+    background: rgba(0,153,255,0.6);
+
+}
+
+.adm_table {
+	width: 100%;
+	height: 100%;
+}
+.adm_table tr+tr {
+	font: 15px Arial, Helvetica, sans-serif;
+    color: #000;
+
+}
+
+.adm_table  input {
+	width: 90%;
+	font-size: 18px;
+    padding: 0px 0px 0px 1px;
+    border: 1px solid #C5E2FF;
+    background: #E9EEF0;
+    outline: 0;
+    -webkit-box-shadow:inset 0px 1px 6px #ECF3F5;
+    box-shadow: inset 0px 1px 6px #ECF3F5;
+    height: 30px;
+    line-height:24px;
+    margin: 2px 6px 2px 0px;
+}
+
+.adm_table input focus {
+	background-color: #FFF;
+	box-shadow: 0px 0px 5px #C00;
+
+}
+
+.adm_table input[type=submit] {
+	width: 25%;
+}
+.adm_table tr+tr td{
+	padding-left: 20px;
+	width: 25%;
+
+}
+
+.adm_table tr:first-child {
+    font: 24px Arial, Helvetica, sans-serif;
+    background: rgba(0,153,255,0.9);
+    border-bottom: 1px solid rgba(0,153,255,0.6);
+	font-size: 24px;
+	text-align: center;
+	width: 100%;
+	height: 100%;
+	font-weight: bold;
+
+}
+
+.adm_table tr+tr td:last-child {
+	text-align: right;
+}
