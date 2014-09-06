@@ -1,22 +1,22 @@
-<div id="main">
+<section id="content">
+	<div id="main">
+		<?php 
 
-<?php 
+		echo '<div class="classes">';
+			echo '<p> View Results </p>';
+			echo "<p>Select a Class.</p>";
+			?>
 
-echo "<img src=\"".base_url()."images/view.png\" /><p>";
-echo "<img src=\"".base_url()."images/underline.jpg\" />";
+			<ul>
+			<?php 
+			foreach($classes->result() as $row)
+			{
+				echo '<li class="acd_button"><a href="'.base_url()."academics/view/class/{$row->CLASS}\">{$row->CLASS}</a></li>"; 
 
-echo "<p>Choose the Classes below and view results.</p>";
-?>
+			}
+			?>
+			</ul>
+		</div>
 
-<ul>
-<?php 
-foreach($classes->result() as $row)
-{
-	echo "<li><a href=\"".base_url()."academics/view/class/{$row->CLASS}\">{$row->CLASS}</a></li>"; 
-
-}
-?>
-</ul>
-
-
-</div>
+	</div>
+</section>

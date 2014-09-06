@@ -1,23 +1,25 @@
-<div id="main">
+<section id="content">
+	<div id="main">
+		<?php 
+		
+		$output = $this->session->userdata('sess');
+		$title = $output['class'].' '.$output['streams'];
+		echo '<div class="classes">';
+			echo '<p> View Results </p>';
+			echo heading($title, 3);
+			echo "<p>Select a Year.</p>";
+			?>
 
-<?php 
+			<ul>
+			<?php 
+			foreach($years->result() as $row)
+			{
+				echo '<li class="acd_button"><a href="'.base_url()."academics/view/years/{$row->YEAR}\">{$row->YEAR}</a></li>"; 
 
-echo "<img src=\"".base_url()."images/view.png\" /><p>";
-echo "<img src=\"".base_url()."images/underline.jpg\" /><p>";
+			}
+			?>
+			</ul>
+		</div>
 
-echo "<b>{$this->session->userdata('class')} {$this->session->userdata('streams')}</b>";
-echo "<p>Choose the Year below and view results.</p>";
-?>
-<ul>
-<?php 
-foreach($years->result() as $row)
-{
-	echo "<li><a href=\"".base_url()."academics/view/years/{$row->YEAR}\">{$row->YEAR}</a></li>"; 
-
-}
-?>
-</ul>
-
-
-
-</div>
+	</div>
+</section>

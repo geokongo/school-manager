@@ -1,24 +1,22 @@
-<div id="main">
+<section id="content">
+	<div id="main">
+		<?php 
+		
+		echo '<div class="classes">';
+			echo '<p> Report Forms </p>';
+			echo "<p>Select a Class.</p>";
+			?>
 
-<?php 
+			<ul>
+			<?php 
+			foreach($classes->result() as $row)
+			{
+				echo '<li class="acd_button"><a href="'.base_url()."academics/reports/class/{$row->CLASS}\">{$row->CLASS}</a></li>"; 
 
-echo "<img src=\"".base_url()."images/report.png\" /><p>";
-echo "<img src=\"".base_url()."images/underline.jpg\" /><p>";
+			}
+			?>
+			</ul>
+		</div>
 
-echo "<p>Choose the Class for which to generate end term reports.</p>";
-?>
-
-<ul>
-<?php 
-foreach($classes->result() as $row)
-{
-	echo "<li><a href=\"".base_url()."academics/reports/class/{$row->CLASS}\">{$row->CLASS}</a></li>"; 
-
-}
-?>
-</ul>
-
-
-
-
-</div>
+	</div>
+</section>

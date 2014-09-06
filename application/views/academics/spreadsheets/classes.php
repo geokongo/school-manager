@@ -1,22 +1,22 @@
-<div id="main">
+<section id="content">
+	<div id="main">
+		<?php 
 
-<?php 
+		echo '<div class="classes">';
+			echo '<p> Spreadsheets </p>';
+			echo "<p>Select a Class.</p>";
+			?>
 
-echo "<img src=\"".base_url()."images/spreadsheets.png\" /><p>";
-echo "<img src=\"".base_url()."images/underline.jpg\" /><p>";
+			<ul>
+			<?php 
+			foreach($classes->result() as $row)
+			{
+				echo '<li class="acd_button"><a href="'.base_url()."academics/spreadsheets/class/{$row->CLASS}\">{$row->CLASS}</a></li>"; 
 
-echo "<p>Choose the Class for which to generate spreadsheet.</p>";
-?>
+			}
+			?>
+			</ul>
+		</div>
 
-<ul>
-<?php 
-foreach($classes->result() as $row)
-{
-	echo "<li><a href=\"".base_url()."academics/spreadsheets/class/{$row->CLASS}\">{$row->CLASS}</a></li>"; 
-
-}
-?>
-</ul>
-
-
-</div>
+	</div>
+</section>
