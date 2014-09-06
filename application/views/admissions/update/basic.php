@@ -32,6 +32,7 @@
 			echo $output['m_name']." ";
 			echo $output['l_name'].'<br />';
 			echo 'Admission Number '.$output['adm'].'</p>'; 
+			echo 'Edit Basic Details</p>';
 			
 			echo form_hidden('actionflag', 'basic_up');
 			

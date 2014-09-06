@@ -33,6 +33,7 @@
 			echo $output['m_name']." ";
 			echo $output['l_name'].'<br />';
 			echo 'Admission Number '.$output['adm'].'</p>'; 
+			echo 'Edit Contact Details</p>';
 	
 			echo form_hidden('actionflag', 'contacts_up');
 			echo '</td></tr>';
