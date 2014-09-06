@@ -32,8 +32,7 @@
 		echo form_label('Admission Number:', 'adm')."<span>";
 		
 		$attrib1 = array( 'name' => 'adm',
-						  'id' => 'adm',
-						  'size' => '20'
+						  'id' => 'adm'
 						 );
 						 
 		echo form_input($attrib1);
@@ -41,8 +40,7 @@
 		echo form_label('First Name:', 'f_name')."<span>";
 		
 		$attrib2 = array( 'name' => 'f_name',
-						  'id' => 'f_name',
-						  'size' => '20'
+						  'id' => 'f_name'
 						  );
 						  
 		echo form_input($attrib2);

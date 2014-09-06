@@ -21,11 +21,11 @@
 	
 	$output = $this->session->userdata('sess');
 	
-	$array = array('id' => 'gdetails_up');
-	echo form_open('admissions/update/gdetails_up', $array).'<p><p>';
 	
 	echo '<div id="adm_table">';
 		echo '<table class="adm_table">';
+			$array = array('id' => 'gdetails_up');
+			echo form_open('admissions/update/gdetails_up', $array).'<p><p>';
 			echo '<tr>';
 			echo '<td colspan="42">';
 			echo '<p>Update Records<br />';

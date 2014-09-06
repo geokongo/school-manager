@@ -115,7 +115,7 @@
 							  'size' => '20'
 							  );
 			
-			echo form_input($attrib5).'<span>';
+			echo form_input($attrib5).'</span>';
 			echo form_label('Gender:', 'gender').'<span>';
 			
 			$attrib6 = array( 'name' => 'gender',

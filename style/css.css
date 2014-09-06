@@ -72,7 +72,7 @@ header ul li a {
 	
 	font-family: sans-serif;
 	font-size: 12px;
-	font-color: #fff; 
+	color: #fff; 
 
 }
 
@@ -213,19 +213,19 @@ nav {
 	to   { transform: rotate(360deg); opacity: 1; }
 }
 
-.login_container {
+div.login_container {
   margin: 50px auto;
   width: 640px;
 }
  
-.login {
+div.login_container > div.login {
   position: relative;
   margin: 0 auto;
   padding: 20px 20px 20px;
   width: 310px;
 }
 
-.login p.submit {
+div.login_container > div.login p.submit {
   text-align: right;
 }
  
@@ -239,11 +239,7 @@ nav {
   font-size: 13px;
 }
 
-.login_container {
-  margin: 50px auto;
-  width: 640px;
-}
-.login:before {
+div.login_container > div.login:before {
   content: '';
   position: absolute;
   top: -8px;
@@ -256,7 +252,7 @@ nav {
   border-radius: 4px;
 }
  
-.login h1 {
+div.login_container > div.login h1 {
   margin: -20px -20px 21px;
   line-height: 40px;
   font-size: 36px;
@@ -274,24 +270,24 @@ nav {
   box-shadow: 0 1px whitesmoke;
 }
  
-.login p {
+div.login_container > div.login p {
   margin: 20px 0 0;
 }
  
-.login p:first-child {
+div.login_container > div.login p:first-child {
   margin-top: 0;
 }
  
-.login input[type=text], .login input[type=password] {
+div.login_container > div.login input[type=text], div.login_container > div.login input[type=password] {
   width: 278px;
 }
 
-input {
+div.login_container > div.login input {
   font-family: 'Lucida Grande', Tahoma, Verdana, sans-serif;
   font-size: 20px;
 }
  
-input[type=text], input[type=password] {
+div.login_container > div.login input[type=text], div.login_container > div.login input[type=password] {
   margin: 5px;
   padding: 0 10px;
   width: 200px;
@@ -307,7 +303,7 @@ input[type=text], input[type=password] {
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
 }
  
- input[type=text]:focus
+ div.login_container > div.login input[type=text]:focus
  {
 	background-color: #FFF;
 	box-shadow: 2px 1px 5px #C00;
@@ -315,13 +311,13 @@ input[type=text], input[type=password] {
 	outline-offset: 0;
 
  }
-input[type=text]:hover, input[type=text]:focus, input[type=password]:hover, input[type=password]:focus {
+div.login_container > div.login input[type=text]:hover, div.login_container > div.login input[type=text]:focus, div.login_container > div.login input[type=password]:hover, div.login_container > div.login input[type=password]:focus {
   border-color: #7dc9e2;
   outline-color: #dceefc;
   outline-offset: 0;
 }
  
-input[type=submit] {
+div.login_container > div.login input[type=submit] {
   padding: 0 18px;
   height: 29px;
   font-size: 12px;
@@ -344,15 +340,15 @@ input[type=submit] {
   box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
-input[type=submit]:hover {
+div.login_container > div.login input[type=submit]:hover {
   background: rgba(0, 102, 204, 0.7);
   border-color: #9eb9c2 #b3c0c8 #b4ccce;
   -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
   box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
 }
 
-input[type=checkbox],
-input[type=radio] {
+div.login_container > div.login input[type=checkbox],
+div.login_container > div.login input[type=radio] {
 border: 1px solid #c0c0c0;
 margin: 0 0.1em 0 0;
 padding: 0;
@@ -371,11 +367,11 @@ display: inline-block;
  
 }
  
-input[type=radio] {
+div.login_container > div.login input[type=radio] {
 -webkit-border-radius: 2em; /* Make radios round */
 }
  
-input[type=checkbox]:checked::after {
+div.login_container > div.login input[type=checkbox]:checked::after {
 content:"âœ”";
 display:block;
 text-align: center;
@@ -384,7 +380,7 @@ height: 16px;
 line-height: 18px;
 }
  
-input[type=radio]:checked::after {
+div.login_container > div.login input[type=radio]:checked::after {
 content:"â—";
 display:block;
 height: 16px;
@@ -413,7 +409,7 @@ color: #444;
     color: #000;
 	
 }
-.adm_form header {
+form.adm_form  > header {
     font: 24px Arial, Helvetica, sans-serif;
     background: rgba(0,153,255,0.9);
     border-bottom: 1px solid rgba(0,153,255,0.6);
@@ -425,7 +421,7 @@ color: #444;
 
 }
 
-.adm_form label , .adm_form div label {
+form.adm_form  > label , form.adm_form  > div label {
     display: block;
     margin: 0px 0px 5px;
 	float: left;
@@ -438,21 +434,9 @@ color: #444;
 
 }
 
-.adm_form label span, .adm_form div label span {
-    display: block;
-    margin: 0px 0px 5px;
-	float: left;
-    width: 280px;
-    color: rgba(0,0,0,0.8);
-    margin-top: 10px;
-    text-align: right;
-    padding-right: 15px;
-    font-weight: bold;
-
-}
-.adm_form  input {
+form.adm_form  > span input, form.adm_form  > div > span select, form.adm_form  > span select  {
 	font-size: 18px;
-    width: 38%;
+    width: 200px;
     padding: 0px 0px 0px 5px;
     border: 1px solid #C5E2FF;
     background: #E9EEF0;
@@ -464,21 +448,17 @@ color: #444;
     margin: 2px 6px 16px 0px;
 }
 
-.adm_form input focus {
+form.adm_form > span input:focus, form.adm_form > span input:hover {
 	background-color: #FFF;
-	box-shadow: 0px 0px 5px #C00;
+	box-shadow: 2px 1px 5px #C00;
+	outline-color: #c00;
+	outline-offset: 0;
 
 }
-.adm_form select{
-    height:30px;
-    padding: 5px 0px 0px 5px;
-    width: 20%%;
-}
 
-.adm_form .button{
+form.adm_form  > span input[type=submit] {
 	
-    padding: 10px 30px 10px 30px;
-    background: #66C1E4;
+    background: rgba(0,102, 253, 0.9);
     border: none;
     color: #FFF;
     box-shadow: 1px 1px 1px #4C6E91;
@@ -487,7 +467,7 @@ color: #444;
     text-shadow: 1px 1px 1px #5079A3;
    
 }
-.adm_form .button:hover{
+form.adm_form  > span input[type=submit]:hover{
     background: #3EB1DD;
 }
 
@@ -508,17 +488,17 @@ div#adm_table {
 
 }
 
-.adm_table {
+div > table.adm_table  {
 	width: 100%;
 	height: 100%;
 }
-.adm_table tr+tr {
+div > table.adm_table tr+tr {
 	font: 15px Arial, Helvetica, sans-serif;
     color: #000;
 
 }
 
-.adm_table  input {
+div > table.adm_table  input {
 	width: 90%;
 	font-size: 18px;
     padding: 0px 0px 0px 1px;
@@ -532,22 +512,22 @@ div#adm_table {
     margin: 2px 6px 2px 0px;
 }
 
-.adm_table input focus {
+div > table.adm_table input focus {
 	background-color: #FFF;
 	box-shadow: 0px 0px 5px #C00;
 
 }
 
-.adm_table input[type=submit] {
+div > table.adm_table input[type=submit] {
 	width: 25%;
 }
-.adm_table tr+tr td{
-	padding-left: 20px;
-	width: 25%;
-
+div > table.adm_table > form > tr+tr td{
+	padding-left: 1px;
+	width: 150px;
+	text-align: left;
 }
 
-.adm_table tr:first-child {
+div > table.adm_table tr:first-child {
     font: 24px Arial, Helvetica, sans-serif;
     background: rgba(0,153,255,0.9);
     border-bottom: 1px solid rgba(0,153,255,0.6);
@@ -559,6 +539,40 @@ div#adm_table {
 
 }
 
-.adm_table tr+tr td:last-child {
+div > table.adm_table tr+tr td:last-child {
 	text-align: right;
+}
+
+div.adm_table {
+    margin-left:auto;
+    margin-right:auto;
+    width: 600px;
+
+}
+
+#adm_table {
+	width: 100%;
+	height: 100%;
+    background: rgba(0,153,255,0.6);
+	
+}
+
+#adm_table tr + tr  td:first-child {
+	text-align: right;
+	width: 50%;
+}
+
+#adm_table tr + tr td:last-child {
+	text-align: left;
+	width: 50%;
+	padding-left: 5px;
+}
+
+#adm_table tr:first-child {
+	background: rgba(255,255,255,0.6);
+}
+
+#adm_table tr + tr {
+	font: 20px Arial, Helvetica, sans-serif;
+	color: #000;
 }
