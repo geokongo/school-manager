@@ -22,7 +22,7 @@
 	$output = $this->session->userdata('sess');
 	
 	$array = array('id' => 'mdetails_up');
-	echo form_open('admissions/update/fdetails_up', $array).'<p><p>';
+	echo form_open('admissions/update/mdetails_up', $array).'<p><p>';
 	
 	echo '<div id="adm_table">';
 		echo '<table class="adm_table">';

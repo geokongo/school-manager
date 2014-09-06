@@ -24,6 +24,7 @@
 	
 	echo heading('Student Details', 3);
 	
+	$output = $this->session->userdata('sess');
 	echo $this->session->userdata('f_name')." ";
 	echo $this->session->userdata('m_name')." ";
 	echo $this->session->userdata('l_name')."<p>";
