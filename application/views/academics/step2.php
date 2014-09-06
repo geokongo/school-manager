@@ -1,44 +1,46 @@
-<div id="main">
+<section id="content">
+	<div id="main">
 
-<?php
+	<?php
+		
+		$output = $this->session->userdata('sess');
+		$title = $output['class'];
+		
+		$array = array( 'class' => 'adm_form');
+		echo form_open('academics/enter', $array)."<header>";
+		echo heading('Entering Results into the Database', 3);
+		echo heading('Step 2', 4);
+		echo heading($title, 3).'</header>';
+		
+		echo form_hidden('actionf', 'step2');
 
-echo "<img src=\"".base_url()."images/enter_ex.png\" /><p>";
-echo "<img src=\"".base_url()."images/underline.jpg\" />";
+		echo form_label('Select Stream: ', 'step2').'<span>';
 
-echo heading('Entering Results into the Database', 2);
-echo heading('Step 2', 2);
-echo "You have chosen to enter results for {$this->session->userdata('class')}<p>";
-echo "Choose the Stream for which you want to enter results below then click next to proceed.<p>";
-
-echo form_open('academics/enter');
-echo form_hidden('actionf', 'step2');
-echo form_label('Select Stream', 'step2');
-
-?>
-	<select name="stream" id="step2">
-		<?php
-		//get classes
-			
-		if($streams->num_rows() > 0)
-		{
-			foreach($streams->result() as $row)
+	?>
+		<select name="stream" id="step2">
+			<?php
+			//get classes
+				
+			if($streams->num_rows() > 0)
 			{
-				echo "<option value=\"{$row->STREAMS}\">{$row->STREAMS}</option>";
+				foreach($streams->result() as $row)
+				{
+					echo "<option value=\"{$row->STREAMS}\">{$row->STREAMS}</option>";
+				
+				}
 			
 			}
+			
+			?>
+		</select></span>
+		<?php
+		echo form_label().'<span>';
+		echo form_submit('submit', 'Next').'</span>';
+		echo form_close();
 		
-		}
 		
-		?>
-	</select><p>
-	<?php
-	echo "<a href=\"step1.php\">Back</a>";
-	echo form_submit('submit', 'Next');
-	echo "</p>";
-	echo form_close();
-	
-	
-?>
+	?>
 
-</div>
+	</div>
+</section>
 	

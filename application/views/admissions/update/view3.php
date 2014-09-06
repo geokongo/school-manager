@@ -23,7 +23,7 @@
 	echo '<div class="adm_table">';
 			echo '<table id="adm_table">';
 				echo '<tr><td colspan="42">';
-				echo '<p>Full Names &nbsp&nbsp&nbsp&nbsp <a href=\"".base_url()."admissions/update/basic\">Edit</a></p></td></tr>';
+				echo "<p>Full Names &nbsp&nbsp&nbsp&nbsp <a href=\"".base_url()."admissions/update/basic\">Edit</a></p></td></tr>";
 				echo '<tr><td> First Name: </td><td>'.$output['f_name'].'</td></tr>';
 				echo '<tr><td> Middle Name: </td><td>'.$output['m_name'].'</td></tr>';
 				echo '<tr><td> Last Name: </td><td>'.$output['l_name'].'</td></tr>';
