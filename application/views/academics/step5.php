@@ -1,21 +1,23 @@
-<div id="main">
+<section id="content">
+	<div id="main">
 
-<?php
+	<?php
 
-echo "<img src=\"".base_url()."images/enter_ex.png\" /><p>";
-echo "<img src=\"".base_url()."images/underline.jpg\" />";;
+		$output = $this->session->userdata('sess');
+		$title = $output['class'].' '.$output['streams'].' '.$output['subjects'];
+		$exam = $output['exams'];
+		
+		$array = array( 'class' => 'adm_form');
+		echo form_open('academics/enter', $array)."<header>";
+		echo heading('Entering Results into the Database', 3);
+		echo heading('Step 5', 4);
+		echo heading($title, 3);
+		echo heading($exam, 3).'</header>';
+		
+		echo form_hidden('actionf', 'step5');
 
-echo heading($this->session->userdata('exams'), 2);
-echo heading('Entering Results into the Database', 2);
-echo heading('Step 5', 2);
-echo "<p>You have chosen to enter {$this->session->userdata('subjects')} results for {$this->session->userdata('class')} {$this->session->userdata('streams')}";
-echo "<p>Choose the Term for which you want to enter results below then click next to proceed. </p>";
-
-echo form_open('academics/enter');
-echo form_hidden('actionf', 'step5');
-echo form_label('Select Term', 'step5');
-
-?>
+		echo form_label('Select Term: ', 'step5').'<span>';
+	?>
 
 	<select name="term" id="step5">
 		<?php
@@ -32,15 +34,14 @@ echo form_label('Select Term', 'step5');
 		}
 		?>
 		
-	</select><p>
+	</select></span>
 	<?php
-	echo "<a href=\"step4.php\">Back</a>";
-	echo form_submit('submit', 'Next');
-	echo "</p>";
+	echo form_label().'<span>';
+	echo form_submit('submit', 'Next').'</span>';
 	echo form_close();
 	
-	
-?>
+	?>
 
-</div>
+	</div>
+</section>
 	
