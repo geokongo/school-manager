@@ -11,6 +11,7 @@
 <?php 
 
 echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".base_url()."style/css.css\">";
+echo "<link rel=\"stylesheet\" type=\"text/css\" media=\"print\" href=\"".base_url()."style/print.css\">";
 echo "<p>".NAME."</p>";
 
 echo "<ul><li class=\"button\"><a href=\"";
