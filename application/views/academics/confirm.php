@@ -1,23 +1,25 @@
-<?php
+<section id="content">
+	<div id="main">
+	<?php
 
-echo "<div id=\"main\">";
+		$output = $this->session->userdata('sess');
+		$title = $output['class'].' '.$output['streams'].' '.$output['subjects'];
+		$exam = $output['exams'].' '.$output['terms'].' '.$output['year'];
+		
+		$array = array( 'class' => 'adm_form');
+		echo form_open_multipart('academics/enter', $array)."<header>";
+		echo heading('Entering Results into the Database', 3);
+		echo heading('Confirm to Enter the Submitted Data', 4);
+		echo heading($title, 3);
+		echo heading($exam, 3).'</header>';
+		
+		echo form_hidden('actionf', 'insert_records');
+		echo form_label().'<span>';
 
-echo "<img src=\"".base_url()."images/enter_ex.png\" /><p>";
-echo "<img src=\"".base_url()."images/underline.jpg\" />";
-
-echo heading('We will now enter data into the database', 1);
-echo "<p>Confirm that the data is okay and you now want it into a table in the database.</p>";
-
-echo form_open('academics/enter');
-echo form_hidden('actionf', 'insert_records');
-echo form_label('Confirm to insert results into database','confirm');
-echo "<p>";
-echo form_submit('submit', 'Confirm');
-echo form_close();
-
-echo $this->session->userdata('file_path');
-echo "<p>";
-echo $this->session->userdata('tablename');
-
-
-echo "</div>";
+		echo form_submit('submit', 'Confirm').'</span>';
+		echo form_close();
+	
+	?>
+	
+	</div>
+</section>
