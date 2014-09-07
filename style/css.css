@@ -477,10 +477,10 @@ form.adm_form  > span input[type=submit]:hover{
 
 table {
 	font-family: verdana,arial,sans-serif;
-	font-size:16px;
-	color:#333333;
-	border-width: 1px;
-	border-color: #666666;
+	font-size:18px;
+	color:#000;
+	border-width: 2px;
+	border-color: #000;
 	border-collapse: collapse;
 }
 
@@ -671,28 +671,39 @@ li.acd_button:hover {
 
 
 div#report {
-	width: 900px;
-	margin: auto;
-}
-
-div#report > div.header p {
-	text-align: center;
-}
-
-div#report > div.content {
 	width: 800px;
 	margin: auto;
 }
 
-div#report > div.content p {
+div#report > div.header h1 {
+	text-align: center;
+	font-size: 28px;
+}
+
+div#report > div.content {
+	width: 750px;
+	margin: auto;
+}
+
+div#report > div.content h2 {
 	text-align: center;
 }
 
 div#report > div.content table {
 	margin-left: auto;
 	margin-right: auto;
+	width: 730px;
+	font-size: 20px;
 }
 
 div#report > div.footer {
 	text-align: center;
+	width: 750px;
+	overflow: hidden;
+}
+
+div#report > div.footer  p {
+	font-size: 18px;
+	text-align: left;
+	padding-left: 30px;
 }

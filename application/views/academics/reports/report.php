@@ -3,9 +3,9 @@
 		<div id="report">
 			<div class="header">
 				<?php
-					echo '<p>Sample School Academy</p>';
-					echo '<p>P . O . Box 1999</p>';
-					echo '<p> Austin Texas</p>';
+					echo '<h1>Sample School Academy</h1>';
+					echo '<h1>P . O . Box 1999</h1>';
+					echo '<h1> Austin Texas</h1>';
 					echo '<hr />';
 				?>
 			</div>
@@ -22,9 +22,9 @@
 					$score_ = $this->session->userdata('total_avg')/$n_subjects;
 					$score = round($score_, 0);
 
-					echo "<p>End of <b>{$this->session->userdata('term')} {$this->session->userdata('year')} </b><p>";
-					echo "Name : <b> ".$this->session->userdata('name')." </b> Admission Number : <b>{$this->session->userdata('adm')}</b><p> ";
-					echo "Class : <b>{$this->session->userdata('class')}</b> Stream : <b>{$this->session->userdata('stream')}</b> &nbsp Average Grade: <b>{$this->grading->get_grade($score)}</b><p> "; 
+					echo '<h2>End of <span style=" text-decoration: underline; " > '.$this->session->userdata('term').' '.$this->session->userdata('year').'</span> <br />';
+					echo 'Name :  <span style=" text-decoration: underline; " >'.$this->session->userdata('name').'</span>  Admission Number : <span style=" text-decoration: underline; " >'.$this->session->userdata('adm').'</span><br /> ';
+					echo 'Class : <span style=" text-decoration: underline; " >'.$this->session->userdata('class').'</span> Stream : <span style=" text-decoration: underline; " >'.$this->session->userdata('stream').'</span> &nbsp Average Grade: <span style=" text-decoration: underline; " >'.$this->grading->get_grade($score).'</span></h2> '; 
 
 						echo "<table border=\"1\">";
 						echo "<tr><td>SUBJECT</td>";
@@ -62,16 +62,15 @@
 				?>
 			</div>
 			<div class="footer">
-						<p>Class Teacher's Remarks ...........................................................<br />
-							....................................................................................................<br />
-							....................................................................................................<br />
-							....................................Sign  ....................  Date  .....................</p>
+						<p>Class Teacher's Remarks .....................................................................................................................................................
+						<p>	.................................................................................................................................................................
+						<p>............................................................................................................................................................
+						<p>...........................................................Sign  ..............................  Date  ...........................................
 							
-						<p>Head Teacher's Remarks ...........................................................<br />
-							....................................................................................................<br />
-							....................................................................................................<br />
-							......................................Sign  ....................  Date  ...................</p>
-							
+						<p>Head Teacher's Remarks .....................................................................................................................................................
+						<p>	.................................................................................................................................................................
+						<p>............................................................................................................................................................
+						<p>...........................................................Sign  ..............................  Date  ...........................................
 
 			
 			</div>
