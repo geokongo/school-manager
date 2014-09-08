@@ -39,7 +39,7 @@ class Academics extends Academics_Controller {
 		
 		if(!$_POST)
 		{
-			//The absense of $_POST means no from has been submitted yet so we just go ahead to get the respective classes for which we might need to enter results.
+			//The absense of $_POST means no form has been submitted yet so we just go ahead to get the respective classes for which we might need to enter results.
 			$actionf = 'step0';
 			$class = 'classes';
 			

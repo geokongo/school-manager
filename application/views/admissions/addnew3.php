@@ -18,11 +18,6 @@
 <div id="main">
 <?php 
 	
-	echo "<img src=\"".base_url()."images/admission.png\" /><p>";
-	echo "<img src=\"".base_url()."images/underline.jpg\" /><p>";
-	
-	
-	
 	$output = $this->session->userdata('sess');
 	
 	
