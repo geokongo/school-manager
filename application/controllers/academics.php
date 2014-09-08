@@ -29,22 +29,15 @@ class Academics extends Academics_Controller {
 		 *The actionf is used to trigger particular methods in the model to retrieve particular data
 		*/
 		
-		$class = '';
-		$stream = '';
-		$subject = '';
-		$exam = '';
-		$term = '';
-		$year = '';
-		$actionf = '';
 		
 		if(!$_POST)
 		{
 			//The absense of $_POST means no form has been submitted yet so we just go ahead to get the respective classes for which we might need to enter results.
-			$actionf = 'step0';
-			$class = 'classes';
+			$input['actionf'] = 'step0';
+			$input['class'] = 'classes';
 			
 			$this->load->model('academics/academic');
-			$data['classes'] = $this->academic->enter($actionf, $class, $stream, $subject, $exam, $term, $year);
+			$data['classes'] = $this->academic->enter($input);
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/step1', $data);
@@ -59,13 +52,14 @@ class Academics extends Academics_Controller {
 			if($_POST['actionf'] == 'step1')
 			{
 				//when class has been selected we go ahead and fetch the streams
-				$class = $_POST['class'];
-				$stream = 'streams';
+				$input['class'] = $_POST['class'];
+				$input['stream'] = 'streams';
 				
 				$this->load->model('academics/academic');
-				$data['streams'] = $this->academic->enter($actionf, $class, $stream, $subject, $exam, $term, $year);
+				$data['streams'] = $this->academic->enter($input);
 			
-				$this->session->set_userdata('class', $class);
+				$sess['class'] = $this->input->post('class');
+				$this->session->set_userdata('sess', $sess);
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/step2', $data);
@@ -76,31 +70,40 @@ class Academics extends Academics_Controller {
 			if($_POST['actionf'] == 'step2')
 			{
 				//when both class and streams has bee set we go ahead and fetch the subjects
-				$streams = $_POST['stream'];
-				$class = $this->session->userdata('class');
-				$subject = 'subjects';
+				$input['streams'] = $_POST['stream'];
+				
+				$output = $this->session->userdata('sess');
+				
+				$input['class'] = $output['class'];
+				$input['subject'] = 'subjects';
 				
 				$this->load->model('academics/academic');
-				$data['subjects'] = $this->academic->enter($actionf, $class, $stream, $subject, $exam, $term, $year);
+				$data['subjects'] = $this->academic->enter($input);
 				
-				$this->session->set_userdata('streams', $streams);
+				$sess['streams'] = $this->input->post('stream');
+				$this->session->set_userdata('sess', $sess);
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/step3', $data);
 				$this->load->view('academics/footer');
 			}
 			
-			if($_POST['actionf'] == 'step3')
+			if($this->input->post('actionf') == 'step3')
 			{
 				//when class, stream and subject has been set we go ahead and get the examinations for that specific class
-				$subjects = $_POST['subject'];
-				$class = $this->session->userdata('class');
-				$exam = 'examinations';
+				$input['subjects'] = $this->input->post('subject');
+				
+				$output = $this->session->userdata('sess');
+				
+				$input['class'] = $output['class'];
+				$input['exam'] = 'examinations';
 				
 				$this->load->model('academics/academic');
-				$data['exams'] = $this->academic->enter($actionf, $class, $stream, $subject, $exam, $term, $year);
+				$data['exams'] = $this->academic->enter($input);
 				
-				$this->session->set_userdata('subjects', $subjects);
+				$sess['subjects'] = $this->input->post('subject');
+				
+				$this->session->set_userdata('sess', $sess);
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/step4', $data);
@@ -108,16 +111,18 @@ class Academics extends Academics_Controller {
 			
 			}
 			
-			if($_POST['actionf'] == 'step4')
+			if($this->input->post('actionf') == 'step4')
 			{
 				//we then get the terms so that the user can choose the one for which to enter results
-				$exams = $_POST['exam'];
-				$term = 'terms';
+				$input['exams'] = $this->input->post('exam');
+				$input['term'] = 'terms';
 				
 				$this->load->model('academics/academic');
-				$data['terms'] = $this->academic->enter($actionf, $class, $stream, $subject, $exam, $term, $year);
+				$data['terms'] = $this->academic->enter($input);
 				
-				$this->session->set_userdata('exams', $exams);
+				$sess['exams'] = $this->input->post('exam');
+				
+				$this->session->set_userdata('sess', $sess);
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/step5', $data);
@@ -125,17 +130,19 @@ class Academics extends Academics_Controller {
 		
 			}
 			
-			if($_POST['actionf'] == 'step5')
+			if($this->input->post('actionf') == 'step5')
 			{
 				//we then get the years so that the user can choose the one for which to enter results
 
-				$terms = $_POST['term'];
-				$year = 'years';
+				$input['terms'] = $this->input->post('term');
+				$input['year'] = 'years';
 				
 				$this->load->model('academics/academic');
-				$data['years'] = $this->academic->enter($actionf, $class, $stream, $subject, $exam, $term, $year);
+				$data['years'] = $this->academic->enter($input);
 				
-				$this->session->set_userdata('terms', $terms);
+				$sess['terms'] = $this->input->post('term');
+				
+				$this->session->set_userdata('sess', $sess);
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/step6', $data);
@@ -143,23 +150,28 @@ class Academics extends Academics_Controller {
 			
 			}
 			
-			if($_POST['actionf'] == 'create_table')
+			if($this->input->post('actionf') == 'create_table')
 			{
 				//once all the varibales are set, we now start by creating a tablename based on the varibles that have been set previously
 				//after creating the table succssfully, we present the user with a form upload so that he can upload the results.
-				$actionf = $_POST['actionf'];
-				$year = $_POST['year'];
-				$class = $this->session->userdata('class');
-				$stream = $this->session->userdata('streams');
-				$subject = $this->session->userdata('subjects');
-				$exam = $this->session->userdata('exams');
-				$term = $this->session->userdata('terms');
+				$input['actionf'] = $this->input->post('actionf');
+				$input['year'] = $this->input->post('year');
+				
+				$output = $this->session->userdata('sess');
+				
+				$input['class'] = $output['class'];
+				$input['stream'] = $output['streams'];
+				$input['subject'] = $output['subjects'];
+				$input['exam'] = $output['exams'];
+				$input['term'] = $output['terms'];
 								
 				$this->load->model('academics/academic');
-				$tablename = $this->academic->enter($actionf, $class, $stream, $subject, $exam, $term, $year);
+				$tablename = $this->academic->enter($input);
 
-				$this->session->set_userdata('tablename', $tablename);
-				$this->session->set_userdata('years', $year);
+				$sess['tablename'] = $tablename;
+				$sess['years'] = $this->input->post('year');
+				
+				$this->session->set_userdata('sess', $sess);
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/upload');
@@ -167,19 +179,19 @@ class Academics extends Academics_Controller {
 			
 			}
 			
-			if($_POST['actionf'] == 'insert_records')
+			if($this->input->post('actionf') == 'insert_records')
 			{
-				$actionf = $_POST['actionf'];
+				$input['actionf'] = $this->input->post('actionf');
 				
 				$this->load->model('academics/academic');
-				$res = $this->academic->enter($actionf, $class, $stream, $subject, $exam, $term, $year);
+				$res = $this->academic->enter($input);
 				
 				if($res)
 				{
-					$actionf = 'fetch_records';
+					$input['actionf'] = 'fetch_records';
 					
 					$this->load->model('academics/academic');
-					$data['data'] = $this->academic->get($actionf);
+					$data['data'] = $this->academic->get($input);
 					
 					$this->load->view('academics/header');
 					$this->load->view('academics/inserted_data', $data);
@@ -217,7 +229,10 @@ class Academics extends Academics_Controller {
 			{
 				//this means the upload was successful and so we ask the user ti cinfirm entering the data into the database before we actually insert into mysql.
 				$data = array( 'upload_data' => $this->upload->data());
-				$this->session->set_userdata('file_path', $data['upload_data']['full_path']);
+				
+				$sess['file_path'] = $data['upload_data']['full_path'];
+				
+				$this->session->set_userdata('sess', $sess);
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/confirm');

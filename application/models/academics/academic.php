@@ -9,14 +9,14 @@
  class academic extends CI_Model {
 	
 	//this function will handle all database requests related to entering results into the databse.
-	public function enter($actionf, $class, $stream, $subject, $exam, $term, $year)
+	public function enter($input)
 	{
 		$bt = '_';	//we use the underscore to separate words in tablenames.
 		
-		if(!empty($actionf))	//the initial step, step0, starts with getting classes for the view so that the user could select for which to enter data.
-		{	if($actionf == 'step0')
+		if(!empty($input['actionf']))	//the initial step, step0, starts with getting classes for the view so that the user could select for which to enter data.
+		{	if($input['actionf'] == 'step0')
 			{
-				$tablename = $class;
+				$tablename = $input['class'];
 				
 				$sql = $this->db->query(" SELECT * FROM $tablename ");
 				
@@ -24,9 +24,9 @@
 			
 			}
 			
-			if($actionf == 'create_table')	//this creates a table to hold results in the database.
+			if($input['actionf'] == 'create_table')	//this creates a table to hold results in the database.
 			{
-				$tablename = $class.$bt.$stream.$bt.$subject.$bt.$exam.$bt.$term.$bt.$year;
+				$tablename = $input['class'].$bt.$input['stream'].$bt.$input['subject'].$bt.$input['exam'].$bt.$input['term'].$bt.$input['year'];
 			
 				$sql = $this->db->query(" CREATE TABLE IF NOT EXISTS $tablename (
 										NAME VARCHAR(20), 
@@ -41,10 +41,12 @@
 		
 			}
 			
-			if($actionf == 'insert_records')	//this inserts records from the .csv file into the table in the database.
+			if($input['actionf'] == 'insert_records')	//this inserts records from the .csv file into the table in the database.
 			{
-				$tablename = $this->session->userdata('tablename');
-				$file_path = $this->session->userdata('file_path');
+				$output = $this->session->userdata('sess');
+				
+				$tablename = $output['tablename'];
+				$file_path = $output['file_path'];
 				
 				$file_path = addslashes($file_path);
 
@@ -60,12 +62,12 @@
 			
 		}
 		
-		if(empty($actionf))
+		if(empty($input['actionf']))
 		{
 		
-			if(!empty($class) && !empty($stream))	//this gets class streams.
+			if(!empty($input['class']) && !empty($input['stream']))	//this gets class streams.
 			{
-				$tablename = $class.$bt.$stream;
+				$tablename = $input['class'].$bt.$input['stream'];
 				
 				$sql = $this->db->query(" SELECT * FROM $tablename ");
 				
@@ -73,9 +75,9 @@
 			
 			}
 			
-			if(!empty($class) && !empty($subject))	//this gets class subjects.
+			if(!empty($input['class']) && !empty($input['subject']))	//this gets class subjects.
 			{
-				$tablename = $class.$bt.$subject;
+				$tablename = $input['class'].$bt.$input['subject'];
 				
 				$sql = $this->db->query(" SELECT * FROM $tablename ");
 				
@@ -83,9 +85,9 @@
 			
 			}
 			
-			if(!empty($class) && !empty($exam))	//this gets class examinations.
+			if(!empty($input['class']) && !empty($input['exam']))	//this gets class examinations.
 			{
-				$tablename = $class.$bt.$exam;
+				$tablename = $input['class'].$bt.$input['exam'];
 				
 				$sql = $this->db->query(" SELECT * FROM $tablename ");
 				
