@@ -4,7 +4,7 @@
 
 		$output = $this->session->userdata('sess');
 		$title = $output['class'].' '.$output['streams'].' '.$output['subjects'];
-		$exam = $output['exams'].' '.$output['terms'].' '.$output['year'];
+		$exam = $output['exams'].' '.$output['terms'].' '.$output['years'];
 		
 		$array = array( 'class' => 'adm_form');
 		echo form_open_multipart('academics/enter', $array)."<header>";

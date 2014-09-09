@@ -45,8 +45,9 @@
 			{
 				$output = $this->session->userdata('sess');
 				
+				$file_path = $this->session->userdata('file_path');
+				
 				$tablename = $output['tablename'];
-				$file_path = $output['file_path'];
 				
 				$file_path = addslashes($file_path);
 
@@ -95,9 +96,9 @@
 			
 			}
 			
-			if(!empty($term))	//this gets terms.
+			if(!empty($input['term']))	//this gets terms.
 			{
-				$tablename = $term;
+				$tablename = $input['term'];
 				
 				$sql = $this->db->query(" SELECT * FROM $tablename ");
 				
@@ -105,9 +106,9 @@
 			
 			}
 			
-			if(!empty($year))	//this gets years.
+			if(!empty($input['year']))	//this gets years.
 			{
-				$tablename = $year;
+				$tablename = $input['year'];
 				
 				$sql = $this->db->query(" SELECT * FROM $tablename ");
 				
@@ -121,11 +122,13 @@
 	}
 	
 	
-	public function get($actionf)	//this function helps to fetch records generally from the database.
+	public function get($input)	//this function helps to fetch records generally from the database.
 	{
-		if($actionf == 'fetch_records')
+		if($input['actionf'] == 'fetch_records')
 		{
-			$tablename = $this->session->userdata('tablename');
+			$output = $this->session->userdata('sess');
+			
+			$tablename = $output['tablename'];
 			
 			$sql = $this->db->query(" SELECT * FROM $tablename ");
 			
@@ -133,7 +136,7 @@
 			
 		}
 		
-		if($actionf == 'get_classes')	//gets a list of all classes registered in the database. 
+		if($input['actionf'] == 'get_classes')	//gets a list of all classes registered in the database. 
 		{
 			$sql = $this->db->query(" SELECT * FROM classes ");
 			
@@ -141,7 +144,7 @@
 
 		}
 		
-		if($actionf == 'get_grades')	//gets a list of all grades and points already defined in the database.
+		if($input['actionf'] == 'get_grades')	//gets a list of all grades and points already defined in the database.
 		{
 			$sql = $this->db->query(" CREATE TABLE IF NOT EXISTS grade_points ( GRADE VARCHAR(2) UNIQUE, POINTS INT ) ");
 			
@@ -154,11 +157,14 @@
 			}
 		}
 		
-		if($actionf == 'get_grading')
+		if($input['actionf'] == 'get_grading')
 		{
 			$bt = '_';
 			$value = 'grading';
-			$tablename = $this->session->userdata('class').$bt.$value;
+			
+			$output = $this->session->userdata('sess');
+			
+			$tablename = $output['class'].$bt.$value;
 			
 			$sql = $this->db->query(" CREATE TABLE IF NOT EXISTS $tablename (
 										GRADE VARCHAR(2) UNIQUE,
@@ -181,7 +187,7 @@
 		
 	}
 	
-	public function fetch_records($class, $stream, $subject, $exam, $term, $year)
+	public function fetch_records($input)
 	{
 		$bt = '_';
 		$tablename = $class.$bt.$stream.$bt.$subject.$bt.$exam.$bt.$term.$bt.$year;
@@ -192,7 +198,7 @@
 	
 	}
 	
-	public function fetch_records2($tablename, $adm)
+	public function fetch_records2($input)
 	{
 		$sql = $this->db->query(" SELECT SCORE FROM $tablename WHERE ADM = $adm ");
 		
@@ -282,21 +288,21 @@
 	
 	}
 	
-	public function insert_grades($actionf, $grade_, $grade, $points, $from, $to, $remarks)
+	public function insert_grades($input)
 	{
-		if($actionf == 'grade_points')
+		if($input['actionf'] == 'grade_points')
 		{
-			if( empty($grade_))
+			if( empty($input['grade_']))
 			{
-				$sql = $this->db->query(" INSERT INTO grade_points SET GRADE = '$grade', POINTS = '$points' ");
+				$sql = $this->db->query(" INSERT INTO grade_points SET GRADE = '{$input['grade']}', POINTS = '{$input['points']}' ");
 				
 				return $sql;
 				
 			}
 			
-			if( !empty($grade_))
+			if( !empty($input['grade_']))
 			{
-				$sql = $this->db->query(" UPDATE grade_points SET POINTS = '$points' WHERE GRADE = '$grade_' ");
+				$sql = $this->db->query(" UPDATE grade_points SET POINTS = '{$input['points']}' WHERE GRADE = '{$input['grade_']}' ");
 				
 				return $sql;
 			
@@ -304,16 +310,16 @@
 			
 		}	
 		
-		if($actionf == 'grading')
+		if($input['actionf'] == 'grading')
 		{
 			
-			if( empty($grade_))
+			if( empty($input['grade_']))
 			{
 				$bt = '_';
 				$value = 'grading';
 				$tablename = $this->session->userdata('class').$bt.$value;
 				
-				$sql = $this->db->query(" INSERT INTO $tablename SET GRADE = '$grade', FROM_ = '$from', TO_ = '$to', REMARKS = '$remarks' ");
+				$sql = $this->db->query(" INSERT INTO $tablename SET GRADE = '{$input['grade']}', FROM_ = '{$input['from']}', TO_ = '{$input['to']}', REMARKS = '{$input['remarks']}' ");
 				
 				return $sql;
 				
@@ -325,7 +331,7 @@
 				$value = 'grading';
 				$tablename = $this->session->userdata('class').$bt.$value;
 				
-				$sql = $this->db->query(" UPDATE $tablename SET FROM_ = '$from', TO_ = '$to', REMARKS = '$remarks' WHERE GRADE = '$grade_' ");
+				$sql = $this->db->query(" UPDATE $tablename SET FROM_ = '{$input['from']}', TO_ = '{$input['to']}', REMARKS = '{$input['remarks']}' WHERE GRADE = '{$input['grade_']}' ");
 				
 				return $sql;
 			

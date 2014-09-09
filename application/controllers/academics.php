@@ -80,7 +80,8 @@ class Academics extends Academics_Controller {
 				$this->load->model('academics/academic');
 				$data['subjects'] = $this->academic->enter($input);
 				
-				$sess['streams'] = $this->input->post('stream');
+				$sess['streams'] = $input['streams'];
+				$sess['class'] = $input['class'];
 				$this->session->set_userdata('sess', $sess);
 				
 				$this->load->view('academics/header');
@@ -101,6 +102,8 @@ class Academics extends Academics_Controller {
 				$this->load->model('academics/academic');
 				$data['exams'] = $this->academic->enter($input);
 				
+				$sess['class'] = $output['class'];
+				$sess['streams'] = $output['streams'];
 				$sess['subjects'] = $this->input->post('subject');
 				
 				$this->session->set_userdata('sess', $sess);
@@ -117,9 +120,14 @@ class Academics extends Academics_Controller {
 				$input['exams'] = $this->input->post('exam');
 				$input['term'] = 'terms';
 				
+				$output = $this->session->userdata('sess');
+				
 				$this->load->model('academics/academic');
 				$data['terms'] = $this->academic->enter($input);
 				
+				$sess['class'] = $output['class'];
+				$sess['streams'] = $output['streams'];
+				$sess['subjects'] = $output['subjects'];
 				$sess['exams'] = $this->input->post('exam');
 				
 				$this->session->set_userdata('sess', $sess);
@@ -137,9 +145,15 @@ class Academics extends Academics_Controller {
 				$input['terms'] = $this->input->post('term');
 				$input['year'] = 'years';
 				
+				$output = $this->session->userdata('sess');
+				
 				$this->load->model('academics/academic');
 				$data['years'] = $this->academic->enter($input);
 				
+				$sess['class'] = $output['class'];
+				$sess['streams'] = $output['streams'];
+				$sess['subjects'] = $output['subjects'];
+				$sess['exams'] = $output['exams'];
 				$sess['terms'] = $this->input->post('term');
 				
 				$this->session->set_userdata('sess', $sess);
@@ -164,10 +178,15 @@ class Academics extends Academics_Controller {
 				$input['subject'] = $output['subjects'];
 				$input['exam'] = $output['exams'];
 				$input['term'] = $output['terms'];
-								
+				
 				$this->load->model('academics/academic');
 				$tablename = $this->academic->enter($input);
 
+				$sess['class'] = $output['class'];
+				$sess['streams'] = $output['streams'];
+				$sess['subjects'] = $output['subjects'];
+				$sess['exams'] = $output['exams'];
+				$sess['terms'] = $output['terms'];
 				$sess['tablename'] = $tablename;
 				$sess['years'] = $this->input->post('year');
 				
@@ -192,6 +211,10 @@ class Academics extends Academics_Controller {
 					
 					$this->load->model('academics/academic');
 					$data['data'] = $this->academic->get($input);
+					
+					$data['output'] = $this->session->userdata('sess');
+					
+					$this->session->unset_userdata('sess');
 					
 					$this->load->view('academics/header');
 					$this->load->view('academics/inserted_data', $data);
@@ -230,9 +253,9 @@ class Academics extends Academics_Controller {
 				//this means the upload was successful and so we ask the user ti cinfirm entering the data into the database before we actually insert into mysql.
 				$data = array( 'upload_data' => $this->upload->data());
 				
-				$sess['file_path'] = $data['upload_data']['full_path'];
+				$file_path = $data['upload_data']['full_path'];
 				
-				$this->session->set_userdata('sess', $sess);
+				$this->session->set_userdata('file_path', $file_path);
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/confirm');
@@ -764,13 +787,6 @@ class Academics extends Academics_Controller {
 	{
 		//we will need these variables to pass to the model so we intialize them as empty. Their values however, will come as uri segments.
 		
-		$grade = '';
-		$points = '';
-		$actionf = '';
-		$grade_ = '';
-		$to = '';
-		$from = '';
-		$remarks = '';
 		
 		$default_keys = array('id', 'action', 'grade', 'points', 'class', 'name');
 		$var = $this->uri->uri_to_assoc(3, $default_keys);
@@ -796,10 +812,10 @@ class Academics extends Academics_Controller {
 		{
 			if($var['action'] === FALSE)	//action has not been set yet so we get the grades from the database and display them to the user.
 			{
-				$actionf = 'get_grades';
+				$input['actionf'] = 'get_grades';
 				
 				$this->load->model('academics/academic');
-				$data['grades'] = $this->academic->get($actionf);
+				$data['grades'] = $this->academic->get($input);
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/settings/grades/grade1', $data);
@@ -809,19 +825,19 @@ class Academics extends Academics_Controller {
 			
 			if($var['action'] == 'addnew')	//this action would enable adding new grades into the database. Once new grade has been added, the page with grades is reloaded to reflect the new addition.
 			{
-				$grade = $_POST['grade'];
-				$points = $_POST['points'];
-				$actionf = 'grade_points';
+				$input['grade'] = $_POST['grade'];
+				$input['points'] = $_POST['points'];
+				$input['actionf'] = 'grade_points';
 				
 				$this->load->model('academics/academic');
-				$res = $this->academic->insert_grades($actionf, $grade_, $grade, $points, $from, $to, $remarks);
+				$res = $this->academic->insert_grades($input);
 				
 				if($res)
 				{
-					$actionf = 'get_grades';
+					$input['actionf'] = 'get_grades';
 					
 					$this->load->model('academics/academic');
-					$data['grades'] = $this->academic->get($actionf);
+					$data['grades'] = $this->academic->get($input);
 				
 					$this->load->view('academics/header');
 					$this->load->view('academics/settings/grades/grade1', $data);
@@ -845,19 +861,19 @@ class Academics extends Academics_Controller {
 				
 				else	//editing has been done and there are new values to be entered into the database.
 				{
-					$grade_ = $var['grade'];
-					$points = $_POST['point'];
-					$actionf = 'grade_points';
+					$input['grade_'] = $var['grade'];
+					$input['points'] = $_POST['point'];
+					$input['actionf'] = 'grade_points';
 					
 					$this->load->model('academics/academic');
-					$res = $this->academic->insert_grades($actionf, $grade_, $grade, $points, $from, $to, $remarks);
+					$res = $this->academic->insert_grades($input);
 					
 					if($res)
 					{
-						$actionf = 'get_grades';
+						$input['actionf'] = 'get_grades';
 				
 						$this->load->model('academics/academic');
-						$data['grades'] = $this->academic->get($actionf);
+						$data['grades'] = $this->academic->get($input);
 				
 						$this->load->view('academics/header');
 						$this->load->view('academics/settings/grades/grade1', $data);
@@ -875,10 +891,10 @@ class Academics extends Academics_Controller {
 		{
 			if($var['action'] === FALSE)	//no action yet so get classes so that the user can choose an action.
 			{
-				$actionf = 'get_classes';	//this actionf value is used to trigger a model to get list of available classes.
+				$input['actionf'] = 'get_classes';	//this actionf value is used to trigger a model to get list of available classes.
 				
 				$this->load->model('academics/academic');
-				$data['classes'] = $this->academic->get($actionf);
+				$data['classes'] = $this->academic->get($input);
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/settings/grading/home', $data);
@@ -890,10 +906,10 @@ class Academics extends Academics_Controller {
 			{
 				$this->session->set_userdata('class', $var['class']);	//assign the chosen class to a session variable.
 				
-				$actionf = 'get_grading';	//class has been chosen so get the grading criteria already set for this particular class.
+				$input['actionf'] = 'get_grading';	//class has been chosen so get the grading criteria already set for this particular class.
 				
 				$this->load->model('academics/academic');
-				$data['grading'] = $this->academic->get($actionf);
+				$data['grading'] = $this->academic->get($input);
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/settings/grading/grade2', $data);
@@ -912,21 +928,21 @@ class Academics extends Academics_Controller {
 			
 			if($var['action'] == 'addnew')		//gets the new grading criteria set from the form and inserts into database.
 			{
-				$grade = $_POST['grade'];
-				$from = $_POST['from'];
-				$to = $_POST['to'];
-				$remarks = $_POST['remarks'];
-				$actionf = 'grading';
+				$input['grade'] = $_POST['grade'];
+				$input['from'] = $_POST['from'];
+				$input['to'] = $_POST['to'];
+				$input['remarks'] = $_POST['remarks'];
+				$input['actionf'] = 'grading';
 				
 				$this->load->model('academics/academic');
-				$res = $this->academic->insert_grades($actionf, $grade_, $grade, $points, $from, $to, $remarks);
+				$res = $this->academic->insert_grades($input);
 				
 				if($res)
 				{
-					$actionf = 'get_grading';
+					$input['actionf'] = 'get_grading';
 				
 					$this->load->model('academics/academic');
-					$data['grading'] = $this->academic->get($actionf);
+					$data['grading'] = $this->academic->get($input);
 				
 					$this->load->view('academics/header');
 					$this->load->view('academics/settings/grading/grade2', $data);
@@ -953,22 +969,22 @@ class Academics extends Academics_Controller {
 				
 				else		//user has submitted a form, so we get the post data and insert into the database.
 				{
-					$grade_ = $var['grade'];
-					$from = $_POST['from'];
-					$to = $_POST['to'];
-					$remarks = $_POST['remarks'];
+					$input['grade_'] = $var['grade'];
+					$input['from'] = $_POST['from'];
+					$input['to'] = $_POST['to'];
+					$input['remarks'] = $_POST['remarks'];
 					
-					$actionf = 'grading';
+					$input['actionf'] = 'grading';
 					
 					$this->load->model('academics/academic');
-					$res = $this->academic->insert_grades($actionf, $grade_, $grade, $points, $from, $to, $remarks);
+					$res = $this->academic->insert_grades($input);
 					
 					if($res)
 					{
-						$actionf = 'get_grading';
+						$input['actionf'] = 'get_grading';
 				
 						$this->load->model('academics/academic');
-						$data['grading'] = $this->academic->get($actionf);
+						$data['grading'] = $this->academic->get($input);
 				
 						$this->load->view('academics/header');
 						$this->load->view('academics/settings/grading/grade2', $data);
