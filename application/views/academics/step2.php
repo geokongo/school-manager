@@ -4,7 +4,7 @@
 	<?php
 		
 		$output = $this->session->userdata('sess');
-		$title = $output['class'];
+		$title = $_SESSION['output']['class'];
 		
 		$array = array( 'class' => 'adm_form');
 		echo form_open('academics/enter', $array)."<header>";

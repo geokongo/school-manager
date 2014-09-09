@@ -9,6 +9,8 @@ class Academics_Controller extends SM_Controller {
             redirect('login','refresh');
         } 
 		
+		session_start();
+		
     }
 
 }

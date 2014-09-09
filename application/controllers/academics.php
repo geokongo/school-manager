@@ -28,9 +28,8 @@ class Academics extends Academics_Controller {
 		 *beinserted into the database. We also use the varibles to compose the tablename which is going to hold this data in the database.
 		 *The actionf is used to trigger particular methods in the model to retrieve particular data
 		*/
-		
-		
-		if(!$_POST)
+
+		if(!$this->input->post())
 		{
 			//The absense of $_POST means no form has been submitted yet so we just go ahead to get the respective classes for which we might need to enter results.
 			$input['actionf'] = 'step0';
@@ -45,21 +44,20 @@ class Academics extends Academics_Controller {
 		
 		}
 		
-		if($_POST)
+		if($this->input->post())
 		{
 			//Presense of $_POST means some form has been submitted so we go ahead and get a specific value form a hidden form field called 'actionf' that we use to 
 			//trigger the right method on the controller and model
-			if($_POST['actionf'] == 'step1')
+			if($this->input->post('actionf') == 'step1')
 			{
 				//when class has been selected we go ahead and fetch the streams
-				$input['class'] = $_POST['class'];
+				$input['class'] = $this->input->post('class');
 				$input['stream'] = 'streams';
 				
 				$this->load->model('academics/academic');
 				$data['streams'] = $this->academic->enter($input);
-			
-				$sess['class'] = $this->input->post('class');
-				$this->session->set_userdata('sess', $sess);
+				
+				$_SESSION['output']['class'] = $this->input->post('class');
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/step2', $data);
@@ -67,12 +65,12 @@ class Academics extends Academics_Controller {
 			
 			}
 			
-			if($_POST['actionf'] == 'step2')
+			if($this->input->post('actionf') == 'step2')
 			{
 				//when both class and streams has bee set we go ahead and fetch the subjects
-				$input['streams'] = $_POST['stream'];
+				$input['streams'] = $this->input->post('stream');
 				
-				$output = $this->session->userdata('sess');
+				$output = $_SESSION['output'];
 				
 				$input['class'] = $output['class'];
 				$input['subject'] = 'subjects';
@@ -80,9 +78,7 @@ class Academics extends Academics_Controller {
 				$this->load->model('academics/academic');
 				$data['subjects'] = $this->academic->enter($input);
 				
-				$sess['streams'] = $input['streams'];
-				$sess['class'] = $input['class'];
-				$this->session->set_userdata('sess', $sess);
+				$_SESSION['output']['streams'] = $input['streams'];
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/step3', $data);

@@ -11,9 +11,8 @@
 	//this function will handle all database requests related to entering results into the databse.
 	public function enter($input)
 	{
-		$bt = '_';	//we use the underscore to separate words in tablenames.
 		
-		if(!empty($input['actionf']))	//the initial step, step0, starts with getting classes for the view so that the user could select for which to enter data.
+		if(isset($input['actionf']))	//the initial step, step0, starts with getting classes for the view so that the user could select for which to enter data.
 		{	if($input['actionf'] == 'step0')
 			{
 				$tablename = $input['class'];
@@ -26,7 +25,7 @@
 			
 			if($input['actionf'] == 'create_table')	//this creates a table to hold results in the database.
 			{
-				$tablename = $input['class'].$bt.$input['stream'].$bt.$input['subject'].$bt.$input['exam'].$bt.$input['term'].$bt.$input['year'];
+				$tablename = $input['class'].'_'.$input['stream'].'_'.$input['subject'].'_'.$input['exam'].'_'.$input['term'].'_'.$input['year'];
 			
 				$sql = $this->db->query(" CREATE TABLE IF NOT EXISTS $tablename (
 										NAME VARCHAR(20), 
@@ -43,9 +42,9 @@
 			
 			if($input['actionf'] == 'insert_records')	//this inserts records from the .csv file into the table in the database.
 			{
-				$output = $this->session->userdata('sess');
+				$output = $_SESSION['output'];
 				
-				$file_path = $this->session->userdata('file_path');
+				$file_path = $output['file_path'];
 				
 				$tablename = $output['tablename'];
 				
@@ -63,12 +62,12 @@
 			
 		}
 		
-		if(empty($input['actionf']))
+		if(!isset($input['actionf']))
 		{
 		
-			if(!empty($input['class']) && !empty($input['stream']))	//this gets class streams.
+			if(isset($input['class']) && isset($input['stream']))	//this gets class streams.
 			{
-				$tablename = $input['class'].$bt.$input['stream'];
+				$tablename = $input['class'].'_'.$input['stream'];
 				
 				$sql = $this->db->query(" SELECT * FROM $tablename ");
 				
@@ -76,9 +75,9 @@
 			
 			}
 			
-			if(!empty($input['class']) && !empty($input['subject']))	//this gets class subjects.
+			if(isset($input['class']) && isset($input['subject']))	//this gets class subjects.
 			{
-				$tablename = $input['class'].$bt.$input['subject'];
+				$tablename = $input['class'].'_'.$input['subject'];
 				
 				$sql = $this->db->query(" SELECT * FROM $tablename ");
 				
@@ -86,9 +85,9 @@
 			
 			}
 			
-			if(!empty($input['class']) && !empty($input['exam']))	//this gets class examinations.
+			if(isset($input['class']) && isset($input['exam']))	//this gets class examinations.
 			{
-				$tablename = $input['class'].$bt.$input['exam'];
+				$tablename = $input['class'].'_'.$input['exam'];
 				
 				$sql = $this->db->query(" SELECT * FROM $tablename ");
 				
@@ -96,7 +95,7 @@
 			
 			}
 			
-			if(!empty($input['term']))	//this gets terms.
+			if(isset($input['term']))	//this gets terms.
 			{
 				$tablename = $input['term'];
 				
@@ -106,7 +105,7 @@
 			
 			}
 			
-			if(!empty($input['year']))	//this gets years.
+			if(isset($input['year']))	//this gets years.
 			{
 				$tablename = $input['year'];
 				
