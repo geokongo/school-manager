@@ -3,7 +3,7 @@
 
 	<?php
 
-		$output = $this->session->userdata('sess');
+		$output = $_SESSION['output'];
 		$title = $output['class'].' '.$output['streams'].' '.$output['subjects'];
 		$exam = $output['exams'].' '.$output['terms'];
 		

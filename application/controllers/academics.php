@@ -90,7 +90,7 @@ class Academics extends Academics_Controller {
 				//when class, stream and subject has been set we go ahead and get the examinations for that specific class
 				$input['subjects'] = $this->input->post('subject');
 				
-				$output = $this->session->userdata('sess');
+				$output = $_SESSION['output'];
 				
 				$input['class'] = $output['class'];
 				$input['exam'] = 'examinations';
@@ -98,11 +98,7 @@ class Academics extends Academics_Controller {
 				$this->load->model('academics/academic');
 				$data['exams'] = $this->academic->enter($input);
 				
-				$sess['class'] = $output['class'];
-				$sess['streams'] = $output['streams'];
-				$sess['subjects'] = $this->input->post('subject');
-				
-				$this->session->set_userdata('sess', $sess);
+				$_SESSION['output']['subjects'] = $this->input->post('subject');
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/step4', $data);
@@ -116,17 +112,10 @@ class Academics extends Academics_Controller {
 				$input['exams'] = $this->input->post('exam');
 				$input['term'] = 'terms';
 				
-				$output = $this->session->userdata('sess');
-				
 				$this->load->model('academics/academic');
 				$data['terms'] = $this->academic->enter($input);
 				
-				$sess['class'] = $output['class'];
-				$sess['streams'] = $output['streams'];
-				$sess['subjects'] = $output['subjects'];
-				$sess['exams'] = $this->input->post('exam');
-				
-				$this->session->set_userdata('sess', $sess);
+				$_SESSION['output']['exams'] = $this->input->post('exam');
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/step5', $data);
@@ -141,18 +130,12 @@ class Academics extends Academics_Controller {
 				$input['terms'] = $this->input->post('term');
 				$input['year'] = 'years';
 				
-				$output = $this->session->userdata('sess');
+				$output = $_SESSION['output'];
 				
 				$this->load->model('academics/academic');
 				$data['years'] = $this->academic->enter($input);
 				
-				$sess['class'] = $output['class'];
-				$sess['streams'] = $output['streams'];
-				$sess['subjects'] = $output['subjects'];
-				$sess['exams'] = $output['exams'];
-				$sess['terms'] = $this->input->post('term');
-				
-				$this->session->set_userdata('sess', $sess);
+				$_SESSION['output']['terms'] = $this->input->post('term');
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/step6', $data);
@@ -167,7 +150,7 @@ class Academics extends Academics_Controller {
 				$input['actionf'] = $this->input->post('actionf');
 				$input['year'] = $this->input->post('year');
 				
-				$output = $this->session->userdata('sess');
+				$output = $_SESSION['output'];
 				
 				$input['class'] = $output['class'];
 				$input['stream'] = $output['streams'];
@@ -178,15 +161,8 @@ class Academics extends Academics_Controller {
 				$this->load->model('academics/academic');
 				$tablename = $this->academic->enter($input);
 
-				$sess['class'] = $output['class'];
-				$sess['streams'] = $output['streams'];
-				$sess['subjects'] = $output['subjects'];
-				$sess['exams'] = $output['exams'];
-				$sess['terms'] = $output['terms'];
-				$sess['tablename'] = $tablename;
-				$sess['years'] = $this->input->post('year');
-				
-				$this->session->set_userdata('sess', $sess);
+				$_SESSION['output']['years'] = $this->input->post('year');
+				$_SESSION['output']['tablename'] = $tablename;
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/upload');
@@ -208,9 +184,8 @@ class Academics extends Academics_Controller {
 					$this->load->model('academics/academic');
 					$data['data'] = $this->academic->get($input);
 					
-					$data['output'] = $this->session->userdata('sess');
-					
-					$this->session->unset_userdata('sess');
+					$data['output'] = $_SESSION['output'];
+					unset($_SESSION['output']);
 					
 					$this->load->view('academics/header');
 					$this->load->view('academics/inserted_data', $data);
@@ -249,9 +224,7 @@ class Academics extends Academics_Controller {
 				//this means the upload was successful and so we ask the user ti cinfirm entering the data into the database before we actually insert into mysql.
 				$data = array( 'upload_data' => $this->upload->data());
 				
-				$file_path = $data['upload_data']['full_path'];
-				
-				$this->session->set_userdata('file_path', $file_path);
+				$_SESSION['output']['file_path'] = $data['upload_data']['full_path'];
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/confirm');
