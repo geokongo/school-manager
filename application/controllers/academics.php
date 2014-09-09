@@ -370,24 +370,17 @@ class Academics extends Academics_Controller {
 	public function spreadsheets()
 	{
 		//we will need these variables to pass to the model, so we intialize them to empty
-		$class = '';
-		$stream = '';
-		$subject = '';
-		$exam = '';
-		$term = '';
-		$year = '';
-		$actionf = '';
 		
 		$default_keys = array('class', 'streams', 'subjects', 'exams', 'terms', 'years');
 		$variables = $this->uri->uri_to_assoc(3, $default_keys);
 		
 		if($this->uri->segment(3) === FALSE)
 		{
-			$actionf = 'step0';
-			$class = 'classes';
+			$input['actionf'] = 'step0';
+			$input['class'] = 'classes';
 			
 			$this->load->model('academics/academic');
-			$data['classes'] = $this->academic->enter($actionf, $class, $stream, $subject, $exam, $term, $year);
+			$data['classes'] = $this->academic->enter($input);
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/spreadsheets/classes', $data);
@@ -395,15 +388,15 @@ class Academics extends Academics_Controller {
 		
 		}
 		
-		if( !empty($variables['class']))
+		if( $variables['class'] != FALSE)
 		{
-			$class = $variables['class'];
-			$stream = 'streams';
+			$input['class'] = $variables['class'];
+			$input['stream'] = 'streams';
 			
 			$this->load->model('academics/academic');
-			$data['streams'] = $this->academic->enter($actionf, $class, $stream, $subject, $exam, $term, $year);
+			$data['streams'] = $this->academic->enter($input);
 			
-			$this->session->set_userdata('class', $class);	//assign chosen class to a session variable.
+			$_SESSION['output']['class'] = $class;	//assign chosen class to a session variable.
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/spreadsheets/streams', $data);
@@ -411,7 +404,7 @@ class Academics extends Academics_Controller {
 		
 		}
 		
-		if( !empty($variables['streams']))
+		if( $variables['streams'] != FALSE)
 		{
 			$this->session->set_userdata('streams', $variables['streams']);	//assign chosen stream to a session variable.
 			$year = 'years';

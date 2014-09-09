@@ -340,12 +340,11 @@
 	
 	}
 	
-	public function spreadsheets($actionf, $class, $stream, $subject, $exam, $term, $year)
+	public function spreadsheets($input)
 	{
-		$bt = '_';
-		if($actionf == 'get_class_list')
+		if($input['actionf'] == 'get_class_list')
 		{
-			$tablename = $class.$bt.$stream.$bt.$year;
+			$tablename = $input['class'].'_'.$input['stream'].'_'.$input['year'];
 			
 			$sql = $this->db->query(" SELECT * FROM $tablename ");
 			
@@ -353,9 +352,9 @@
 		
 		}
 		
-		if($actionf == 'get_exams')
+		if($input['actionf'] == 'get_exams')
 		{
-			$tablename = $class.$bt.$exam;
+			$tablename = $input['class'].'_'.$input['exam'];
 			
 			$sql = $this->db->query(" SELECT EXAM FROM $tablename ");
 			
@@ -363,9 +362,9 @@
 		
 		}
 		
-		if($actionf == 'get_subjects')
+		if($input['actionf'] == 'get_subjects')
 		{
-			$tablename = $class.$bt.$subject;
+			$tablename = $input['class'].'_'.$input['subject'];
 			
 			$sql = $this->db->query(" SELECT SUBJECTS FROM $tablename ");
 			
@@ -373,10 +372,10 @@
 		
 		}
 		
-		if($actionf == 'create_spreadsheet_table')
+		if($input['actionf'] == 'create_spreadsheet_table')
 		{
 			$value = 'spreadsheet';
-			$tablename = $class.$bt.$stream.$bt.$term.$bt.$year.$bt.$value;
+			$tablename = $input['class'].'_'.$input['stream'].'_'.$input['term'].'_'.$input['year'].'_'.$value;
 			
 			$sql = $this->db->query(" CREATE TABLE IF NOT EXISTS $tablename (
 									  ADM INT UNIQUE,

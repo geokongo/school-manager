@@ -3,6 +3,7 @@
 		<?php 
 		
 		$output = $_SESSION['output'];
+		
 		$title = $output['class'];
 		echo '<div class="classes">';
 			echo '<p> View Reports </p>';
