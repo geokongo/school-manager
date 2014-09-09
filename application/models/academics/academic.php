@@ -410,13 +410,12 @@
 	
 	}
 	
-	public function reports($actionf, $class, $stream, $term, $year, $adm)
+	public function reports($input)
 	{
-		$bt = '_';
 		
-		if($actionf == 'step0')
+		if($input['actionf'] == 'step0')
 		{
-			$tablename = $class;
+			$tablename = $input['class'];
 			
 			$sql = $this->db->query(" SELECT * FROM $tablename ");
 			
@@ -425,9 +424,9 @@
 		}
 		
 		
-		if($actionf == 'get_streams')
+		if($input['actionf'] == 'get_streams')
 		{
-			$tablename = $class.$bt.$stream;
+			$tablename = $input['class'].'_'.$input['stream'];
 			
 			$sql = $this->db->query(" SELECT * FROM $tablename ");
 			
@@ -435,9 +434,9 @@
 		
 		}
 		
-		if($actionf == 'get_terms')
+		if($input['actionf'] == 'get_terms')
 		{
-			$tablename = $term;
+			$tablename = $input['term'];
 			
 			$sql = $this->db->query(" SELECT * FROM $tablename ");
 			
@@ -445,9 +444,9 @@
 		
 		}
 		
-		if($actionf == 'get_years')
+		if($input['actionf'] == 'get_years')
 		{
-			$tablename = $year;
+			$tablename = $input['year'];
 			
 			$sql = $this->db->query(" SELECT * FROM $tablename ");
 			
@@ -455,9 +454,9 @@
 		
 		}
 		
-		if($actionf == 'get_class_list')
+		if($input['actionf'] == 'get_class_list')
 		{
-			$tablename = $class.$bt.$stream.$bt.$year;
+			$tablename = $input['class'].'_'.$input['stream'].'_'.$input['year'];
 			
 			$sql = $this->db->query(" SELECT * FROM $tablename ");
 			
@@ -465,33 +464,37 @@
 		
 		}
 		
-		if($actionf == 'get_report')
+		if($input['actionf'] == 'get_report')
 		{
-			$class = $this->session->userdata('class');
+			$output = $_SESSION['output'];
+			
+			$class = $output['class'];
 			$exam = 'examinations';
 			
-			$tablename = $class.$bt.$exam;
+			$tablename = $class.'_'.$exam;
 			
 			$sql = $this->db->query(" SELECT * FROM $tablename ");
 			
 			if($sql)
 			{
-				$this->session->set_userdata('exams', $sql);
+				$_SESSION['output']['exams'] = $sql;
 				
 				$subject = 'subjects';
 				
-				$tablename = $class.$bt.$subject;
+				$tablename = $class.'_'.$subject;
 				
 				$sql = $this->db->query(" SELECT * FROM $tablename ");
 				
 				if($sql)
 				{
-					$this->session->set_userdata('subjects', $sql);
+					$_SESSION['output']['subjects'] = $sql;
 					
 					$sql = $this->db->query(" CREATE TEMPORARY TABLE report ( SUBJECT VARCHAR(50) UNIQUE ) ");
 					if($sql)
 					{
-						$exams = $this->session->userdata('exams');
+						$output = $_SESSION['output'];
+						
+						$exams = $output['exams'];
 						
 						foreach($exams->result() as $row)
 						{
@@ -504,12 +507,12 @@
 						if($sql)
 						{
 							
-							$adm = $this->session->userdata('adm');
+							$adm = $output['adm'];
 							
 							static $total_avg;
 							$total = 0;
 							
-							$subjects = $this->session->userdata('subjects');
+							$subjects = $output['subjects'];
 							$no_of_sub = $subjects->num_rows();
 							
 							foreach($subjects->result() as $subjects_row)
@@ -518,7 +521,7 @@
 								
 								$this->db->query(" INSERT INTO report SET SUBJECT = '$subject_itself' ");
 								
-								$exams = $this->session->userdata('exams');
+								$exams = $output['exams'];
 								$iterations = $exams->num_rows();
 								
 								foreach($exams->result() as $exams_row)
@@ -529,7 +532,7 @@
 									$itr = 1;
 									
 									$exam_itself = $exams_row->EXAM;
-									$tablename = $this->session->userdata('class').$bt.$this->session->userdata('stream').$bt.$subject_itself.$bt.$exam_itself.$bt.$this->session->userdata('term').$bt.$this->session->userdata('year');
+									$tablename = $output['class'].'_'.$output['stream'].'_'.$subject_itself.'_'.$exam_itself.'_'.$output['term'].'_'.$output['year'];
 
 									$sql = $this->db->query(" SELECT SCORE FROM $tablename WHERE ADM = $adm ");
 									
@@ -576,14 +579,14 @@
 							
 							$out_of_score = $no_of_sub * 100;
 							
-							$this->session->set_userdata('total_avg', $total_avg);
-							$this->session->set_userdata('out_of_score', $out_of_score);
+							$_SESSION['output']['total_avg'] = $total_avg;
+							$_SESSION['output']['out_of_score'] = $out_of_score;
 							
 							$sql = $this->db->query(" SELECT * FROM report ");
 							
 							if($sql)
 							{
-								$this->session->set_userdata('report', $sql);
+								$_SESSION['output']['report'] = $sql;
 							
 							}
 
@@ -599,19 +602,19 @@
 			
 			}
 			
-			$class = $this->session->userdata('class');
-			$stream = $this->session->userdata('stream');
-			$term = $this->session->userdata('term');
-			$year = $this->session->userdata('year');
+			$class = $output['class'];
+			$stream = $output['stream'];
+			$term = $output['term'];
+			$year = $output['year'];
 			$sp = 'spreadsheet';
 			
-			$tablename = $class.$bt.$stream.$bt.$term.$bt.$year.$bt.$sp;
+			$tablename = $class.'_'.$stream.'_'.$term.'_'.$year.'_'.$sp;
 			
 			$sql = $this->db->query(" ALTER TABLE $tablename ORDER BY TOTAL DESC ");
 			
 			if($sql)
 			{
-				$total = $this->session->userdata('total_avg');
+				$total = $_SESSION['output']['total_avg'];
 				
 				$sql = $this->db->query(" SELECT COUNT(*) AS POS FROM $tablename x WHERE x.TOTAL >= '$total' ");
 
@@ -619,7 +622,7 @@
 				{
 					$row = $sql->row();
 
-					$this->session->set_userdata('pos', $row->POS);
+					$_SESSION['output']['pos'] = $row->POS;
 				
 				}
 				

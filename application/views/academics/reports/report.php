@@ -3,7 +3,7 @@
 		<div id="report">
 			<div class="header">
 				<?php
-					echo '<h1>Sample School Academy</h1>';
+					echo '<h1>'.NAME.'</h1>';
 					echo '<h1>P . O . Box 1999</h1>';
 					echo '<h1> Austin Texas</h1>';
 					echo '<hr />';
@@ -11,20 +11,21 @@
 			</div>
 			<div class="content">
 				<?php
-					$output = $this->session->userdata('sess');
-					$exams = $this->session->userdata('exams');
-					$subjects = $this->session->userdata('subjects');
-					$report = $this->session->userdata('report');
+					$output = $_SESSION['output'];
+					
+					$exams = $output['exams'];
+					$subjects = $output['subjects'];
+					$report = $output['report'];
 
 					$n_subjects = $subjects->num_rows();
 					$n_exams = $exams->num_rows();
 
-					$score_ = $this->session->userdata('total_avg')/$n_subjects;
+					$score_ = $output['total_avg']/$n_subjects;
 					$score = round($score_, 0);
 
-					echo '<h2>End of <span style=" text-decoration: underline; " > '.$this->session->userdata('term').' '.$this->session->userdata('year').'</span> <br />';
-					echo 'Name :  <span style=" text-decoration: underline; " >'.$this->session->userdata('name').'</span>  Admission Number : <span style=" text-decoration: underline; " >'.$this->session->userdata('adm').'</span><br /> ';
-					echo 'Class : <span style=" text-decoration: underline; " >'.$this->session->userdata('class').'</span> Stream : <span style=" text-decoration: underline; " >'.$this->session->userdata('stream').'</span> &nbsp Average Grade: <span style=" text-decoration: underline; " >'.$this->grading->get_grade($score).'</span></h2> '; 
+					echo '<h2>End of <span style=" text-decoration: underline; " > '.$output['term'].' '.$output['year'].'</span> <br />';
+					echo 'Name :  <span style=" text-decoration: underline; " >'.$output['name'].'</span>  Admission Number : <span style=" text-decoration: underline; " >'.$output['adm'].'</span><br /> ';
+					echo 'Class : <span style=" text-decoration: underline; " >'.$output['class'].'</span> Stream : <span style=" text-decoration: underline; " >'.$output['stream'].'</span> &nbsp Average Grade: <span style=" text-decoration: underline; " >'.$this->grading->get_grade($score).'</span></h2> '; 
 
 						echo "<table border=\"1\">";
 						echo "<tr><td>SUBJECT</td>";
@@ -54,8 +55,8 @@
 						
 						$colspan = $n_exams + 1;
 						
-						echo "<tr><td colspan=\"{$colspan}\">TOTAL</td><td>{$this->session->userdata('total_avg')} </td><td>Out Of</td><td>{$this->session->userdata('out_of_score')} </td></tr> ";
-						echo "<tr><td colspan=\"{$colspan}\">POSITION</td><td>{$this->session->userdata('pos')} </td><td>Out Of</td><td>{$this->session->userdata('no_of_students')} </td></tr> ";
+						echo "<tr><td colspan=\"{$colspan}\">TOTAL</td><td>{$output['total_avg']} </td><td>Out Of</td><td>{$output['out_of_score']} </td></tr> ";
+						echo "<tr><td colspan=\"{$colspan}\">POSITION</td><td>{$output['pos']} </td><td>Out Of</td><td>{$output['no_of_students']} </td></tr> ";
 
 						echo "</table>";
 					

@@ -5,7 +5,8 @@
 echo "<img src=\"".base_url()."images/report.png\" /><p>";
 echo "<img src=\"".base_url()."images/underline.jpg\" /><p>";
 
-echo "<b>{$this->session->userdata('class')} {$this->session->userdata('streams')} {$this->session->userdata('years')}</b>";
+$output = $_SESSION['output'];
+echo "<b>{$output['class']} {$output['stream']} {$output['year']}</b>";
 echo "<p>Choose a Student from the class list below and view results.</p>";
 
 echo "<table>";

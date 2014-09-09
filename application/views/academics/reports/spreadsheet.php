@@ -5,12 +5,14 @@
 echo "<img src=\"".base_url()."images/report.png\" /><p>";
 echo "<img src=\"".base_url()."images/underline.jpg\" /><p>";
 
-$subjects = $this->session->userdata('subjects');
+$output = $_SESSION['output'];
+
+$subjects = $output['subjects'];
 
 if($object->num_rows() > 0)
 {
-	echo "<b>{$this->session->userdata('class')} {$this->session->userdata('streams')} <p>";
-	echo "{$this->session->userdata('terms')}, {$this->session->userdata('years')} Spreadsheet<p></b>";
+	echo "<b>{$output['class']} {$output['stream']} <p>";
+	echo "{$output['term']}, {$output['year']} Spreadsheet<p></b>";
 	
 	echo "<table border=\"1\">";
 	echo "<tr><td>ADM</td><td>NAME</td>";
