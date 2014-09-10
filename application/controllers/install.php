@@ -4,7 +4,7 @@ class Install extends CI_Controller {
 	
 	public function index()
 	{
-		$this->load->view('admin/header');
+		$this->load->view('install/header');
 		$this->load->view('install/home');
 		$this->load->view('admin/footer');
 	
@@ -237,7 +237,7 @@ class Install extends CI_Controller {
 					{
 						unlink($target);
 						
-						$this->load->view('admin/header');
+						$this->load->view('install/header');
 						$this->load->view('install/step2');
 						$this->load->view('admin/footer');
 					
@@ -405,7 +405,7 @@ class Install extends CI_Controller {
 						unlink($source);
 						rename($target, $source);
 						
-						$this->load->view('admin/header');
+						$this->load->view('install/header');
 						$this->load->view('install/account');
 						$this->load->view('admin/footer');
 						

@@ -348,22 +348,24 @@ class Academics extends Academics_Controller {
 		
 		}
 		
-		if( !empty($variables['subjects']))
+		if( $variables['subjects'] != FALSE)
 		{
 			//once all variables are set, we retrieve them from the session userdata and assign them to the particular variable names and then pass them on to the model
 			//this model would return an array called results which has the related data for this particular class and then pass it on to the view for display.
-			$subject = $variables['subjects'];
+			$input['subject'] = $variables['subjects'];
 			
-			$class = $this->session->userdata('class');
-			$stream = $this->session->userdata('streams');
-			$exam = $this->session->userdata('exams');
-			$term = $this->session->userdata('terms');
-			$year = $this->session->userdata('years');
+			$output = $_SESSION['output'];
+			
+			$input['class'] = $output['class'];
+			$input['stream'] = $output['stream'];
+			$input['exam'] = $output['exam'];
+			$input['term'] = $output['term'];
+			$input['year'] = $output['year'];
 			
 			$this->load->model('academics/academic');
-			$data['results'] = $this->academic->fetch_records($class, $stream, $subject, $exam, $term, $year);
+			$data['results'] = $this->academic->fetch_records($input);
 			
-			$this->session->set_userdata('subjects', $variables['subjects']);
+			$_SESSION['output']['subjects'] = $variables['subjects'];
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/view/results', $data);
