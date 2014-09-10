@@ -287,7 +287,7 @@ class Install extends CI_Controller {
 				
 				if(stripos($line, $address_check) !== FALSE)
 				{
-					$newline .= 'define(\'ADDRESS\', \''.$paddress.'\');'.PHP_EOL;
+					$newline = 'define(\'ADDRESS\', \''.$paddress.'\');'.PHP_EOL;
 					
 					$line = $newline;
 					$exists = TRUE;
@@ -295,7 +295,7 @@ class Install extends CI_Controller {
 
 				if(stripos($line, $city_check) !== FALSE)
 				{
-					$newline .= 'define(\'CITY\', \''.$city.'\');'.PHP_EOL;
+					$newline = 'define(\'CITY\', \''.$city.'\');'.PHP_EOL;
 					
 					$line = $newline;
 					$exists = TRUE;
