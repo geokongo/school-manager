@@ -256,6 +256,8 @@ class Install extends CI_Controller {
 		{
 			$url = strtolower($this->input->post('url'));
 			$institution = mysql_real_escape_string(ucwords($this->input->post('institution')));
+			$paddress = mysql_real_escape_string(strtoupper($this->input->post('paddress')));
+			$city = mysql_real_escape_string(strtoupper($this->input->post('city')));
 			$folder = strtolower($this->input->post('folder'));
 			
 				$source = APPPATH."config/constants.php";
@@ -266,32 +268,38 @@ class Install extends CI_Controller {
 				
 				$insert_pos = 0;
 				$exists = FALSE;
-				$newline = 'define(\'NAME\', \''.$institution.'\');'.PHP_EOL;
 				
-				$test1 = 'define(\'NAME\'';
-				$test2 = 'define(\'FOPEN_READ_WRITE_CREATE_STRICT\'';
+				$name_check = 'define(\'NAME\'';
+				$address_check = 'define(\'ADDRESS\'';
+				$city_check = 'define(\'CITY\'';
 				
 			while( !feof($sp))
 			{
 				$line = fgets($sp);
 				
-				if(stripos($line, $test1) !== FALSE)
+				if(stripos($line, $name_check) !== FALSE)
 				{
+					$newline = 'define(\'NAME\', \''.$institution.'\');'.PHP_EOL;
+					
 					$line = $newline;
 					$exists = TRUE;
 				}
 				
-				if(stripos($line, $test2) !== FALSE)
+				if(stripos($line, $address_check) !== FALSE)
 				{
-					$insert_pos = ftell($sp);
+					$newline .= 'define(\'ADDRESS\', \''.$paddress.'\');'.PHP_EOL;
 					
-				}
-				else
+					$line = $newline;
+					$exists = TRUE;
+				}	
+
+				if(stripos($line, $city_check) !== FALSE)
 				{
-					$var = '';
-					$var .= $line;
-				
-				}
+					$newline .= 'define(\'CITY\', \''.$city.'\');'.PHP_EOL;
+					
+					$line = $newline;
+					$exists = TRUE;
+				}				
 				
 				fwrite($tp, $line);
 			
@@ -306,17 +314,6 @@ class Install extends CI_Controller {
 				unlink($source);
 				rename($target, $source);
 				
-			}
-			else
-			{
-				fseek($sp, $insert_pos);
-				fwrite($sp, $newline);
-			
-				fclose($sp);
-				fclose($tp);
-				
-				$exists = TRUE;
-			
 			}
 			
 			if($exists === TRUE)
