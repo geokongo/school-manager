@@ -250,11 +250,11 @@ class Academics extends Academics_Controller {
 		if($this->uri->segment(3) === FALSE)
 		{
 			//if there is no value in uri segment 3, then it means to variable has been set yet, so we go and get the classes for the user to choose which he would like to view results
-			$actionf = 'step0';
-			$class = 'classes';
+			$input['actionf'] = 'step0';
+			$input['class'] = 'classes';
 			
 			$this->load->model('academics/academic');
-			$data['classes'] = $this->academic->enter($actionf, $class, $stream, $subject, $exam, $term, $year);
+			$data['classes'] = $this->academic->enter($input);
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/view/classes', $data);
@@ -262,16 +262,16 @@ class Academics extends Academics_Controller {
 		
 		}
 		
-		if( !empty($variables['class']))
+		if( $variables['class'] != FALSE )
 		{
 			//once the class has been set, we get the streams
-			$class = $variables['class'];
-			$stream = 'streams';
+			$input['class'] = $variables['class'];
+			$input['stream'] = 'streams';
 			
 			$this->load->model('academics/academic');
-			$data['streams'] = $this->academic->enter($actionf, $class, $stream, $subject, $exam, $term, $year);
+			$data['streams'] = $this->academic->enter($input);
 			
-			$this->session->set_userdata('class', $class);
+			$_SESSION['output']['class'] = $input['class'];
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/view/streams', $data);
