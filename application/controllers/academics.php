@@ -135,7 +135,7 @@ class Academics extends Academics_Controller {
 				$this->load->model('academics/academic');
 				$data['years'] = $this->academic->enter($input);
 				
-				$_SESSION['output']['terms'] = $this->input->post('term');
+				$_SESSION['output']['term'] = $this->input->post('term');
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/step6', $data);
@@ -153,15 +153,15 @@ class Academics extends Academics_Controller {
 				$output = $_SESSION['output'];
 				
 				$input['class'] = $output['class'];
-				$input['stream'] = $output['streams'];
-				$input['subject'] = $output['subjects'];
-				$input['exam'] = $output['exams'];
-				$input['term'] = $output['terms'];
+				$input['stream'] = $output['stream'];
+				$input['subject'] = $output['subject'];
+				$input['exam'] = $output['exam'];
+				$input['term'] = $output['term'];
 				
 				$this->load->model('academics/academic');
 				$tablename = $this->academic->enter($input);
 
-				$_SESSION['output']['years'] = $this->input->post('year');
+				$_SESSION['output']['year'] = $this->input->post('year');
 				$_SESSION['output']['tablename'] = $tablename;
 				
 				$this->load->view('academics/header');
@@ -365,7 +365,7 @@ class Academics extends Academics_Controller {
 			$this->load->model('academics/academic');
 			$data['results'] = $this->academic->fetch_records($input);
 			
-			$_SESSION['output']['subjects'] = $variables['subjects'];
+			$_SESSION['output']['subject'] = $variables['subjects'];
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/view/results', $data);
