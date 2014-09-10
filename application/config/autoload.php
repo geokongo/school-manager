@@ -51,7 +51,7 @@ $autoload['packages'] = array();
 |
 */
 
-$autoload['libraries'] = array('database', 'form_validation', 'session', 'javascript' );
+$autoload['libraries'] = array('form_validation', 'session', 'javascript' );
 
 
 /*
