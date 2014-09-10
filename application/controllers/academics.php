@@ -407,10 +407,10 @@ class Academics extends Academics_Controller {
 		if( $variables['streams'] != FALSE)
 		{
 			$this->session->set_userdata('streams', $variables['streams']);	//assign chosen stream to a session variable.
-			$year = 'years';
+			$input['year'] = 'years';
 			
 			$this->load->model('academics/academic');
-			$data['years'] = $this->academic->enter($actionf, $class, $stream, $subject, $exam, $term, $year);
+			$data['years'] = $this->academic->enter($input);
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/spreadsheets/years', $data);
@@ -418,13 +418,13 @@ class Academics extends Academics_Controller {
 		
 		}
 		
-		if( !empty($variables['years']))
+		if( $variables['years'] != FALSE)
 		{
-			$this->session->set_userdata('years', $variables['years']);	//assign chosen year to a session variable.
-			$term = 'terms';
+			$_SESSION['output']['year'] = $variables['years'];	//assign chosen year to a session variable.
+			$input['term'] = 'terms';
 			
 			$this->load->model('academics/academic');
-			$data['terms'] = $this->academic->enter($actionf, $class, $stream, $subject, $exam, $term, $year);
+			$data['terms'] = $this->academic->enter($input);
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/spreadsheets/terms', $data);
@@ -432,10 +432,10 @@ class Academics extends Academics_Controller {
 		
 		}
 		
-		if( !empty($variables['terms']))
+		if($variables['terms'] != FALSE)
 		{
 			//after all variables have been set, we start to generate the spreadsheet by getting the class list, subjects, examinations
-			$this->session->set_userdata('terms', $variables['terms']);
+			$_SESSION['output']['term'] = $variables['terms'];
 			
 			$actionf = 'get_class_list';
 			
