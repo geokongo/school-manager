@@ -255,11 +255,12 @@ class Academics extends Academics_Controller {
 		if( $variables['class'] != FALSE )
 		{
 			//once the class has been set, we get the streams
+			$this->input->actionf = 'get_streams';
 			$this->input->class = $variables['class'];
 			$this->input->stream = 'streams';
 			
 			$this->load->model('academics/academic');
-			$data['streams'] = $this->academic->enter($this->input);
+			$data['streams'] = $this->academic->view($this->input);
 			
 			$_SESSION['output']->class = $this->input->class;
 			
@@ -272,12 +273,13 @@ class Academics extends Academics_Controller {
 		if($variables['streams'] != FALSE)
 		{
 			//once class and stream have been set, we get the years
+			$this->input->actionf = 'get_years';
 			$_SESSION['output']->stream = $variables['streams'];
 			
 			$this->input->year = 'years';
 			
 			$this->load->model('academics/academic');
-			$data['years'] = $this->academic->enter($this->input);
+			$data['years'] = $this->academic->view($this->input);
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/view/years', $data);
@@ -288,12 +290,13 @@ class Academics extends Academics_Controller {
 		if( $variables['years'] != FALSE)
 		{
 			//once class, stream and year  have been set, we get the terms
+			$this->input->actionf = 'get_terms';
 			$_SESSION['output']->year = $variables['years'];
 			
 			$this->input->term = 'terms';
 			
 			$this->load->model('academics/academic');
-			$data['terms'] = $this->academic->enter($this->input);
+			$data['terms'] = $this->academic->view($this->input);
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/view/terms', $data);
@@ -304,13 +307,14 @@ class Academics extends Academics_Controller {
 		if($variables['terms'] != FALSE)
 		{
 			//once class, stream, year and term have been set, we get the exminations
+			$this->input->actionf = 'get_exams';
 			$_SESSION['output']->term = $variables['terms'];
 			
 			$this->input->class = $_SESSION['output']->class;
 			$this->input->exam = 'examinations';
 			
 			$this->load->model('academics/academic');
-			$data['exams'] = $this->academic->enter($this->input);
+			$data['exams'] = $this->academic->view($this->input);
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/view/examinations', $data);
@@ -321,13 +325,14 @@ class Academics extends Academics_Controller {
 		if( $variables['exams'] != FALSE)
 		{
 			//the last variable we want is the particular subject for which to fetch results
+			$this->input->actionf = 'get_subjects';
 			$_SESSION['output']->exam = $variables['exams'];
 			
 			$this->input->class = $_SESSION['output']->class;
 			$this->input->subject = 'subjects';
 			
 			$this->load->model('academics/academic');
-			$data['subjects'] = $this->academic->enter($this->input);
+			$data['subjects'] = $this->academic->view($this->input);
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/view/subjects', $data);
@@ -339,6 +344,8 @@ class Academics extends Academics_Controller {
 		{
 			//once all variables are set, we retrieve them from the session userdata and assign them to the particular variable names and then pass them on to the model
 			//this model would return an array called results which has the related data for this particular class and then pass it on to the view for display.
+			$this->input->actionf = 'get_records';
+			
 			$this->input->subject = $variables['subjects'];
 			
 			$this->input->class = $_SESSION['output']->class;
@@ -348,7 +355,7 @@ class Academics extends Academics_Controller {
 			$this->input->year = $_SESSION['output']->year;
 			
 			$this->load->model('academics/academic');
-			$data['results'] = $this->academic->fetch_records($this->input);
+			$data['results'] = $this->academic->view($this->input);
 			
 			$_SESSION['output']->subject = $variables['subjects'];
 			

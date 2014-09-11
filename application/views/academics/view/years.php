@@ -2,8 +2,7 @@
 	<div id="main">
 		<?php 
 		
-		$output = $this->session->userdata('sess');
-		$title = $output['class'].' '.$output['streams'];
+		$title = $_SESSION['output']->class.' '.$_SESSION['output']->stream;
 		echo '<div class="classes">';
 			echo '<p> View Results </p>';
 			echo heading($title, 3);

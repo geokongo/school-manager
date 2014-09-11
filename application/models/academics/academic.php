@@ -120,6 +120,81 @@
 	}
 	
 	
+	public function view($input)
+	{
+		if($input->actionf == 'step0')
+		{
+			$tablename = $input->class;
+			
+			$sql = $this->db->query(" SELECT * FROM $tablename ");
+			
+			return $sql;
+		
+		}
+		
+		if($input->actionf == 'get_streams')
+		{
+		
+			$tablename = $input->class.'_'.$input->stream;
+			
+			$sql = $this->db->query(" SELECT * FROM $tablename ");
+			
+			return $sql;
+		
+		}
+		
+		if($input->actionf == 'get_subjects')
+		{
+			$tablename = $input->class.'_'.$input->subject;
+			
+			$sql = $this->db->query(" SELECT * FROM $tablename ");
+			
+			return $sql;
+			
+		}
+		
+		if($input->actionf == 'get_exams')
+		{
+			$tablename = $input->class.'_'.$input->exam;
+			
+			$sql = $this->db->query(" SELECT * FROM $tablename ");
+			
+			return $sql;
+			
+		}
+		
+		if($input->actionf == 'get_terms')
+		{
+			$tablename = $input->term;
+			
+			$sql = $this->db->query(" SELECT * FROM $tablename ");
+			
+			return $sql;
+		
+		}
+		
+		if($input->actionf == 'get_years')
+		{
+			$tablename = $input->year;
+			
+			$sql = $this->db->query(" SELECT * FROM $tablename ");
+			
+			return $sql;
+		
+		}
+		
+		if($input->actionf == 'get_records')
+		{
+			$tablename = $input->class.'_'.$input->stream.'_'.$input->subject.'_'.$input->exam.'_'.$input->term.'_'.$input->year;
+			
+			$sql = $this->db->query(" SELECT * FROM $tablename ");
+			
+			return $sql;
+		
+		}
+		
+	}
+	
 	public function get($input)	//this function helps to fetch records generally from the database.
 	{
 		if($input->actionf == 'fetch_records')
