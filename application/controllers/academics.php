@@ -28,7 +28,6 @@ class Academics extends Academics_Controller {
 		 *beinserted into the database. We also use the varibles to compose the tablename which is going to hold this data in the database.
 		 *The actionf is used to trigger particular methods in the model to retrieve particular data
 		*/
-
 		if(!$this->input->post())
 		{
 			//The absense of $_POST means no form has been submitted yet so we just go ahead to get the respective classes for which we might need to enter results.
@@ -57,7 +56,7 @@ class Academics extends Academics_Controller {
 				$this->load->model('academics/academic');
 				$data['streams'] = $this->academic->enter($this->input);
 				
-				$_SESSION['output']->class = $this->input->post('class');
+				$_SESSION['output']->class = $this->input->class;
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/step2', $data);
@@ -177,7 +176,6 @@ class Academics extends Academics_Controller {
 					$data['data'] = $this->academic->get($this->input);
 					
 					$data['output'] = $_SESSION['output'];
-					unset($_SESSION['output']);
 					
 					$this->load->view('academics/header');
 					$this->load->view('academics/inserted_data', $data);
