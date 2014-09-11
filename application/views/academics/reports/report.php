@@ -4,28 +4,27 @@
 			<div class="header">
 				<?php
 					echo '<h1>'.NAME.'</h1>';
-					echo '<h1>P . O . Box 1999</h1>';
-					echo '<h1> Austin Texas</h1>';
+					echo '<h1>'.ADDRESS.'</h1>';
+					echo '<h1>'.CITY.'</h1>';
 					echo '<hr />';
 				?>
 			</div>
 			<div class="content">
 				<?php
-					$output = $_SESSION['output'];
 					
-					$exams = $output['exams'];
-					$subjects = $output['subjects'];
-					$report = $output['report'];
+					$exams = $_SESSION['output']->exams;
+					$subjects = $_SESSION['output']->subjects;
+					$report = $_SESSION['output']->report;
 
 					$n_subjects = $subjects->num_rows();
 					$n_exams = $exams->num_rows();
 
-					$score_ = $output['total_avg']/$n_subjects;
+					$score_ = $_SESSION['output']->total_avg/$n_subjects;
 					$score = round($score_, 0);
 
-					echo '<h2>End of <span style=" text-decoration: underline; " > '.$output['term'].' '.$output['year'].'</span> <br />';
-					echo 'Name :  <span style=" text-decoration: underline; " >'.$output['name'].'</span>  Admission Number : <span style=" text-decoration: underline; " >'.$output['adm'].'</span><br /> ';
-					echo 'Class : <span style=" text-decoration: underline; " >'.$output['class'].'</span> Stream : <span style=" text-decoration: underline; " >'.$output['stream'].'</span> &nbsp Average Grade: <span style=" text-decoration: underline; " >'.$this->grading->get_grade($score).'</span></h2> '; 
+					echo '<h2>End of <span style=" text-decoration: underline; " > '.$_SESSION['output']->term.' '.$_SESSION['output']->year.'</span> <br />';
+					echo 'Name :  <span style=" text-decoration: underline; " >'.$_SESSION['output']->name.'</span>  Admission Number : <span style=" text-decoration: underline; " >'.$_SESSION['output']->adm.'</span><br /> ';
+					echo 'Class : <span style=" text-decoration: underline; " >'.$_SESSION['output']->class.'</span> Stream : <span style=" text-decoration: underline; " >'.$_SESSION['output']->stream.'</span> &nbsp Average Grade: <span style=" text-decoration: underline; " >'.$this->grading->get_grade($score).'</span></h2> '; 
 
 						echo "<table border=\"1\">";
 						echo "<tr><td>SUBJECT</td>";

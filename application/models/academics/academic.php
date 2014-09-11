@@ -410,9 +410,9 @@
 	public function reports($input)
 	{
 		
-		if($input['actionf'] == 'step0')
+		if($this->input->actionf == 'step0')
 		{
-			$tablename = $input['class'];
+			$tablename = $this->input->class;
 			
 			$sql = $this->db->query(" SELECT * FROM $tablename ");
 			
@@ -421,9 +421,9 @@
 		}
 		
 		
-		if($input['actionf'] == 'get_streams')
+		if($this->input->actionf == 'get_streams')
 		{
-			$tablename = $input['class'].'_'.$input['stream'];
+			$tablename = $this->input->class.'_'.$this->input->stream;
 			
 			$sql = $this->db->query(" SELECT * FROM $tablename ");
 			
@@ -431,9 +431,9 @@
 		
 		}
 		
-		if($input['actionf'] == 'get_terms')
+		if($this->input->actionf == 'get_terms')
 		{
-			$tablename = $input['term'];
+			$tablename = $this->input->term;
 			
 			$sql = $this->db->query(" SELECT * FROM $tablename ");
 			
@@ -441,9 +441,9 @@
 		
 		}
 		
-		if($input['actionf'] == 'get_years')
+		if($this->input->actionf == 'get_years')
 		{
-			$tablename = $input['year'];
+			$tablename = $this->input->year;
 			
 			$sql = $this->db->query(" SELECT * FROM $tablename ");
 			
@@ -451,9 +451,9 @@
 		
 		}
 		
-		if($input['actionf'] == 'get_class_list')
+		if($this->input->actionf == 'get_class_list')
 		{
-			$tablename = $input['class'].'_'.$input['stream'].'_'.$input['year'];
+			$tablename = $this->input->class.'_'.$this->input->stream.'_'.$this->input->year;
 			
 			$sql = $this->db->query(" SELECT * FROM $tablename ");
 			
@@ -461,11 +461,10 @@
 		
 		}
 		
-		if($input['actionf'] == 'get_report')
+		if($this->input->actionf == 'get_report')
 		{
-			$output = $_SESSION['output'];
 			
-			$class = $output['class'];
+			$class = $_SESSION['output']->class;
 			$exam = 'examinations';
 			
 			$tablename = $class.'_'.$exam;
@@ -474,7 +473,7 @@
 			
 			if($sql)
 			{
-				$_SESSION['output']['exams'] = $sql;
+				$_SESSION['output']->exams = $sql;
 				
 				$subject = 'subjects';
 				
@@ -484,14 +483,13 @@
 				
 				if($sql)
 				{
-					$_SESSION['output']['subjects'] = $sql;
+					$_SESSION['output']->subjects = $sql;
 					
 					$sql = $this->db->query(" CREATE TEMPORARY TABLE report ( SUBJECT VARCHAR(50) UNIQUE ) ");
 					if($sql)
 					{
-						$output = $_SESSION['output'];
 						
-						$exams = $output['exams'];
+						$exams = $_SESSION['output']->exams;
 						
 						foreach($exams->result() as $row)
 						{
@@ -504,12 +502,12 @@
 						if($sql)
 						{
 							
-							$adm = $output['adm'];
+							$adm = $_SESSION['output']->adm;
 							
 							static $total_avg;
 							$total = 0;
 							
-							$subjects = $output['subjects'];
+							$subjects = $_SESSION['output']->subjects;
 							$no_of_sub = $subjects->num_rows();
 							
 							foreach($subjects->result() as $subjects_row)
@@ -518,7 +516,7 @@
 								
 								$this->db->query(" INSERT INTO report SET SUBJECT = '$subject_itself' ");
 								
-								$exams = $output['exams'];
+								$exams = $_SESSION['output']->exams;
 								$iterations = $exams->num_rows();
 								
 								foreach($exams->result() as $exams_row)
@@ -529,7 +527,7 @@
 									$itr = 1;
 									
 									$exam_itself = $exams_row->EXAM;
-									$tablename = $output['class'].'_'.$output['stream'].'_'.$subject_itself.'_'.$exam_itself.'_'.$output['term'].'_'.$output['year'];
+									$tablename = $_SESSION['output']->class.'_'.$_SESSION['output']->stream.'_'.$subject_itself.'_'.$exam_itself.'_'.$_SESSION['output']->term.'_'.$_SESSION['output']->year;
 
 									$sql = $this->db->query(" SELECT SCORE FROM $tablename WHERE ADM = $adm ");
 									
@@ -576,14 +574,14 @@
 							
 							$out_of_score = $no_of_sub * 100;
 							
-							$_SESSION['output']['total_avg'] = $total_avg;
-							$_SESSION['output']['out_of_score'] = $out_of_score;
+							$_SESSION['output']->total_avg = $total_avg;
+							$_SESSION['output']->out_of_score = $out_of_score;
 							
 							$sql = $this->db->query(" SELECT * FROM report ");
 							
 							if($sql)
 							{
-								$_SESSION['output']['report'] = $sql;
+								$_SESSION['output']->report = $sql;
 							
 							}
 
@@ -599,13 +597,7 @@
 			
 			}
 			
-			$class = $output['class'];
-			$stream = $output['stream'];
-			$term = $output['term'];
-			$year = $output['year'];
-			$sp = 'spreadsheet';
-			
-			$tablename = $class.'_'.$stream.'_'.$term.'_'.$year.'_'.$sp;
+			$tablename = $_SESSION['output']->class.'_'.$_SESSION['output']->stream.'_'.$_SESSION['output']->term.'_'.$_SESSION['output']->year.'_'.$sp;
 			
 			$sql = $this->db->query(" ALTER TABLE $tablename ORDER BY TOTAL DESC ");
 			

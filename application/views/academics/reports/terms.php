@@ -2,10 +2,8 @@
 	<div id="main">
 		<?php 
 		
-		$output = $_SESSION['output'];
-		
-		$title = $output['class'].' '.$output['stream'];
-		$exam = $output['year'];
+		$title = $_SESSION['output']->class.' '.$_SESSION['output']->stream;
+		$exam = $_SESSION['output']->year;
 		echo '<div class="classes">';
 			echo '<p> View Reports </p>';
 			echo heading($title, 3);

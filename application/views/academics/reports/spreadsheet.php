@@ -1,60 +1,60 @@
-<div id="main">
+<section id="content">
+	<div id="main">
 
-<?php 
+	<?php 
 
-echo "<img src=\"".base_url()."images/report.png\" /><p>";
-echo "<img src=\"".base_url()."images/underline.jpg\" /><p>";
+	echo "<img src=\"".base_url()."images/report.png\" /><p>";
+	echo "<img src=\"".base_url()."images/underline.jpg\" /><p>";
 
-$output = $_SESSION['output'];
+	$subjects = $_SESSION['output']->subjects;
 
-$subjects = $output['subjects'];
-
-if($object->num_rows() > 0)
-{
-	echo "<b>{$output['class']} {$output['stream']} <p>";
-	echo "{$output['term']}, {$output['year']} Spreadsheet<p></b>";
-	
-	echo "<table border=\"1\">";
-	echo "<tr><td>ADM</td><td>NAME</td>";
-	
-	foreach($subjects->result() as $row)
+	if($object->num_rows() > 0)
 	{
-		echo "<td>".substr($row->SUBJECTS, 0, 3)."</td>";
-	
-	}
-	
-	echo "<td>TOTAL</td><td>POS</td></tr>";
-	
-	static $pos;
-	$pos = 1;
-	
-	foreach($object->result_array() as $row)
-	{
+		echo "<b>{$_SESSION['output']->class} {$_SESSION['output']->stream} <p>";
+		echo "{$_SESSION['output']->term}, {$_SESSION['output']->year} Spreadsheet<p></b>";
 		
+		echo "<table border=\"1\">";
+		echo "<tr><td>ADM</td><td>NAME</td>";
 		
-		echo "<tr>";
-		
-		foreach($row as $name => $value)
+		foreach($subjects->result() as $row)
 		{
-			echo "<td>{$value}</td>";
+			echo "<td>".substr($row->SUBJECTS, 0, 3)."</td>";
 		
 		}
 		
-		echo "<td>";
-		echo $pos;
-		echo "</td>";
+		echo "<td>TOTAL</td><td>POS</td></tr>";
 		
-		echo "</tr>";
+		static $pos;
+		$pos = 1;
 		
-		$pos++;
-	
+		foreach($object->result_array() as $row)
+		{
+			
+			
+			echo "<tr>";
+			
+			foreach($row as $name => $value)
+			{
+				echo "<td>{$value}</td>";
+			
+			}
+			
+			echo "<td>";
+			echo $pos;
+			echo "</td>";
+			
+			echo "</tr>";
+			
+			$pos++;
+		
+		}
+
+		echo "</table>";
+		
+
 	}
 
-	echo "</table>";
-	
+	?>
 
-}
-
-?>
-
-</div>
+	</div>
+</section>
