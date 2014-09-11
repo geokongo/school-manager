@@ -597,13 +597,13 @@
 			
 			}
 			
-			$tablename = $_SESSION['output']->class.'_'.$_SESSION['output']->stream.'_'.$_SESSION['output']->term.'_'.$_SESSION['output']->year.'_'.$sp;
+			$tablename = $_SESSION['output']->class.'_'.$_SESSION['output']->stream.'_'.$_SESSION['output']->term.'_'.$_SESSION['output']->year.'_spreadsheet';
 			
 			$sql = $this->db->query(" ALTER TABLE $tablename ORDER BY TOTAL DESC ");
 			
 			if($sql)
 			{
-				$total = $_SESSION['output']['total_avg'];
+				$total = $_SESSION['output']->total_avg;
 				
 				$sql = $this->db->query(" SELECT COUNT(*) AS POS FROM $tablename x WHERE x.TOTAL >= '$total' ");
 
@@ -611,7 +611,7 @@
 				{
 					$row = $sql->row();
 
-					$_SESSION['output']['pos'] = $row->POS;
+					$_SESSION['output']->pos = $row->POS;
 				
 				}
 				

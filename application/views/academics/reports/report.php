@@ -54,8 +54,8 @@
 						
 						$colspan = $n_exams + 1;
 						
-						echo "<tr><td colspan=\"{$colspan}\">TOTAL</td><td>{$output['total_avg']} </td><td>Out Of</td><td>{$output['out_of_score']} </td></tr> ";
-						echo "<tr><td colspan=\"{$colspan}\">POSITION</td><td>{$output['pos']} </td><td>Out Of</td><td>{$output['no_of_students']} </td></tr> ";
+						echo "<tr><td colspan=\"{$colspan}\">TOTAL</td><td>{$_SESSION['output']->total_avg} </td><td>Out Of</td><td>{$_SESSION['output']->out_of_score} </td></tr> ";
+						echo "<tr><td colspan=\"{$colspan}\">POSITION</td><td>{$_SESSION['output']->pos} </td><td>Out Of</td><td>{$_SESSION['output']->no_of_students} </td></tr> ";
 
 						echo "</table>";
 					

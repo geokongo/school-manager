@@ -342,7 +342,7 @@ class Academics extends Academics_Controller {
 			$this->input->subject = $variables['subjects'];
 			
 			$this->input->class = $_SESSION['output']->class;
-			$this->inpu->stream = $_SESSION['output']->stream;
+			$this->input->stream = $_SESSION['output']->stream;
 			$this->input->exam = $_SESSION['output']->exam;
 			$this->input->term = $_SESSION['output']->term;
 			$this->input->year = $_SESSION['output']->year;
@@ -608,11 +608,11 @@ class Academics extends Academics_Controller {
 		if($this->uri->segment(3) === FALSE)
 		{
 			//if no uri segment has been defined it means this method is being called for the first time so we get the classes and display them.
-			$input['actionf'] = 'step0';
-			$input['class'] = 'classes';
+			$this->input->actionf = 'step0';
+			$this->input->class = 'classes';
 			
 			$this->load->model('academics/academic');
-			$data['classes'] = $this->academic->reports($input);
+			$data['classes'] = $this->academic->reports($this->input);
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/reports/classes', $data);
@@ -623,14 +623,14 @@ class Academics extends Academics_Controller {
 		if( $variables['class'] != FALSE)
 		{
 			//if the class has been chosen we get the streams.
-			$input['class'] = $variables['class'];
-			$input['stream'] = 'streams';
-			$input['actionf'] = 'get_streams';
+			$this->input->class = $variables['class'];
+			$this->input->stream = 'streams';
+			$this->input->actionf = 'get_streams';
 			
 			$this->load->model('academics/academic');
-			$data['streams'] = $this->academic->reports($input);
+			$data['streams'] = $this->academic->reports($this->input);
 			
-			$_SESSION['output']['class'] = $input['class']; 	//assign chosen class to a session variable.
+			$_SESSION['output']->class = $this->input->class; 	//assign chosen class to a session variable.
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/reports/streams', $data);
@@ -641,12 +641,12 @@ class Academics extends Academics_Controller {
 		if($variables['stream'] != FALSE)
 		{
 			//once the class has been chosen we get the years.
-			$_SESSION['output']['stream'] = $variables['stream'];	//assign chosen stream to a session variable.
-			$input['year'] = 'years';
-			$input['actionf'] = 'get_years';
+			$_SESSION['output']->stream = $variables['stream'];	//assign chosen stream to a session variable.
+			$this->input->year = 'years';
+			$this->input->actionf = 'get_years';
 			
 			$this->load->model('academics/academic');
-			$data['years'] = $this->academic->reports($input);
+			$data['years'] = $this->academic->reports($this->input);
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/reports/years', $data);
@@ -657,12 +657,12 @@ class Academics extends Academics_Controller {
 		if($variables['year'] != FALSE)
 		{
 			//once year is chosen we get the terms.
-			$_SESSION['output']['year'] = $variables['year'];	//assign chosen year to a session variable.
-			$input['term'] = 'terms';
-			$input['actionf'] = 'get_terms';
+			$_SESSION['output']->year = $variables['year'];	//assign chosen year to a session variable.
+			$this->input->term = 'terms';
+			$this->input->actionf = 'get_terms';
 			
 			$this->load->model('academics/academic');
-			$data['terms'] = $this->academic->reports($input);
+			$data['terms'] = $this->academic->reports($this->input);
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/reports/terms', $data);
@@ -673,23 +673,22 @@ class Academics extends Academics_Controller {
 		if( $variables['term'] != FALSE)
 		{
 			//once the term has been chosen we generate the class list so that the use can choose the student for whom he wants to generate the report.
-			$_SESSION['output']['term'] = $variables['term'];	//assign the chosen term to a session variable.
+			$_SESSION['output']->term = $variables['term'];	//assign the chosen term to a session variable.
 			
-			$input['actionf'] = 'get_class_list';
+			$this->input->actionf = 'get_class_list';
 			
 			//we reassign the session variables to the respective variables so that we then pass them to the model.
-			$output = $_SESSION['output'];
 			
-			$input['class'] = $output['class'];
-			$input['stream'] = $output['stream'];
-			$input['year'] = $output['year'];
+			$this->input->class = $_SESSION['output']->class;
+			$this->input->stream = $_SESSION['output']->stream;
+			$this->input->year = $_SESSION['output']->year;
 			
 			$this->load->model('academics/academic');
-			$class_list = $this->academic->reports($input);
+			$class_list = $this->academic->reports($this->input);
 			
 			$no_of_students = $class_list->num_rows();	//the number of students will help us in filling the position out of file in the report form.
 				
-			$_SESSION['output']['no_of_students'] = $no_of_students;
+			$_SESSION['output']->no_of_students = $no_of_students;
 			
 			$data['class_list'] = $class_list;
 			
@@ -704,18 +703,18 @@ class Academics extends Academics_Controller {
 			//when the user selects on a student, the admission number is passed through a uri segment.
 			//the admission number, as a unique value, is then used to get the report. The result object from the model is assigned to a session variable and 
 			//then accessed in the view via the session userdata at display.
-			$_SESSION['output']['adm'] = $variables['adm'];
-			$_SESSION['output']['name'] = $variables['name'];
+			$_SESSION['output']->adm = $variables['adm'];
+			$_SESSION['output']->name = $variables['name'];
 			
-			$input['actionf'] = 'get_report';
-			$input['adm'] = $variables['adm'];
+			$this->input->actionf = 'get_report';
+			$this->input->adm = $variables['adm'];
 			
 			$this->load->model('academics/academic');
-			$res = $this->academic->reports($input);
+			$res = $this->academic->reports($this->input);
 			
 			if($res)
 			{
-				$class_['class'] = $_SESSION['output']['class'];
+				$class_['class'] = $_SESSION['output']->class;
 				$this->load->library('grading', $class_);	//we initialize the grading library with this particular class for use in the view to get grade and remarks.
 				
 				$this->load->view('academics/header');

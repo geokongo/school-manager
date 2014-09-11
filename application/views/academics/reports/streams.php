@@ -2,7 +2,7 @@
 	<div id="main">
 		<?php 
 		
-		$title = $_SESSEION['output']->class;
+		$title = $_SESSION['output']->class;
 		echo '<div class="classes">';
 			echo '<p> View Reports </p>';
 			echo heading($title, 3);
