@@ -11,8 +11,8 @@ class Academics_Controller extends SM_Controller {
 		
 		session_start();
 
-		//$this->load->library('output');
-		//$this->load->library('input');
+		$this->load->library('output');
+		$this->load->library('input');
 		
     }
 	

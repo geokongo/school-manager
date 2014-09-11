@@ -2,5 +2,12 @@
 
 class Output {
 
+	public function rescape($string)
+	{
+		$string = stripslashes($string);
+		
+		return $string;
+		
+	}
 
 }
