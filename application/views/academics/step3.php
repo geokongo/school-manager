@@ -3,8 +3,9 @@
 
 	<?php
 
-		$output = $this->session->userdata('sess');
-		$title = $_SESSION['output']['class'].$_SESSION['output']['stream'];
+		$output = $_SESSION['output'];
+		
+		$title = $_SESSION['output']->class.' '.$_SESSION['output']->stream;
 		
 		$array = array( 'class' => 'adm_form');
 		echo form_open('academics/enter', $array)."<header>";

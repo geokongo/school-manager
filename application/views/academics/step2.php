@@ -3,10 +3,11 @@
 
 	<?php
 		
-		$output = $this->session->userdata('sess');
-		$title = $_SESSION['output']['class'];
+		
+		$title = $_SESSION['output']->class;
 		
 		$array = array( 'class' => 'adm_form');
+		
 		echo form_open('academics/enter', $array)."<header>";
 		echo heading('Entering Results into the Database', 3);
 		echo heading('Step 2', 4);

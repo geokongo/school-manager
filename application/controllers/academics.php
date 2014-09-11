@@ -32,11 +32,11 @@ class Academics extends Academics_Controller {
 		if(!$this->input->post())
 		{
 			//The absense of $_POST means no form has been submitted yet so we just go ahead to get the respective classes for which we might need to enter results.
-			$input['actionf'] = 'step0';
-			$input['class'] = 'classes';
+			$this->input->actionf = 'step0';
+			$this->input->class = 'classes';
 			
 			$this->load->model('academics/academic');
-			$data['classes'] = $this->academic->enter($input);
+			$data['classes'] = $this->academic->enter($this->input);
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/step1', $data);
@@ -51,13 +51,13 @@ class Academics extends Academics_Controller {
 			if($this->input->post('actionf') == 'step1')
 			{
 				//when class has been selected we go ahead and fetch the streams
-				$input['class'] = $this->input->post('class');
-				$input['stream'] = 'streams';
+				$this->input->class = $this->input->post('class');
+				$this->input->stream = 'streams';
 				
 				$this->load->model('academics/academic');
-				$data['streams'] = $this->academic->enter($input);
+				$data['streams'] = $this->academic->enter($this->input);
 				
-				$_SESSION['output']['class'] = $this->input->post('class');
+				$_SESSION['output']->class = $this->input->post('class');
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/step2', $data);
@@ -68,17 +68,15 @@ class Academics extends Academics_Controller {
 			if($this->input->post('actionf') == 'step2')
 			{
 				//when both class and streams has bee set we go ahead and fetch the subjects
-				$input['streams'] = $this->input->post('stream');
+				$this->input->streams = $this->input->post('stream');
 				
-				$output = $_SESSION['output'];
-				
-				$input['class'] = $output['class'];
-				$input['subject'] = 'subjects';
+				$this->input->class = $_SESSION['output']->class;
+				$this->input->subject = 'subjects';
 				
 				$this->load->model('academics/academic');
-				$data['subjects'] = $this->academic->enter($input);
+				$data['subjects'] = $this->academic->enter($this->input);
 				
-				$_SESSION['output']['streams'] = $input['streams'];
+				$_SESSION['output']->stream = $this->input->streams;
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/step3', $data);
@@ -88,17 +86,15 @@ class Academics extends Academics_Controller {
 			if($this->input->post('actionf') == 'step3')
 			{
 				//when class, stream and subject has been set we go ahead and get the examinations for that specific class
-				$input['subjects'] = $this->input->post('subject');
+				$this->input->subjects = $this->input->post('subject');
 				
-				$output = $_SESSION['output'];
-				
-				$input['class'] = $output['class'];
-				$input['exam'] = 'examinations';
+				$this->input->class = $_SESSION['output']->class;
+				$this->input->exam = 'examinations';
 				
 				$this->load->model('academics/academic');
-				$data['exams'] = $this->academic->enter($input);
+				$data['exams'] = $this->academic->enter($this->input);
 				
-				$_SESSION['output']['subjects'] = $this->input->post('subject');
+				$_SESSION['output']->subject = $this->input->post('subject');
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/step4', $data);
@@ -109,13 +105,13 @@ class Academics extends Academics_Controller {
 			if($this->input->post('actionf') == 'step4')
 			{
 				//we then get the terms so that the user can choose the one for which to enter results
-				$input['exams'] = $this->input->post('exam');
-				$input['term'] = 'terms';
+				$this->input->exams = $this->input->post('exam');
+				$this->input->term = 'terms';
 				
 				$this->load->model('academics/academic');
-				$data['terms'] = $this->academic->enter($input);
+				$data['terms'] = $this->academic->enter($this->input);
 				
-				$_SESSION['output']['exams'] = $this->input->post('exam');
+				$_SESSION['output']->exam = $this->input->post('exam');
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/step5', $data);
@@ -127,15 +123,13 @@ class Academics extends Academics_Controller {
 			{
 				//we then get the years so that the user can choose the one for which to enter results
 
-				$input['terms'] = $this->input->post('term');
-				$input['year'] = 'years';
-				
-				$output = $_SESSION['output'];
+				$this->input->terms = $this->input->post('term');
+				$this->input->year = 'years';
 				
 				$this->load->model('academics/academic');
-				$data['years'] = $this->academic->enter($input);
+				$data['years'] = $this->academic->enter($this->input);
 				
-				$_SESSION['output']['term'] = $this->input->post('term');
+				$_SESSION['output']->term = $this->input->post('term');
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/step6', $data);
@@ -147,22 +141,20 @@ class Academics extends Academics_Controller {
 			{
 				//once all the varibales are set, we now start by creating a tablename based on the varibles that have been set previously
 				//after creating the table succssfully, we present the user with a form upload so that he can upload the results.
-				$input['actionf'] = $this->input->post('actionf');
-				$input['year'] = $this->input->post('year');
+				$this->input->actionf = $this->input->post('actionf');
+				$this->input->year = $this->input->post('year');
 				
-				$output = $_SESSION['output'];
-				
-				$input['class'] = $output['class'];
-				$input['stream'] = $output['stream'];
-				$input['subject'] = $output['subject'];
-				$input['exam'] = $output['exam'];
-				$input['term'] = $output['term'];
+				$this->input->class = $_SESSION['output']->class;
+				$this->input->stream = $_SESSION['output']->stream;
+				$this->input->subject = $_SESSION['output']->subject;
+				$this->input->exam = $_SESSION['output']->exam;
+				$this->input->term = $_SESSION['output']->term;
 				
 				$this->load->model('academics/academic');
-				$tablename = $this->academic->enter($input);
+				$tablename = $this->academic->enter($this->input);
 
-				$_SESSION['output']['year'] = $this->input->post('year');
-				$_SESSION['output']['tablename'] = $tablename;
+				$_SESSION['output']->year = $this->input->post('year');
+				$_SESSION['output']->tablename = $tablename;
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/upload');
@@ -172,17 +164,17 @@ class Academics extends Academics_Controller {
 			
 			if($this->input->post('actionf') == 'insert_records')
 			{
-				$input['actionf'] = $this->input->post('actionf');
+				$this->input->actionf = $this->input->post('actionf');
 				
 				$this->load->model('academics/academic');
-				$res = $this->academic->enter($input);
+				$res = $this->academic->enter($this->input);
 				
 				if($res)
 				{
-					$input['actionf'] = 'fetch_records';
+					$this->input->actionf = 'fetch_records';
 					
 					$this->load->model('academics/academic');
-					$data['data'] = $this->academic->get($input);
+					$data['data'] = $this->academic->get($this->input);
 					
 					$data['output'] = $_SESSION['output'];
 					unset($_SESSION['output']);
@@ -224,7 +216,7 @@ class Academics extends Academics_Controller {
 				//this means the upload was successful and so we ask the user ti cinfirm entering the data into the database before we actually insert into mysql.
 				$data = array( 'upload_data' => $this->upload->data());
 				
-				$_SESSION['output']['file_path'] = $data['upload_data']['full_path'];
+				$_SESSION['output']->file_path = $data['upload_data']['full_path'];
 				
 				$this->load->view('academics/header');
 				$this->load->view('academics/confirm');

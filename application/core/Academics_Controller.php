@@ -5,14 +5,15 @@ class Academics_Controller extends SM_Controller {
     {
         parent::__construct();
 
-        if ($this->session->userdata('usertype') != 'academics'){
+        if ($this->session->userdata('usertype') != 'academics')
+		{
             redirect('login','refresh');
+			
         } 
 		
 		session_start();
 
 		$this->load->library('output');
-		$this->load->library('input');
 		
     }
 	

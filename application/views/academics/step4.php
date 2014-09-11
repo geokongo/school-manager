@@ -3,8 +3,7 @@
 
 	<?php
 
-		$output = $_SESSION['output'];
-		$title = $output['class'].' '.$output['streams'].' '.$output['subjects'];
+		$title = $_SESSION['output']->class.' '.$_SESSION['output']->stream.' '.$_SESSION['output']->subject;
 		
 		$array = array( 'class' => 'adm_form');
 		echo form_open('academics/enter', $array)."<header>";

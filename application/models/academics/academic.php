@@ -12,10 +12,10 @@
 	public function enter($input)
 	{
 		
-		if(isset($input['actionf']))	//the initial step, step0, starts with getting classes for the view so that the user could select for which to enter data.
-		{	if($input['actionf'] == 'step0')
+		if(isset($input->actionf))	//the initial step, step0, starts with getting classes for the view so that the user could select for which to enter data.
+		{	if($input->actionf == 'step0')
 			{
-				$tablename = $input['class'];
+				$tablename = $input->class;
 				
 				$sql = $this->db->query(" SELECT * FROM $tablename ");
 				
@@ -23,9 +23,9 @@
 			
 			}
 			
-			if($input['actionf'] == 'create_table')	//this creates a table to hold results in the database.
+			if($input->actionf == 'create_table')	//this creates a table to hold results in the database.
 			{
-				$tablename = $input['class'].'_'.$input['stream'].'_'.$input['subject'].'_'.$input['exam'].'_'.$input['term'].'_'.$input['year'];
+				$tablename = $input->class.'_'.$input->stream.'_'.$input->subject.'_'.$input->exam.'_'.$input->term.'_'.$input->year;
 			
 				$sql = $this->db->query(" CREATE TABLE IF NOT EXISTS $tablename (
 										NAME VARCHAR(20), 
@@ -40,13 +40,12 @@
 		
 			}
 			
-			if($input['actionf'] == 'insert_records')	//this inserts records from the .csv file into the table in the database.
+			if($input->actionf == 'insert_records')	//this inserts records from the .csv file into the table in the database.
 			{
 				$output = $_SESSION['output'];
 				
-				$file_path = $output['file_path'];
-				
-				$tablename = $output['tablename'];
+				$file_path = $output->file_path;
+				$tablename = $output->tablename;
 				
 				$file_path = addslashes($file_path);
 
@@ -62,12 +61,12 @@
 			
 		}
 		
-		if(!isset($input['actionf']))
+		if(!isset($input->actionf))
 		{
 		
-			if(isset($input['class']) && isset($input['stream']))	//this gets class streams.
+			if(isset($input->class) && isset($input->stream))	//this gets class streams.
 			{
-				$tablename = $input['class'].'_'.$input['stream'];
+				$tablename = $input->class.'_'.$input->stream;
 				
 				$sql = $this->db->query(" SELECT * FROM $tablename ");
 				
@@ -75,9 +74,9 @@
 			
 			}
 			
-			if(isset($input['class']) && isset($input['subject']))	//this gets class subjects.
+			if(isset($input->class) && isset($input->subject))	//this gets class subjects.
 			{
-				$tablename = $input['class'].'_'.$input['subject'];
+				$tablename = $input->class.'_'.$input->subject;
 				
 				$sql = $this->db->query(" SELECT * FROM $tablename ");
 				
@@ -85,9 +84,9 @@
 			
 			}
 			
-			if(isset($input['class']) && isset($input['exam']))	//this gets class examinations.
+			if(isset($input->class) && isset($input->exam))	//this gets class examinations.
 			{
-				$tablename = $input['class'].'_'.$input['exam'];
+				$tablename = $input->class.'_'.$input->exam;
 				
 				$sql = $this->db->query(" SELECT * FROM $tablename ");
 				
@@ -95,9 +94,9 @@
 			
 			}
 			
-			if(isset($input['term']))	//this gets terms.
+			if(isset($input->term))	//this gets terms.
 			{
-				$tablename = $input['term'];
+				$tablename = $input->term;
 				
 				$sql = $this->db->query(" SELECT * FROM $tablename ");
 				
@@ -105,9 +104,9 @@
 			
 			}
 			
-			if(isset($input['year']))	//this gets years.
+			if(isset($input->year))	//this gets years.
 			{
-				$tablename = $input['year'];
+				$tablename = $input->year;
 				
 				$sql = $this->db->query(" SELECT * FROM $tablename ");
 				
@@ -123,11 +122,10 @@
 	
 	public function get($input)	//this function helps to fetch records generally from the database.
 	{
-		if($input['actionf'] == 'fetch_records')
+		if($input->actionf == 'fetch_records')
 		{
-			$output = $this->session->userdata('sess');
 			
-			$tablename = $output['tablename'];
+			$tablename = $_SESSION['output']->tablename;
 			
 			$sql = $this->db->query(" SELECT * FROM $tablename ");
 			
@@ -135,7 +133,7 @@
 			
 		}
 		
-		if($input['actionf'] == 'get_classes')	//gets a list of all classes registered in the database. 
+		if($input->actionf == 'get_classes')	//gets a list of all classes registered in the database. 
 		{
 			$sql = $this->db->query(" SELECT * FROM classes ");
 			

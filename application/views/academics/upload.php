@@ -2,9 +2,8 @@
 	<div id="main">
 	<?php
 
-		$output = $_SESSION['output'];
-		$title = $output['class'].' '.$output['streams'].' '.$output['subjects'];
-		$exam = $output['exams'].' '.$output['terms'].' '.$output['years'];
+		$title = $_SESSION['output']->class.' '.$_SESSION['output']->stream.' '.$_SESSION['output']->subject;
+		$exam = $_SESSION['output']->exam.' '.$_SESSION['output']->term.' '.$_SESSION['output']->year;
 		
 		$array = array( 'class' => 'adm_form');
 		echo form_open_multipart('academics/enter', $array)."<header>";
