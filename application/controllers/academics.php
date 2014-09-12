@@ -173,7 +173,7 @@ class Academics extends Academics_Controller {
 					$this->input->actionf = 'fetch_records';
 					
 					$this->load->model('academics/academic');
-					$data['data'] = $this->academic->get($this->input);
+					$data['data'] = $this->academic->enter($this->input);
 					
 					$data['output'] = $_SESSION['output'];
 					
@@ -244,7 +244,7 @@ class Academics extends Academics_Controller {
 			$this->input->class = 'classes';
 			
 			$this->load->model('academics/academic');
-			$data['classes'] = $this->academic->enter($this->input);
+			$data['classes'] = $this->academic->view($this->input);
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/view/classes', $data);
@@ -377,11 +377,11 @@ class Academics extends Academics_Controller {
 		
 		if($this->uri->segment(3) === FALSE)
 		{
-			$input['actionf'] = 'step0';
-			$input['class'] = 'classes';
+			$this->input->actionf = 'step0';
+			$this->input->class = 'classes';
 			
 			$this->load->model('academics/academic');
-			$data['classes'] = $this->academic->enter($input);
+			$data['classes'] = $this->academic->spreadsheets($this->input);
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/spreadsheets/classes', $data);
@@ -391,13 +391,14 @@ class Academics extends Academics_Controller {
 		
 		if( $variables['class'] != FALSE)
 		{
-			$input['class'] = $variables['class'];
-			$input['stream'] = 'streams';
+			$this->input->actionf = 'get_streams';
+			$this->input->class = $variables['class'];
+			$this->input->stream = 'streams';
 			
 			$this->load->model('academics/academic');
-			$data['streams'] = $this->academic->enter($input);
+			$data['streams'] = $this->academic->spreadsheets($this->input);
 			
-			$_SESSION['output']['class'] = $class;	//assign chosen class to a session variable.
+			$_SESSION['output']->class = $this->input->class;	//assign chosen class to a session variable.
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/spreadsheets/streams', $data);
@@ -407,11 +408,13 @@ class Academics extends Academics_Controller {
 		
 		if( $variables['streams'] != FALSE)
 		{
-			$this->session->set_userdata('streams', $variables['streams']);	//assign chosen stream to a session variable.
-			$input['year'] = 'years';
+			$_SESSION['output']->stream =  $variables['streams'];	//assign chosen stream to a session variable.
+			
+			$this->input->actionf = 'get_years';
+			$this->input->year = 'years';
 			
 			$this->load->model('academics/academic');
-			$data['years'] = $this->academic->enter($input);
+			$data['years'] = $this->academic->spreadsheets($this->input);
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/spreadsheets/years', $data);
@@ -421,11 +424,13 @@ class Academics extends Academics_Controller {
 		
 		if( $variables['years'] != FALSE)
 		{
-			$_SESSION['output']['year'] = $variables['years'];	//assign chosen year to a session variable.
-			$input['term'] = 'terms';
+			$_SESSION['output']->year = $variables['years'];	//assign chosen year to a session variable.
+			
+			$this->input->actionf = 'get_terms';
+			$this->input->term = 'terms';
 			
 			$this->load->model('academics/academic');
-			$data['terms'] = $this->academic->enter($input);
+			$data['terms'] = $this->academic->spreadsheets($this->input);
 			
 			$this->load->view('academics/header');
 			$this->load->view('academics/spreadsheets/terms', $data);
@@ -436,79 +441,76 @@ class Academics extends Academics_Controller {
 		if($variables['terms'] != FALSE)
 		{
 			//after all variables have been set, we start to generate the spreadsheet by getting the class list, subjects, examinations
-			$_SESSION['output']['term'] = $variables['terms'];
+			$this->input->term = $variables['terms'];
 			
-			$actionf = 'get_class_list';
+			$this->input->actionf = 'get_class_list';
 			
-			$class = $this->session->userdata('class');
-			$stream = $this->session->userdata('streams');
-			$year = $this->session->userdata('years');
+			$this->input->class = $_SESSION['output']->class;
+			$this->input->stream = $_SESSION['output']->stream;
+			$this->input->year = $_SESSION['output']->year;
 			
 			$this->load->model('academics/academic');
-			$class_list = $this->academic->spreadsheets($actionf, $class, $stream, $subject, $exam, $term, $year);
+			$class_list = $this->academic->spreadsheets($this->input);
 			
 			if($class_list)
 			{
 				//we will loop through this class list by admission numbers one at a time in order to get the students results in the table
-				$this->session->set_userdata('class_list', $class_list);
 				
-				$actionf = 'get_exams';
-				$exam = 'examinations';
+				$this->input->actionf = 'get_exams';
+				$this->input->exam = 'examinations';
 				
 				$this->load->model('academics/academic');
-				$exams = $this->academic->spreadsheets($actionf, $class, $stream, $subject, $exam, $term, $year);
+				$exams = $this->academic->spreadsheets($this->input);
 				
 				if($exams)
 				{
 					//the exam names will help us to generate the table names in order to get the subject results and the calculate the average_score to populate the spreadsheet with.
-					$this->session->set_userdata('exams', $exams);
 					
-					$actionf = 'get_subjects';
-					$subject = 'subjects';
+					$this->input->actionf = 'get_subjects';
+					$this->input->subject = 'subjects';
 					
 					$this->load->model('academics/academic');
-					$subjects = $this->academic->spreadsheets($actionf, $class, $stream, $subject, $exam, $term, $year);
+					$subjects = $this->academic->spreadsheets($this->input);
 					
 					if($subjects)
 					{
 						//we create the spreadsheet table using the class, stream, term and year names
-						$this->session->set_userdata('subjects', $subjects);
+						$_SESSION['output']->subjects = $subjects;
 						
-						$actionf = 'create_spreadsheet_table';
-						$term = $this->session->userdata('terms');
-						$subject = $this->session->userdata('subjects');
+						$this->input->actionf = 'create_spreadsheet_table';
 						
 						$this->load->model('academics/academic');
-						$res = $this->academic->spreadsheets($actionf, $class, $stream, $subject, $exam, $term, $year);
+						$res = $this->academic->spreadsheets($this->input);
 						
 						if($res)
 						{
 							//after spreadsheet table has been created successfully we loop through the class list to get the admission numbers one at a time.
-							$this->session->set_userdata('spreadsheet_tablename', $res);
+							$_SESSION['output']->spreadsheet_tablename = $res;
 							
-							$class_list = $this->session->userdata('class_list');
 							foreach($class_list->result() as $class_list_row)
 							{
 								//foreach admission number we will fetch the associated results, calculate averages and then populate into the spreadsheet.
 								$adm = $class_list_row->ADM;
 								$name = $class_list_row->NAME;
-								$spreadsheet_tablename = $this->session->userdata('spreadsheet_tablename');
 								
 								static $total;
 								$total = 0;
 								
+								$this->input->actionf = 'insert_adm_name';
+								$this->input->adm = $adm;
+								$this->input->name = $name;
+								$this->input->tablename = $spreadsheet_tablename;
+								
 								
 								$this->load->model('academics/academic');
-								$this->academic->insert_adm_name($spreadsheet_tablename, $adm, $name, $total);
+								$this->academic->spreadsheets($this->input);
 								
-								$class_subjects = $this->session->userdata('subjects');
-								foreach($class_subjects->result() as $class_subjects_row)
+								foreach($subjects->result() as $class_subjects_row)
 								{
 									//we will start with one subject at a time and loop through until all subjects are entered.
 									$subject_itself = $class_subjects_row->SUBJECTS;
-									$class_exams = $this->session->userdata('exams');
-									$iterations = $class_exams->num_rows();
-									foreach($class_exams->result() as $class_exams_row)
+									$iterations = $exams->num_rows();
+									foreach($exams->result() as $class_exams_row)
 									{
 										/*we use each subject name from above together with each exam name to get the score for the particular admission number and assign the score to a 
 										 *static variable $val. This is incremented for every exam and then we use the number of exams to calculate the average at the end of the loop and 
@@ -523,11 +525,13 @@ class Academics extends Academics_Controller {
 										
 										
 										$exam_itself = $class_exams_row->EXAM;
-										$bt = '_';
-										$tablename = $this->session->userdata('class').$bt.$this->session->userdata('streams').$bt.$subject_itself.$bt.$exam_itself.$bt.$this->session->userdata('terms').$bt.$this->session->userdata('years');
+										$score_tablename = $_SESSION['output']->class.'_'.$_SESSION['output']->stream.'_'.$subject_itself.'_'.$exam_itself.'_'.$_SESSION['output']->term.'_'.$_SESSION['output']->year;
+										
+										$this->input->actionf = 'get_score';
+										$this->input->score_tablename = $score_tablename;
 										
 										$this->load->model('academics/academic');
-										$res = $this->academic->fetch_records2($tablename, $adm);
+										$res = $this->academic->spreadsheets($this->input);
 										
 										if($res->num_rows() > 0)
 										{
@@ -552,11 +556,13 @@ class Academics extends Academics_Controller {
 									$average_score_ = round($average_score, 0);  //we round of the average to the nearest whole number to avoid decimals in the final result.
 									
 									$total += $average_score_;	//we increment the $total variable once the subject average has been established
-									$spreadsheet_tablename = $this->session->userdata('spreadsheet_tablename');
 									
+									$this->input->actionf = 'update_score';
+									$this->input->subject = $subject_itself;
+									$this->input->avg_score = $average_score_;
 									
 									$this->load->model('academics/academic');
-									$res = $this->academic->update_score($spreadsheet_tablename, $adm, $subject_itself, $average_score_);	//this sql inserts the average score into the spreadsheet table
+									$res = $this->academic->spreadsheets($this->input);	//this sql inserts the average score into the spreadsheet table
 								
 									if($itr == $iterations)	//at this point we reset the static variables to null so that they are ready for the next iteration.
 									{
@@ -564,26 +570,36 @@ class Academics extends Academics_Controller {
 										$itr = NULL;
 										
 									}
+									
 								}
 								
 								//once all subjects have been populated, we then insert the total score into the database using this query.
+								
+								$this->input->actionf = 'set_total';
+								$this->input->total = $total;
+								
 								$this->load->model('academics/academic');
-								$this->academic->insert_adm_name($spreadsheet_tablename, $adm, $name, $total);
+								$this->academic->spreadsheets($this->input);
 								
 								$total = NULL;	//after inserting the total score we reset the static variable $score to make it ready for the next iteration.
 							
 							}
 							
+							$this->input->actionf = 'sort_table';
+							
 							$this->load->model('academics/academic');
-							$task = $this->academic->sort_table($spreadsheet_tablename); //this sql orders the spreadsheet table by the totals field in descending order.
+							$task = $this->academic->spreadsheets($this->input); //this sql orders the spreadsheet table by the totals field in descending order.
 							
 							if($task)
 							{
 								//once the table has been sorted successfully, we select * from it and assign the result object to the variable $object and the pass this to the view
-								$this->load->model('academics/academic');
-								$data['object'] = $this->academic->select_table($spreadsheet_tablename);
 								
-								$class_['class'] = $this->session->userdata('class');
+								$this->input->actionf = 'select_table';
+								
+								$this->load->model('academics/academic');
+								$data['object'] = $this->academic->spreadsheets($this->input);
+								
+								$class_['class'] = $_SESSION['output']->class;
 								
 								$this->load->library('grading', $class_);
 								

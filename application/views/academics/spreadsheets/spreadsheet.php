@@ -9,8 +9,8 @@ $subjects = $this->session->userdata('subjects');
 
 if($object)
 {
-	echo "<b>{$this->session->userdata('class')} {$this->session->userdata('streams')} <p>";
-	echo "{$this->session->userdata('terms')}, {$this->session->userdata('years')} Spreadsheet<p></b>";
+	echo "<b>{$_SESSION['output']->class} {$_SESSION['output']->stream} <p>";
+	echo "{$_SESSION['output']->term}, {$_SESSION['output']->year} Spreadsheet<p></b>";
 	
 	echo "<table border=\"1\">";
 	echo "<tr><td>ADM</td><td>NAME</td>";

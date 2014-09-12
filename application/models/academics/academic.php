@@ -13,7 +13,8 @@
 	{
 		
 		if(isset($input->actionf))	//the initial step, step0, starts with getting classes for the view so that the user could select for which to enter data.
-		{	if($input->actionf == 'step0')
+		{	
+			if($input->actionf == 'step0')
 			{
 				$tablename = $input->class;
 				
@@ -58,6 +59,18 @@
 				return $sql;
 			
 			}
+			
+			if($input->actionf == 'fetch_records')
+			{
+				
+				$tablename = $_SESSION['output']->tablename;
+				
+				$sql = $this->db->query(" SELECT * FROM $tablename ");
+				
+				return $sql;
+				
+			}
+			
 			
 		}
 		
@@ -115,6 +128,7 @@
 			}
 		
 		}
+		
 		
 	
 	}
@@ -415,9 +429,9 @@
 	
 	public function spreadsheets($input)
 	{
-		if($input['actionf'] == 'get_class_list')
+		if($input->actionf == 'step0')
 		{
-			$tablename = $input['class'].'_'.$input['stream'].'_'.$input['year'];
+			$tablename = $input->class;
 			
 			$sql = $this->db->query(" SELECT * FROM $tablename ");
 			
@@ -425,9 +439,50 @@
 		
 		}
 		
-		if($input['actionf'] == 'get_exams')
+		if($input->actionf == 'get_streams')
 		{
-			$tablename = $input['class'].'_'.$input['exam'];
+			$tablename = $input->class.'_'.$input->stream;
+			
+			$sql = $this->db->query(" SELECT * FROM $tablename ");
+			
+			return $sql;
+		
+		}
+		
+		if($input->actionf == 'get_years')
+		{
+			$tablename = $input->year;
+			
+			$sql = $this->db->query(" SELECT * FROM $tablename ");
+			
+			return $sql;
+		
+		}
+		
+		if($input->actionf == 'get_terms')
+		{
+			$tablename = $input->term;
+			
+			$sql = $this->db->query(" SELECT * FROM $tablename ");
+			
+			return $sql;
+		
+		}
+		
+		
+		if($input->actionf == 'get_class_list')
+		{
+			$tablename = $input->class.'_'.$input->stream.'_'.$input->year;
+			
+			$sql = $this->db->query(" SELECT * FROM $tablename ");
+			
+			return $sql;
+		
+		}
+		
+		if($input->actionf == 'get_exams')
+		{
+			$tablename = $input->class.'_'.$input->exam;
 			
 			$sql = $this->db->query(" SELECT EXAM FROM $tablename ");
 			
@@ -435,9 +490,9 @@
 		
 		}
 		
-		if($input['actionf'] == 'get_subjects')
+		if($input->actionf == 'get_subjects')
 		{
-			$tablename = $input['class'].'_'.$input['subject'];
+			$tablename = $input->class.'_'.$input->subject;
 			
 			$sql = $this->db->query(" SELECT SUBJECTS FROM $tablename ");
 			
@@ -445,10 +500,9 @@
 		
 		}
 		
-		if($input['actionf'] == 'create_spreadsheet_table')
+		if($input->actionf == 'create_spreadsheet_table')
 		{
-			$value = 'spreadsheet';
-			$tablename = $input['class'].'_'.$input['stream'].'_'.$input['term'].'_'.$input['year'].'_'.$value;
+			$tablename = $input->class.'_'.$input->stream.'_'.$input->term.'_'.$input->year.'_spreadsheet';
 			
 			$sql = $this->db->query(" CREATE TABLE IF NOT EXISTS $tablename (
 									  ADM INT UNIQUE,
@@ -456,7 +510,9 @@
 									  ) ");
 			if($sql)
 			{
-				foreach($subject->result() as $row)
+				$subjects = $_SESSION['output']->subjects;
+				
+				foreach($subjects  as $row)
 				{
 					$subject_itself = $row->SUBJECTS;
 					
@@ -474,12 +530,89 @@
 				
 				}
 				
-				
-			
 			}
 		
 		}
-	
+		
+		if($input->actionf == 'insert_adm_name')
+		{	
+			$sql = $this->db->query(" INSERT INTO $input->tablename SET ADM = '$input->adm', NAME = '$input->name' ");
+			
+		}	
+		
+		if($input->actionf == 'get_score')
+		{
+			$sql = $this->db->query(" SELECT SCORE FROM $input->score_tablename WHERE ADM = $input->adm ");
+			
+			return $sql;
+		
+		}
+		
+		if($input->actionf == 'update_score')
+		{
+			$sql = $this->db->query(" UPDATE $input->tablename SET $input->subject = $input->average_score WHERE ADM = $input->adm ");
+		
+		}
+		
+		if($input->actionf == 'set_total')
+		{
+			$sql = $this->db->query(" UPDATE $input->tablename SET TOTAL = $input->total WHERE ADM = $input->adm ");
+			
+			return $sql;
+		
+		}
+		
+		if($input->actionf == 'sort_table')
+		{
+			$sql = $this->db->query(" ALTER TABLE $input->tablename ORDER BY TOTAL DESC ");
+			
+			return $sql;
+		
+		}
+		
+		if($input->actionf == 'select_table')
+		{
+			$sql = $this->db->query(" SELECT * FROM $input->tablename ");
+			
+			if($sql)
+			{
+				
+				$results = $sql->result_array();
+				
+				static $itr_;
+				$itr_ = 0;
+				
+				foreach($results as $row)
+				{
+					$total = $row['TOTAL'];
+					
+					$sql = $this->db->query(" SELECT COUNT(*) AS POS FROM $input->tablename x WHERE x.TOTAL >= '$total' ");
+					
+					if($sql)
+					{
+						$pos = $sql->result_array();
+						
+						foreach($pos as $position)
+						{
+							$val = $position['POS'];
+						
+						}
+						
+						$results[$itr_]['POS'] = $val;
+						
+					}
+					
+					$itr_++;
+				
+				}
+				
+				return $results;
+				
+				$itr_ = NULL;
+			}
+
+		}
+		
 	}
 	
 	public function reports($input)

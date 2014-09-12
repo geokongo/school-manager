@@ -1,9 +1,7 @@
 <section id="content">
 	<div id="main">
 		<?php 
-		
-		$output = $this->session->userdata('sess');
-		$title = $output['class'];
+		$title = $_SESSION['output']->class;
 		echo '<div class="classes">';
 			echo '<p> View Spreadsheets </p>';
 			echo heading($title, 3);
