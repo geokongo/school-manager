@@ -494,7 +494,7 @@
 		{
 			$tablename = $input->class.'_'.$input->subject;
 			
-			$sql = $this->db->query(" SELECT SUBJECTS FROM $tablename ");
+			$sql = $this->db->query(" SELECT * FROM $tablename ");
 			
 			return $sql;
 		
@@ -510,7 +510,9 @@
 									  ) ");
 			if($sql)
 			{
-				$subjects = $_SESSION['output']->subjects;
+				$subjects_tablename = $input->class.'_subjects';
+				
+				$subjects = $this->db->query(" SELECT * FROM $subjects_tablename ");
 				
 				foreach($subjects  as $row)
 				{
@@ -536,7 +538,9 @@
 		
 		if($input->actionf == 'insert_adm_name')
 		{	
-			$sql = $this->db->query(" INSERT INTO $input->tablename SET ADM = '$input->adm', NAME = '$input->name' ");
+			$tablename = $_SESSION['output']->spreadsheet_tablename;
+			
+			$sql = $this->db->query(" INSERT INTO $tablename SET ADM = '$input->adm', NAME = '$input->name' ");
 			
 		}	
 		
@@ -550,13 +554,16 @@
 		
 		if($input->actionf == 'update_score')
 		{
-			$sql = $this->db->query(" UPDATE $input->tablename SET $input->subject = $input->average_score WHERE ADM = $input->adm ");
+			$tablename = $_SESSION['output']->spreadsheet_tablename;
+			
+			$sql = $this->db->query(" UPDATE $tablename SET $input->subject = $input->avg_score WHERE ADM = $input->adm ");
 		
 		}
 		
 		if($input->actionf == 'set_total')
 		{
-			$sql = $this->db->query(" UPDATE $input->tablename SET TOTAL = $input->total WHERE ADM = $input->adm ");
+			$tablename = $_SESSION['output']->spreadsheet_tablename;
+			$sql = $this->db->query(" UPDATE $tablename SET TOTAL = $input->total WHERE ADM = $input->adm ");
 			
 			return $sql;
 		
@@ -564,7 +571,9 @@
 		
 		if($input->actionf == 'sort_table')
 		{
-			$sql = $this->db->query(" ALTER TABLE $input->tablename ORDER BY TOTAL DESC ");
+			$tablename = $_SESSION['output']->spreadsheet_tablename;
+			
+			$sql = $this->db->query(" ALTER TABLE $tablename ORDER BY TOTAL DESC ");
 			
 			return $sql;
 		
@@ -572,7 +581,9 @@
 		
 		if($input->actionf == 'select_table')
 		{
-			$sql = $this->db->query(" SELECT * FROM $input->tablename ");
+			$tablename = $_SESSION['output']->spreadsheet_tablename;
+			
+			$sql = $this->db->query(" SELECT * FROM $tablename ");
 			
 			if($sql)
 			{
@@ -586,7 +597,7 @@
 				{
 					$total = $row['TOTAL'];
 					
-					$sql = $this->db->query(" SELECT COUNT(*) AS POS FROM $input->tablename x WHERE x.TOTAL >= '$total' ");
+					$sql = $this->db->query(" SELECT COUNT(*) AS POS FROM $tablename x WHERE x.TOTAL >= '$total' ");
 					
 					if($sql)
 					{

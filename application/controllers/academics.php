@@ -466,6 +466,8 @@ class Academics extends Academics_Controller {
 				{
 					//the exam names will help us to generate the table names in order to get the subject results and the calculate the average_score to populate the spreadsheet with.
 					
+					$_SESSION['output']->exams = $exams;
+					
 					$this->input->actionf = 'get_subjects';
 					$this->input->subject = 'subjects';
 					
@@ -499,8 +501,6 @@ class Academics extends Academics_Controller {
 								$this->input->actionf = 'insert_adm_name';
 								$this->input->adm = $adm;
 								$this->input->name = $name;
-								$this->input->tablename = $spreadsheet_tablename;
-								
 								
 								$this->load->model('academics/academic');
 								$this->academic->spreadsheets($this->input);
