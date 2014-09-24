@@ -41,7 +41,7 @@
  *
  */
  
-		if( ! $_POST)
+		if( ! $this->input->post())
 		{
 			$this->load->view('admissions/header');
 			$this->load->view('admissions/addnew1');
