@@ -1,0 +1,56 @@
+body {
+	background: rgba(1, 104, 253, 0.1);
+	width: 100%;
+	margin: 0px;
+}
+
+div#top_line {
+	height: 30px;
+	width: 100%;
+	margin: 0px;
+	padding:5px;
+	display: block !important;
+	overflow: auto;
+	font: 12px/1 Helvetica,sans-serif;
+	color: #DDD;
+	background: linear-gradient(to bottom, #333, #222) repeat scroll 0% 0% #222;
+
+}
+
+div#login_menu {
+	height: 40px;
+	width: 100%;
+	margin: 0px;
+	padding: 5px;
+	display: block !important;
+	overflow: auto;
+	font: 12px/1 Helvetica,sans-serif;
+	color: #DDD;
+	background: rgba(0,104,153,0.4);
+	border: 1px solid rgba(255,255,255, 0.6);
+
+}
+
+div#main {
+	width: 960px;
+	margin: 10px auto;
+	border-radius: 10px;
+	background: rgba(0,104, 153, 0.09);
+	min-height: 100%;
+	
+
+}
+
+div#div_1 > div {
+	width: 50%;
+
+}
+
+footer {
+	height: 70px;
+	width: 100%;
+	background: rgba(0,104,153,0.4);
+	bottom: 0px;
+	position: fixed;
+	text-align: center;
+}
