@@ -1,985 +1,977 @@
- AW.<?php 
+<?php 
 
-/**
- *This is the academics controller
- *
- *This controller will handle all file requests from the academics user dashboard
- */
- 
-class Academics extends Academics_Controller {
-
-	//immediately after successful login, the index function logs in the user into the academics dashboard. This happens because at this time
-	//no variables have yet been defined so the rest of the functions will not be executed.
+class Academics extends SM_Controller {
 	
-	
-	public function index() 
+	//extend parent construct
+	function __construct()
 	{
+		parent::__construct();
+		$this->db_prefix = DB_PREFIX.$this->session->userdata('client_id');
+		$this->load->model('academic');
+		$this->load->model('admission');
+	
+	}
+	
+	public function index()
+	{
+		$this->load->view('academics/header');
+		$this->load->view('academics/home');
+		$this->load->view('academics/footer');
+	
+	
+	}
+	
+	
+	
+	
+	
+	public function grading()
+	{
+		if(!$this->input->post())
+		{
+			//get classes to use for setting grading
+			{
+				//getClasses
+				$tableName = $this->db_prefix.'.options';
+				$data['classes'] = $this->db->get($tableName);
+				
+				$this->load->view('academics/header');
+				$this->load->view('academics/grading', $data);
+				$this->load->view('academics/footer');
+			
+			}
+		
+		}
+		
+		if($this->input->post())
+		{
+			if($this->input->post('actionf') == 'add_new_grading' OR $this->input->post('actionf') == 'edit_grading')
+			{
+				//check to see if there are already defined grades in the system
+				//get classOptions
+				$tableName = $this->db_prefix.'.options';
+				$classOptionsObject = $this->db->get_where($tableName, array('class' => addslashes($this->input->post('class'))) );
+				
+				if($classOptionsObject) //query executed successully
+				{
+					foreach($classOptionsObject->result() as $classOptions)
+					{
+						$gradingArray = unserialize(stripslashes($classOptions->grading));
+						
+						if(empty($gradingArray)) //no grading defined yet
+						{
+							$gradingArray = array(
+											addslashes(trim($this->input->post('grade'))) => array(
+																						'from' => addslashes(trim($this->input->post('from'))),
+																						'to' => addslashes(trim($this->input->post('to'))),
+																						'remarks' => addslashes(trim($this->input->post('remarks'))),
+																						'points' => addslashes(trim($this->input->post('points')))
+																			)
+										);
+							$variable['option'] = 'grading';
+							$variable['option_array'] = addslashes(serialize($gradingArray));
+							$variable['class'] = addslashes($this->input->post('class'));
+							$variable['actionf'] = 'add_class_options';
+							
+							$this->admission->classes($variable); //insert the serialized grading array into the database
+							
+							//reload the grading page
+							{
+								//getClasses
+								$tableName = $this->db_prefix.'.options';
+								$data['classes'] = $this->db->get($tableName);
+								
+								$this->load->view('academics/header');
+								$this->load->view('academics/grading', $data);
+								$this->load->view('academics/footer');
+							
+							}
+							
+						}
+						
+						else //there are already grades defined so we update the array
+						{
+							$gradingArray[addslashes(trim($this->input->post('grade')))]['from'] = addslashes(trim($this->input->post('from')));						
+							$gradingArray[addslashes(trim($this->input->post('grade')))]['to'] = addslashes(trim($this->input->post('to')));						
+							$gradingArray[addslashes(trim($this->input->post('grade')))]['remarks'] = addslashes(trim($this->input->post('remarks')));						
+							$gradingArray[addslashes(trim($this->input->post('grade')))]['points'] = addslashes(trim($this->input->post('points')));		
+
+							//serialize the grades array and update the database
+							$variable['option'] = 'grading';
+							$variable['option_array'] = addslashes(serialize($gradingArray));
+							$variable['class'] = addslashes($this->input->post('class'));
+							$variable['actionf'] = 'add_class_options';
+							
+							$this->admission->classes($variable); //insert the serialized grading array into the database
+							
+							//reload the grading page
+							{
+								//getClasses
+								$tableName = $this->db_prefix.'.options';
+								$data['classes'] = $this->db->get($tableName);
+								
+								$this->load->view('academics/header');
+								$this->load->view('academics/grading', $data);
+								$this->load->view('academics/footer');
+							
+							}
+							
+						}
+					
+					}
+				
+				}
+				
+			}
+			
+			if($this->input->post('actionf') == 'delete_grade') //grade is supposed to be deleted
+			{
+				//check to see if there are already defined grades in the system
+				//get classOptions
+				$tableName = $this->db_prefix.'.options';
+				$classOptionsObject = $this->db->get_where($tableName, array('class' => addslashes($this->input->post('class'))) );
+				
+				if($classOptionsObject) //query executed successully
+				{
+					$classOptions = $classOptionsObject->row();
+					$gradingArray = unserialize(stripslashes($classOptions->grading));
+					
+					$array[addslashes($this->input->post('grade'))] = ''; //we make the array to be deleted empty
+					
+					$gradingArray = array_diff_key($gradingArray, $array); //remove this particular array key from the grading array
+
+					//serialize the grades array and update the database
+					$variable['option'] = 'grading';
+					$variable['option_array'] = addslashes(serialize($gradingArray));
+					$variable['class'] = addslashes($this->input->post('class'));
+					$variable['actionf'] = 'add_class_options';
+					
+					$this->admission->classes($variable); //insert the serialized grading array into the database
+					
+					//reload the grading page
+					{
+						//getClasses
+						$tableName = $this->db_prefix.'.options';
+						$data['classes'] = $this->db->get($tableName);
+						
+						$this->load->view('academics/header');
+						$this->load->view('academics/grading', $data);
+						$this->load->view('academics/footer');
+					
+					}
+					
+				}
+			
+			}
+		}
+	
+	}
+	
+	public function class_list()
+	{
+		if(!$this->input->post())
+		{
+			//get a list of classes and display the options
+			//getClasses
+			$tableName = $this->db_prefix.'.options';
+			$data['availableClassesObject'] = $this->db->get($tableName);
+			
 			$this->load->view('academics/header');
-			$this->load->view('academics/home');
+			$this->load->view('academics/class_list', $data);
 			$this->load->view('academics/footer');
 			
+		}
+		
+		if($this->input->post())
+		{
+			if($this->input->post('actionf') == 'get_class_options')
+			{
+				//get classOptions
+				$tableName = $this->db_prefix.'.options';
+				$classOptionsObject = $this->db->get_where($tableName, array( 'class' => addslashes($this->input->post('selected_class')) ) );
+				
+				if($classOptionsObject) //query executed successfully
+				{
+					$classOptions = $classOptionsObject->row();
+					
+					$classSubjectsArray = unserialize(stripslashes($classOptions->subjects));
+					$streamsArray = unserialize(stripslashes($classOptions->streams));
+					
+					$classOptionsHtml = '<label for="stream_cl">Stream</label>';
+					
+					if(empty($streamsArray))
+					{
+						$classOptionsHtml .= '<p class="alert alert-danger"> There are no streams for this class yet!</p><p><p>';
+					
+					}
+					else
+					{
+						$classOptionsHtml .= '<select name="stream" id="stream_cl" class="form-control" required >';
+						
+						$streamsArray = array_keys($streamsArray);
+						
+						foreach($streamsArray as $streamIndex => $streamName )
+						{
+							$classOptionsHtml .= '<option value="'.stripslashes($streamName).'">'.stripslashes($streamName).'</option>';
+						
+						}
+						
+						$classOptionsHtml .= '</select><p><p>';
+						
+					}
+					
+					$classOptionsHtml .= '<label for="subject">Subject</label>';
+					
+					if(empty($classSubjectsArray))
+					{
+						$classOptionsHtml .= '<p class="alert alert-danger">There are no subjects yet!</p><p><p>';
+					
+					}
+					else
+					{
+						$classOptionsHtml .= '<select name="subject" class="form-control" required >';
+						
+						foreach($classSubjectsArray as $subjectIndex => $subjectName)
+						{
+							$classOptionsHtml .= '<option value="'.stripslashes($subjectName).'">'.stripslashes($subjectName).'</option>';
+						
+						}
+						
+						$classOptionsHtml .= '</select><p><p>';
+						
+					}
+					
+					echo $classOptionsHtml;
+					
+				}
+				
+			}
+			
+			if($this->input->post('actionf') == 'get_class_list')
+			{
+				//get students
+				$tableName = $this->db_prefix.'.student_information';
+				$data['listOfStudents'] = $this->db->get_where($tableName, array( 'coa' => addslashes($this->input->post('class')), 'soa' => addslashes($this->input->post('stream')) ) );
+				
+				//get classOptions
+				$tableName = $this->db_prefix.'.options';
+				$data['classOptionsObject'] = $this->db->get_where( $tableName, array( 'class' => addslashes($this->input->post('class') ) ) );
+				
+				$data['class'] = $this->input->post('class');
+				$data['stream'] = $this->input->post('stream');
+				$data['subject'] = $this->input->post('subject');
+				
+				$this->load->view('academics/header');
+				$this->load->view('academics/class_list', $data);
+				$this->load->view('academics/footer');
+				
+			}
+		
+		}
+	
+	}
+	
+	public function enter_marks()
+	{
+		if(!$this->input->post())
+		{
+			if($this->uri->segment(3) == 'enter_marks')
+			{
+				$this->load->view('academics/header');
+				$this->load->view('academics/enter');
+				$this->load->view('academics/footer');
+			
+			}
+			if($this->uri->segment(3) == 'get_marks')
+			{
+				$this->load->view('academics/header');
+				$this->load->view('academics/get');
+				$this->load->view('academics/footer');
+			
+			}
+		}
+		if($this->input->post())
+		{
+			if($this->input->post('actionf') == 'chooseOptions')
+			{
+				$data['class'] = $this->input->post('class');
+				$data['exam'] = $this->input->post('exam');
+				$data['term'] = $this->input->post('term');
+				$data['year'] = $this->input->post('year');
+				
+				//get class list
+				$tableName = $this->db_prefix.'.student_information';
+				$data['studentRecords'] = $this->db->get_where($tableName, array( 'coa' => $this->input->post('class') ) );
+				
+				//get exams Array
+				$tableName = $this->db_prefix.'.2014_examinations';
+				$data['examsArray'] = $this->db->get_where($tableName, array( 'class' => $this->input->post('class') ) );
+				
+				//get spreadsheetArray
+				$tableName = $this->db_prefix.'.options';
+				$data['spreadsheetArray'] = $this->db->get_where($tableName, array( 'class' => $this->input->post('class') ) );
+				
+				$this->load->view('academics/header');
+				$this->load->view('academics/enter', $data);
+				$this->load->view('academics/footer');
+			
+			}
+			
+			if($this->input->post('actionf') == 'enter_marks')
+			{
+				//get class list
+				$tableName = $this->db_prefix.'.student_information';
+				$studentRecords = $this->db->get_where($tableName, array( 'coa' => $this->input->post('class') ) );
+				
+				//get spreadsheetArray
+				$tableName = $this->db_prefix.'.options';
+				$spreadsheetArray = $this->db->get_where($tableName, array( 'class' => $this->input->post('class') ) );
+				
+				if($spreadsheetArray->num_rows() < 1) //nothing has been entered yet
+				{
+					$this->db->insert($tableName, array( 'class' => $this->input->post('class'), 'spreadsheet' => addslashes(serialize($this->input->post('exams'))) ) );
+				
+				}
+				else
+				{
+					$array = $this->input->post('exams');
+					$spreadsheet = $spreadsheetArray->row();
+					$spreadsheet = unserialize(stripslashes($spreadsheet->spreadsheet));
+					$spreadsheet[$this->input->post('year')][$this->input->post('term')][$this->input->post('exam')] = $array[$this->input->post('year')][$this->input->post('term')][$this->input->post('exam')];
+					
+					$this->db->where('class', $this->input->post('class') );
+					$this->db->update($tableName, array( 'spreadsheet' => addslashes(serialize($spreadsheet)) ) );
+				
+				}
+				//get exams Array
+				$tableName = $this->db_prefix.'.2014_examinations';
+				$examsArray = $this->db->get_where($tableName, array( 'class' => $this->input->post('class') ) );
+				
+				if($examsArray->num_rows() < 1) //no exams entered yet
+				{
+					foreach($studentRecords->result() as $studentRecord)
+					{
+						$adm = $studentRecord->adm;
+						$exams = $this->input->post($adm);
+						$exams = addslashes(serialize($exams));
+						
+						
+						//compose dataArray
+						$dataArray = array( 
+										'adm' => $studentRecord->adm,
+										'f_name' => $studentRecord->f_name,
+										'm_name' => $studentRecord->m_name,
+										'l_name' => $studentRecord->l_name,
+										'exams' => $exams,
+										'stream' => $studentRecord->soa,
+										'class' => $studentRecord->coa
+						);
+						
+						//insert into the db-
+						$this->db->insert($tableName, $dataArray);
+					
+					}
+				
+				}
+				else
+				{
+					foreach($studentRecords->result() as $studentRecord)
+					{
+						$adm = $studentRecord->adm;
+						$exams = $this->input->post($adm);
+						
+						foreach($examsArray->result() as $examArray)
+						{
+							if($examArray->adm == $adm)
+							{
+								$marks = unserialize(stripslashes($examArray->exams));
+						
+								$marks[$this->input->post('year')][$this->input->post('term')]['ENGLISH'][$this->input->post('exam')]['LANG'] = $exams[$this->input->post('year')][$this->input->post('term')]['ENGLISH'][$this->input->post('exam')]['LANG'];
+								$marks[$this->input->post('year')][$this->input->post('term')]['ENGLISH'][$this->input->post('exam')]['COMP'] = $exams[$this->input->post('year')][$this->input->post('term')]['ENGLISH'][$this->input->post('exam')]['COMP'];
+								$marks[$this->input->post('year')][$this->input->post('term')]['ENGLISH'][$this->input->post('exam')]['PERCENTAGE'] = $exams[$this->input->post('year')][$this->input->post('term')]['ENGLISH'][$this->input->post('exam')]['PERCENTAGE'];
+								$marks[$this->input->post('year')][$this->input->post('term')]['KISWAHILI'][$this->input->post('exam')]['LUG'] = $exams[$this->input->post('year')][$this->input->post('term')]['KISWAHILI'][$this->input->post('exam')]['LUG'];
+								$marks[$this->input->post('year')][$this->input->post('term')]['KISWAHILI'][$this->input->post('exam')]['INS'] = $exams[$this->input->post('year')][$this->input->post('term')]['KISWAHILI'][$this->input->post('exam')]['INS'];
+								$marks[$this->input->post('year')][$this->input->post('term')]['KISWAHILI'][$this->input->post('exam')]['PERCENTAGE'] = $exams[$this->input->post('year')][$this->input->post('term')]['KISWAHILI'][$this->input->post('exam')]['PERCENTAGE'];
+								$marks[$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES'][$this->input->post('exam')]['SST'] = $exams[$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES'][$this->input->post('exam')]['SST'];
+								$marks[$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES'][$this->input->post('exam')]['CRE'] = $exams[$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES'][$this->input->post('exam')]['CRE'];
+								$marks[$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES'][$this->input->post('exam')]['PERCENTAGE'] = $exams[$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES'][$this->input->post('exam')]['PERCENTAGE'];
+								$marks[$this->input->post('year')][$this->input->post('term')]['MATHS'][$this->input->post('exam')] = $exams[$this->input->post('year')][$this->input->post('term')]['MATHS'][$this->input->post('exam')];
+								$marks[$this->input->post('year')][$this->input->post('term')]['SCIENCE'][$this->input->post('exam')] = $exams[$this->input->post('year')][$this->input->post('term')]['SCIENCE'][$this->input->post('exam')];
+								$marks[$this->input->post('year')][$this->input->post('term')][$this->input->post('exam')]['TOTAL'] = $exams[$this->input->post('year')][$this->input->post('term')][$this->input->post('exam')]['TOTAL'];
+								$marks[$this->input->post('year')][$this->input->post('term')][$this->input->post('exam')]['POS'] = $exams[$this->input->post('year')][$this->input->post('term')][$this->input->post('exam')]['POS'];
+						
+
+								//compose dataArray
+								$dataArray = array( 
+												'f_name' => $studentRecord->f_name,
+												'm_name' => $studentRecord->m_name,
+												'l_name' => $studentRecord->l_name,
+												'exams' => addslashes(serialize($marks)),
+												'stream' => $studentRecord->soa,
+												'class' => $studentRecord->coa
+								);
+								
+								//update  the db-
+								$this->db->where('adm', $studentRecord->adm);
+								$this->db->update($tableName, $dataArray);
+							
+							}
+							
+						}
+						
+					}
+				
+				}
+				
+				//get spreadsheetArray
+				$tableName = $this->db_prefix.'.options';
+				$data['spreadsheetArray'] = $this->db->get_where($tableName, array( 'class' => $this->input->post('class') ) );
+				
+				//get exams Array
+				$tableName = $this->db_prefix.'.2014_examinations';
+				$data['studentRecords'] = $this->db->get_where($tableName, array( 'class' => $this->input->post('class') ) );
+				$data['class'] = $this->input->post('class');
+				$data['exam'] = $this->input->post('exam');
+				$data['term'] = $this->input->post('term');
+				$data['year'] = $this->input->post('year');
+				
+				$this->load->view('academics/header');
+				$this->load->view('academics/get', $data);
+				$this->load->view('academics/footer');
+			
+			}
+			
+			if($this->input->post('actionf') == 'get_marks')
+			{
+				
+				//get spreadsheetArray
+				$tableName = $this->db_prefix.'.options';
+				$data['spreadsheetArray'] = $this->db->get_where($tableName, array( 'class' => $this->input->post('class') ) );
+				
+				//get exams Array
+				$tableName = $this->db_prefix.'.2014_examinations';
+				$data['studentRecords'] = $this->db->get_where($tableName, array( 'class' => $this->input->post('class') ) );
+				$data['class'] = $this->input->post('class');
+				$data['exam'] = $this->input->post('exam');
+				$data['term'] = $this->input->post('term');
+				$data['year'] = $this->input->post('year');
+				
+				$this->load->view('academics/header');
+				$this->load->view('academics/get', $data);
+				$this->load->view('academics/footer');
+			}
+			
+		}
 		
 	}
 	
-	//This method will handle all requests that are related to the entering of results into the database
-	public function enter() 
+	public function spreadsheets()
 	{
-		/*These variables will come as post variabels when the forms are submitted. We use these variables to narrow down tp the specific data that is supposed to
-		 *beinserted into the database. We also use the varibles to compose the tablename which is going to hold this data in the database.
-		 *The actionf is used to trigger particular methods in the model to retrieve particular data
-		*/
 		if(!$this->input->post())
 		{
-			//The absense of $_POST means no form has been submitted yet so we just go ahead to get the respective classes for which we might need to enter results.
-			$this->input->actionf = 'step0';
-			$this->input->class = 'classes';
-			
-			$this->load->model('academics/academic');
-			$data['classes'] = $this->academic->enter($this->input);
-			
 			$this->load->view('academics/header');
-			$this->load->view('academics/step1', $data);
+			$this->load->view('academics/spreadsheet');
 			$this->load->view('academics/footer');
 		
 		}
 		
 		if($this->input->post())
 		{
-			//Presense of $_POST means some form has been submitted so we go ahead and get a specific value form a hidden form field called 'actionf' that we use to 
-			//trigger the right method on the controller and model
-			if($this->input->post('actionf') == 'step1')
+			
+			
+			
+			//get spreadsheetArray
+			$tableName = $this->db_prefix.'.options';
+			$data['spreadsheetArray'] = $this->db->get_where($tableName, array( 'class' => $this->input->post('class') ) );
+			
+			//get exams Array
+			$tableName = $this->db_prefix.'.2014_examinations';
+			$studentRecords = $this->db->get_where($tableName, array( 'class' => $this->input->post('class') ) );
+			
+			//define the totalAverageScores array
+			$totalAverageScores = array();
+			$subjectTotalsArray = array();
+			
+			$totalEnglish = 0;
+			$totalKiswahili = 0;
+			$totalSocialStudies = 0;
+			$totalMaths = 0;
+			$totalScience = 0;
+			
+			$resultsArray = array();
+			
+			$noOfStudents = $studentRecords->num_rows();
+			
+			foreach($studentRecords->result() as $studentRecord)
 			{
-				//when class has been selected we go ahead and fetch the streams
-				$this->input->class = $this->input->post('class');
-				$this->input->stream = 'streams';
+				$resultsArray[$studentRecord->adm]['f_name'] = $studentRecord->f_name;
+				$resultsArray[$studentRecord->adm]['m_name'] = $studentRecord->m_name;
+				$resultsArray[$studentRecord->adm]['l_name'] = $studentRecord->l_name;
+				$resultsArray[$studentRecord->adm]['stream'] = $studentRecord->stream;
+				$resultsArray[$studentRecord->adm]['class'] = $studentRecord->class;
+				$resultsArray[$studentRecord->adm]['marks'] = unserialize(stripslashes($studentRecord->exams));
 				
-				$this->load->model('academics/academic');
-				$data['streams'] = $this->academic->enter($this->input);
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['AVG']['LANG'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['TEST1']['LANG'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['TEST2']['LANG'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['TEST3']['LANG']) / 3);
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['AVG']['COMP'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['TEST1']['COMP'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['TEST2']['COMP'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['TEST3']['COMP']) / 3);
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['AVG']['PERCENTAGE'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['AVG']['LANG'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['AVG']['COMP']) / 90 * 100);
 				
-				$_SESSION['output']->class = $this->input->class;
+				$totalEnglish += $resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['AVG']['PERCENTAGE'];
 				
-				$this->load->view('academics/header');
-				$this->load->view('academics/step2', $data);
-				$this->load->view('academics/footer');
-			
-			}
-			
-			if($this->input->post('actionf') == 'step2')
-			{
-				//when both class and streams has bee set we go ahead and fetch the subjects
-				$this->input->streams = $this->input->post('stream');
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['AVG']['LUG'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['TEST1']['LUG'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['TEST2']['LUG'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['TEST3']['LUG']) / 3);
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['AVG']['INS'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['TEST1']['INS'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['TEST2']['INS'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['TEST3']['INS']) / 3);
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['AVG']['PERCENTAGE'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['AVG']['LUG'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['AVG']['INS']) / 90 * 100);
 				
-				$this->input->class = $_SESSION['output']->class;
-				$this->input->subject = 'subjects';
+				$totalKiswahili += $resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['AVG']['PERCENTAGE'];
 				
-				$this->load->model('academics/academic');
-				$data['subjects'] = $this->academic->enter($this->input);
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['AVG']['SST'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['TEST1']['SST'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['TEST2']['SST'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['TEST3']['SST']) / 3);
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['AVG']['CRE'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['TEST1']['CRE'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['TEST2']['CRE'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['TEST3']['CRE']) / 3);
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['AVG']['PERCENTAGE'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['AVG']['SST'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['AVG']['CRE']) / 90 * 100);
 				
-				$_SESSION['output']->stream = $this->input->streams;
+				$totalSocialStudies += $resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['AVG']['PERCENTAGE'];
 				
-				$this->load->view('academics/header');
-				$this->load->view('academics/step3', $data);
-				$this->load->view('academics/footer');
-			}
-			
-			if($this->input->post('actionf') == 'step3')
-			{
-				//when class, stream and subject has been set we go ahead and get the examinations for that specific class
-				$this->input->subjects = $this->input->post('subject');
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['MATHS']['AVG'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['MATHS']['TEST1'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['MATHS']['TEST2'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['MATHS']['TEST3']) / 3);
 				
-				$this->input->class = $_SESSION['output']->class;
-				$this->input->exam = 'examinations';
+				$totalMaths += $resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['MATHS']['AVG'];
 				
-				$this->load->model('academics/academic');
-				$data['exams'] = $this->academic->enter($this->input);
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SCIENCE']['AVG'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SCIENCE']['TEST1'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SCIENCE']['TEST2'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SCIENCE']['TEST3']) / 3);
 				
-				$_SESSION['output']->subject = $this->input->post('subject');
+				$totalSocialStudies += $resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SCIENCE']['AVG'];
 				
-				$this->load->view('academics/header');
-				$this->load->view('academics/step4', $data);
-				$this->load->view('academics/footer');
-			
-			}
-			
-			if($this->input->post('actionf') == 'step4')
-			{
-				//we then get the terms so that the user can choose the one for which to enter results
-				$this->input->exams = $this->input->post('exam');
-				$this->input->term = 'terms';
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['AVG']['TOTAL'] =  
+					$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['MATHS']['AVG'] +
+					$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SCIENCE']['AVG'] +
+					$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['AVG']['PERCENTAGE'] +
+					$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['AVG']['PERCENTAGE'] +			
+					$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['AVG']['PERCENTAGE'] ;
 				
-				$this->load->model('academics/academic');
-				$data['terms'] = $this->academic->enter($this->input);
-				
-				$_SESSION['output']->exam = $this->input->post('exam');
-				
-				$this->load->view('academics/header');
-				$this->load->view('academics/step5', $data);
-				$this->load->view('academics/footer');
-		
-			}
-			
-			if($this->input->post('actionf') == 'step5')
-			{
-				//we then get the years so that the user can choose the one for which to enter results
 
-				$this->input->terms = $this->input->post('term');
-				$this->input->year = 'years';
-				
-				$this->load->model('academics/academic');
-				$data['years'] = $this->academic->enter($this->input);
-				
-				$_SESSION['output']->term = $this->input->post('term');
-				
-				$this->load->view('academics/header');
-				$this->load->view('academics/step6', $data);
-				$this->load->view('academics/footer');
-			
-			}
-			
-			if($this->input->post('actionf') == 'create_table')
-			{
-				//once all the varibales are set, we now start by creating a tablename based on the varibles that have been set previously
-				//after creating the table succssfully, we present the user with a form upload so that he can upload the results.
-				$this->input->actionf = $this->input->post('actionf');
-				$this->input->year = $this->input->post('year');
-				
-				$this->input->class = $_SESSION['output']->class;
-				$this->input->stream = $_SESSION['output']->stream;
-				$this->input->subject = $_SESSION['output']->subject;
-				$this->input->exam = $_SESSION['output']->exam;
-				$this->input->term = $_SESSION['output']->term;
-				
-				$this->load->model('academics/academic');
-				$tablename = $this->academic->enter($this->input);
+				$totalAverageScores[] = $resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['AVG']['TOTAL'];
 
-				$_SESSION['output']->year = $this->input->post('year');
-				$_SESSION['output']->tablename = $tablename;
 				
-				$this->load->view('academics/header');
-				$this->load->view('academics/upload');
-				$this->load->view('academics/footer');
-			
 			}
 			
-			if($this->input->post('actionf') == 'insert_records')
+			@$averageEngScore = round($totalEnglish / $noOfStudents);
+			@$averageKisScore = round($totalKiswahili / $noOfStudents);
+			@$averageSSTScore = round($totalSocialStudies / $noOfStudents);
+			@$averageSciScore = round($totalScience / $noOfStudents);
+			@$averageMathsScore = round($totalMaths / $noOfStudents);
+			
+			$subjectTotalsArray = array($averageEngScore, $averageKisScore, $averageMathsScore, $averageSSTScore, $averageSciScore);
+			array_multisort($subjectTotalsArray, SORT_DESC);
+			array_multisort($totalAverageScores, SORT_DESC);
+			
+			$class = $this->input->post('class');
+			$term = $this->input->post('term');
+			$year = $this->input->post('year');
+			$data['averageEngScore'] = $averageEngScore;
+			$data['averageKisScore'] = $averageKisScore;
+			$data['averageSSTScore'] = $averageSSTScore;
+			$data['averageSciScore'] = $averageSciScore;
+			$data['averageMathsScore'] = $averageMathsScore;
+			$data['subjectTotalsArray'] = $subjectTotalsArray;
+			$data['totalAverageScores'] = $totalAverageScores;
+			$data['resultsArray'] = $resultsArray;
+			
+			
+			
+			$this->load->library('tcpdf/tcpdf');
+		 
+			// create new PDF document
+			$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);   
+		 
+			// set document information
+			$pdf->SetCreator(PDF_CREATOR);
+			$pdf->SetAuthor($this->session->userdata('client_name'));
+			$pdf->SetTitle('End Term Spreadsheets');
+			$pdf->SetSubject('SPREADSHEET');
+			$pdf->SetKeywords('SPREADSHEET, PDF, END TERM, MARKS, RANKING');  
+		 
+			// remove default header/footer
+			$pdf->setPrintHeader(false);
+			$pdf->setPrintFooter(false);		 
+		 
+			/*set default header data
+			$pdf->SetHeaderData('','' , $this->session->userdata('client_name'), '', array(0,64,255), array(0,64,128));
+			$pdf->setFooterData(array(0,64,0), array(0,64,128));
+		 
+			// set header and footer fonts
+			$pdf->setHeaderFont(Array('times', '', PDF_FONT_SIZE_MAIN));
+			$pdf->setFooterFont(Array('times', '', PDF_FONT_SIZE_DATA)); 
+		 
+			*/
+		 
+			// set default monospaced font
+			$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+		 
+			// set margins
+			$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+			$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+			$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);   
+		 
+			// set auto page breaks
+			$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+		 
+			// set image scale factor
+			$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
+		 
+			// set some language-dependent strings (optional)
+			if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+				require_once(dirname(__FILE__).'/lang/eng.php');
+				$pdf->setLanguageArray($l);
+			}  
+		 
+			// ---------------------------------------------------------   
+		 
+			// set default font subsetting mode
+			$pdf->setFontSubsetting(true);  
+		 
+			// Set font
+			// dejavusans is a UTF-8 Unicode font, if you only need to
+			// print standard ASCII chars, you can use core fonts like
+			// helvetica or times to reduce file size.
+			$pdf->SetFont('times', '', 14, '', true);  
+		 
+			// Add a page
+			// This method has several options, check the source code documentation for more information.
+			$pdf->AddPage();
+		 
+			// set text shadow effect
+			//$pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));   
+		 
+			// Set some content to print
+
+			$html =  '<div class="col-lg-12"><style> table td, th { font-size: 12px; } </style><p class="lead">';
+
+			$html .= '<p style="text-align:center;">'.$this->session->userdata('client_name').'<br />'.$class.' '.$term.' '.$year.' SPREADSHEET</p>';
+			
+			$html .= '<table border="1" cellspacing="0" cellpadding="2" border-collapse="collapse">';
+			
+			$html .= '<thead><tr><td colspan="1" style="width : 6%;">AD</td><td colspan="6" style="width : 44%;">NAME</td><th style="width : 4%; ">LAN</th><th style="width : 4%; ">COM</th><th style="width : 4%; " class="success" >%</th><th style="width : 4%; ">LUG</th><th style="width : 4%; ">INS</th><th style="width : 4%; " class="success">%</th><th style="width : 4%; ">SST</th><th style="width : 4%; ">CRE</th><th style="width : 4%; " class="success">%</th><th style="width : 4%; " class="success">MAT</th><th style="width : 4%; " class="success">SCI</th><th style="width : 4%; ">TOT</th><th style="width : 4%; ">POS</th></tr></thead>';
+			$html .= '<tbody>';
+			
+			foreach($resultsArray as $admissionNumber => $moreInfo)
 			{
-				$this->input->actionf = $this->input->post('actionf');
-				
-				$this->load->model('academics/academic');
-				$res = $this->academic->enter($this->input);
-				
-				if($res)
-				{
-					$this->input->actionf = 'fetch_records';
-					
-					$this->load->model('academics/academic');
-					$data['data'] = $this->academic->enter($this->input);
-					
-					$data['output'] = $_SESSION['output'];
-					
-					$this->load->view('academics/header');
-					$this->load->view('academics/inserted_data', $data);
-					$this->load->view('academics/footer');
-				
-				}
+				$pos = array_search($moreInfo['marks'][$year][$term]['AVG']['TOTAL'], $totalAverageScores) + 1 ;
+				$html .= '<tr><td colspan="1" >'.$admissionNumber.'</td><td  colspan="6">'.$moreInfo['f_name'].' '.$moreInfo['l_name'].'</td><td>'.$moreInfo['marks'][$year][$term]['ENGLISH']['AVG']['LANG'].'</td><td>'.$moreInfo['marks'][$year][$term]['ENGLISH']['AVG']['COMP'].'</td><td>'.$moreInfo['marks'][$year][$term]['ENGLISH']['AVG']['PERCENTAGE'].'</td><td>'.$moreInfo['marks'][$year][$term]['KISWAHILI']['AVG']['LUG'].'</td><td>'.$moreInfo['marks'][$year][$term]['KISWAHILI']['AVG']['INS'].'</td><td>'.$moreInfo['marks'][$year][$term]['KISWAHILI']['AVG']['PERCENTAGE'].'</td><td>'.$moreInfo['marks'][$year][$term]['SOCIALSTUDIES']['AVG']['SST'].'</td><td>'.$moreInfo['marks'][$year][$term]['SOCIALSTUDIES']['AVG']['CRE'].'</td><td>'.$moreInfo['marks'][$year][$term]['SOCIALSTUDIES']['AVG']['PERCENTAGE'].'	</td><td>'.$moreInfo['marks'][$year][$term]['MATHS']['AVG'].'</td><td>'.$moreInfo['marks'][$year][$term]['SCIENCE']['AVG'].'</td><td>'.$moreInfo['marks'][$year][$term]['AVG']['TOTAL'].'</td><td>'.$pos.'</td></tr>';
 			
 			}
 			
-		}
+			$html .= '</tbody></table>';
+		 
+		 
+		 
+			// Print text using writeHTMLCell()
+			$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);  
+		 
+			// ---------------------------------------------------------   
+		 
+			// Close and output PDF document
+			// This method has several options, check the source code documentation for more information.
+			$pdf->Output('example_001.pdf', 'I');   
+		 
+			//============================================================+
+			// END OF FILE
+			//============================================================+
+			
 		
-		if($_FILES)
-		{
-			//when the user selects and file, uploads it and then submits it, the $_FILES variable will be available.
-			//in the varibles below we set the upload folder path, the allowed file types, which we have set to .csv to avoid raw excel data 
-			//being inserted because this will ruin the database.
-			$config['upload_path'] = './uploads/';
-			$config['allowed_types'] = 'csv';
-			$config['max_size'] = '1000';
-		
-			$this->load->library('upload', $config);
-		
-			if( ! $this->upload->do_upload())
-			{
-				//if the do_upload() function does not run successfully, it means theres is an error, therefore we redisplay the upload form with the appropriate error message.
-				$data['error'] = $this->upload->display_errors();
-				
-				$this->load->view('academics/header');
-				$this->load->view('academics/upload2', $data);
-				$this->load->view('academics/footer');
-		
-			}
-		
-			else
-			{
-				//this means the upload was successful and so we ask the user ti cinfirm entering the data into the database before we actually insert into mysql.
-				$data = array( 'upload_data' => $this->upload->data());
-				
-				$_SESSION['output']->file_path = $data['upload_data']['full_path'];
-				
-				$this->load->view('academics/header');
-				$this->load->view('academics/confirm');
-				$this->load->view('academics/footer');
-		
-			}
-		
-		
+		 
+		/* End of file c_test.php */
+		/* Location: ./application/controllers/c_test.php */			
+			
+			
+			
+			
+			/*
+			
+			$this->load->view('academics/header');
+			$this->load->view('academics/spreadsheet');
+			$this->load->view('academics/footer');
+			
+			*/
+			
 		}
 	
 	}
 	
-	
-	//this method will handle all requests related to viewing the entered results
-	public function view() 
-	{
-		//we begin by defining these varibles and initializing them to empty. This is because the model will be expecting all these variables so its good to have them define even if empty to avoid minor errors
-		//these variables will come form the uri segments
-		
-		$default_keys = array('class', 'streams', 'subjects', 'exams', 'terms', 'years');
-		$variables = $this->uri->uri_to_assoc(3, $default_keys);
-		
-		if($this->uri->segment(3) === FALSE)
-		{
-			//if there is no value in uri segment 3, then it means to variable has been set yet, so we go and get the classes for the user to choose which he would like to view results
-			$this->input->actionf = 'step0';
-			$this->input->class = 'classes';
-			
-			$this->load->model('academics/academic');
-			$data['classes'] = $this->academic->view($this->input);
-			
-			$this->load->view('academics/header');
-			$this->load->view('academics/view/classes', $data);
-			$this->load->view('academics/footer');
-		
-		}
-		
-		if( $variables['class'] != FALSE )
-		{
-			//once the class has been set, we get the streams
-			$this->input->actionf = 'get_streams';
-			$this->input->class = $variables['class'];
-			$this->input->stream = 'streams';
-			
-			$this->load->model('academics/academic');
-			$data['streams'] = $this->academic->view($this->input);
-			
-			$_SESSION['output']->class = $this->input->class;
-			
-			$this->load->view('academics/header');
-			$this->load->view('academics/view/streams', $data);
-			$this->load->view('academics/footer');
-		
-		}
-		
-		if($variables['streams'] != FALSE)
-		{
-			//once class and stream have been set, we get the years
-			$this->input->actionf = 'get_years';
-			$_SESSION['output']->stream = $variables['streams'];
-			
-			$this->input->year = 'years';
-			
-			$this->load->model('academics/academic');
-			$data['years'] = $this->academic->view($this->input);
-			
-			$this->load->view('academics/header');
-			$this->load->view('academics/view/years', $data);
-			$this->load->view('academics/footer');
-		
-		}
-		
-		if( $variables['years'] != FALSE)
-		{
-			//once class, stream and year  have been set, we get the terms
-			$this->input->actionf = 'get_terms';
-			$_SESSION['output']->year = $variables['years'];
-			
-			$this->input->term = 'terms';
-			
-			$this->load->model('academics/academic');
-			$data['terms'] = $this->academic->view($this->input);
-			
-			$this->load->view('academics/header');
-			$this->load->view('academics/view/terms', $data);
-			$this->load->view('academics/footer');
-		
-		}
-		
-		if($variables['terms'] != FALSE)
-		{
-			//once class, stream, year and term have been set, we get the exminations
-			$this->input->actionf = 'get_exams';
-			$_SESSION['output']->term = $variables['terms'];
-			
-			$this->input->class = $_SESSION['output']->class;
-			$this->input->exam = 'examinations';
-			
-			$this->load->model('academics/academic');
-			$data['exams'] = $this->academic->view($this->input);
-			
-			$this->load->view('academics/header');
-			$this->load->view('academics/view/examinations', $data);
-			$this->load->view('academics/footer');
-		
-		}
-		
-		if( $variables['exams'] != FALSE)
-		{
-			//the last variable we want is the particular subject for which to fetch results
-			$this->input->actionf = 'get_subjects';
-			$_SESSION['output']->exam = $variables['exams'];
-			
-			$this->input->class = $_SESSION['output']->class;
-			$this->input->subject = 'subjects';
-			
-			$this->load->model('academics/academic');
-			$data['subjects'] = $this->academic->view($this->input);
-			
-			$this->load->view('academics/header');
-			$this->load->view('academics/view/subjects', $data);
-			$this->load->view('academics/footer');
-		
-		}
-		
-		if( $variables['subjects'] != FALSE)
-		{
-			//once all variables are set, we retrieve them from the session userdata and assign them to the particular variable names and then pass them on to the model
-			//this model would return an array called results which has the related data for this particular class and then pass it on to the view for display.
-			$this->input->actionf = 'get_records';
-			
-			$this->input->subject = $variables['subjects'];
-			
-			$this->input->class = $_SESSION['output']->class;
-			$this->input->stream = $_SESSION['output']->stream;
-			$this->input->exam = $_SESSION['output']->exam;
-			$this->input->term = $_SESSION['output']->term;
-			$this->input->year = $_SESSION['output']->year;
-			
-			$this->load->model('academics/academic');
-			$data['results'] = $this->academic->view($this->input);
-			
-			$_SESSION['output']->subject = $variables['subjects'];
-			
-			$this->load->view('academics/header');
-			$this->load->view('academics/view/results', $data);
-			$this->load->view('academics/footer');
-		
-		}
-	
-	}
-	
-	//this method would handle all request related to the generation of a spreadsheet.
-	public function spreadsheets()
-	{
-		//we will need these variables to pass to the model, so we intialize them to empty
-		
-		$default_keys = array('class', 'streams', 'subjects', 'exams', 'terms', 'years');
-		$variables = $this->uri->uri_to_assoc(3, $default_keys);
-		
-		if($this->uri->segment(3) === FALSE)
-		{
-			$this->input->actionf = 'step0';
-			$this->input->class = 'classes';
-			
-			$this->load->model('academics/academic');
-			$data['classes'] = $this->academic->spreadsheets($this->input);
-			
-			$this->load->view('academics/header');
-			$this->load->view('academics/spreadsheets/classes', $data);
-			$this->load->view('academics/footer');
-		
-		}
-		
-		if( $variables['class'] != FALSE)
-		{
-			$this->input->actionf = 'get_streams';
-			$this->input->class = $variables['class'];
-			$this->input->stream = 'streams';
-			
-			$this->load->model('academics/academic');
-			$data['streams'] = $this->academic->spreadsheets($this->input);
-			
-			$_SESSION['output']->class = $this->input->class;	//assign chosen class to a session variable.
-			
-			$this->load->view('academics/header');
-			$this->load->view('academics/spreadsheets/streams', $data);
-			$this->load->view('academics/footer');
-		
-		}
-		
-		if( $variables['streams'] != FALSE)
-		{
-			$_SESSION['output']->stream =  $variables['streams'];	//assign chosen stream to a session variable.
-			
-			$this->input->actionf = 'get_years';
-			$this->input->year = 'years';
-			
-			$this->load->model('academics/academic');
-			$data['years'] = $this->academic->spreadsheets($this->input);
-			
-			$this->load->view('academics/header');
-			$this->load->view('academics/spreadsheets/years', $data);
-			$this->load->view('academics/footer');
-		
-		}
-		
-		if( $variables['years'] != FALSE)
-		{
-			$_SESSION['output']->year = $variables['years'];	//assign chosen year to a session variable.
-			
-			$this->input->actionf = 'get_terms';
-			$this->input->term = 'terms';
-			
-			$this->load->model('academics/academic');
-			$data['terms'] = $this->academic->spreadsheets($this->input);
-			
-			$this->load->view('academics/header');
-			$this->load->view('academics/spreadsheets/terms', $data);
-			$this->load->view('academics/footer');
-		
-		}
-		
-		if($variables['terms'] != FALSE)
-		{
-			//after all variables have been set, we start to generate the spreadsheet by getting the class list, subjects, examinations
-			$this->input->term = $variables['terms'];
-			
-			$this->input->actionf = 'get_class_list';
-			
-			$this->input->class = $_SESSION['output']->class;
-			$this->input->stream = $_SESSION['output']->stream;
-			$this->input->year = $_SESSION['output']->year;
-			
-			$this->load->model('academics/academic');
-			$class_list = $this->academic->spreadsheets($this->input);
-			
-			if($class_list)
-			{
-				//we will loop through this class list by admission numbers one at a time in order to get the students results in the table
-				
-				$this->input->actionf = 'get_exams';
-				$this->input->exam = 'examinations';
-				
-				$this->load->model('academics/academic');
-				$exams = $this->academic->spreadsheets($this->input);
-				
-				if($exams)
-				{
-					//the exam names will help us to generate the table names in order to get the subject results and the calculate the average_score to populate the spreadsheet with.
-					
-					$_SESSION['output']->exams = $exams;
-					
-					$this->input->actionf = 'get_subjects';
-					$this->input->subject = 'subjects';
-					
-					$this->load->model('academics/academic');
-					$subjects = $this->academic->spreadsheets($this->input);
-					
-					if($subjects)
-					{
-						//we create the spreadsheet table using the class, stream, term and year names
-						$_SESSION['output']->subjects = $subjects;
-						
-						$this->input->actionf = 'create_spreadsheet_table';
-						
-						$this->load->model('academics/academic');
-						$res = $this->academic->spreadsheets($this->input);
-						
-						if($res)
-						{
-							//after spreadsheet table has been created successfully we loop through the class list to get the admission numbers one at a time.
-							$_SESSION['output']->spreadsheet_tablename = $res;
-							
-							foreach($class_list->result() as $class_list_row)
-							{
-								//foreach admission number we will fetch the associated results, calculate averages and then populate into the spreadsheet.
-								$adm = $class_list_row->ADM;
-								$name = $class_list_row->NAME;
-								
-								static $total;
-								$total = 0;
-								
-								$this->input->actionf = 'insert_adm_name';
-								$this->input->adm = $adm;
-								$this->input->name = $name;
-								
-								$this->load->model('academics/academic');
-								$this->academic->spreadsheets($this->input);
-								
-								foreach($subjects->result() as $class_subjects_row)
-								{
-									//we will start with one subject at a time and loop through until all subjects are entered.
-									$subject_itself = $class_subjects_row->SUBJECTS;
-									$iterations = $exams->num_rows();
-									foreach($exams->result() as $class_exams_row)
-									{
-										/*we use each subject name from above together with each exam name to get the score for the particular admission number and assign the score to a 
-										 *static variable $val. This is incremented for every exam and then we use the number of exams to calculate the average at the end of the loop and 
-										 *then insert the value into the database.
-										 *we use the static variable $itr to destroy the value in the static variable $val when the loop is finished. This would help against carrying forward values from
-										 *the previous iterations.
-										 */
-										static $val;
-										static $itr;
-										
-										$itr = 1;
-										
-										
-										$exam_itself = $class_exams_row->EXAM;
-										$score_tablename = $_SESSION['output']->class.'_'.$_SESSION['output']->stream.'_'.$subject_itself.'_'.$exam_itself.'_'.$_SESSION['output']->term.'_'.$_SESSION['output']->year;
-										
-										$this->input->actionf = 'get_score';
-										$this->input->score_tablename = $score_tablename;
-										
-										$this->load->model('academics/academic');
-										$res = $this->academic->spreadsheets($this->input);
-										
-										if($res->num_rows() > 0)
-										{
-											//this means there was a score value returned
-											$row = $res->row();
-											$val2 = $row->SCORE;
-										
-										}
-										
-										else
-										{
-											//this means no score value returned, may be the table was blank
-											$val2 = 0;
-										}
-										
-										$val += $val2;
-										$itr +=1;
-										
-									}
-									
-									$average_score = $val/$iterations;
-									$average_score_ = round($average_score, 0);  //we round of the average to the nearest whole number to avoid decimals in the final result.
-									
-									$total += $average_score_;	//we increment the $total variable once the subject average has been established
-									
-									$this->input->actionf = 'update_score';
-									$this->input->subject = $subject_itself;
-									$this->input->avg_score = $average_score_;
-									
-									$this->load->model('academics/academic');
-									$res = $this->academic->spreadsheets($this->input);	//this sql inserts the average score into the spreadsheet table
-								
-									if($itr == $iterations)	//at this point we reset the static variables to null so that they are ready for the next iteration.
-									{
-										$val = NULL;
-										$itr = NULL;
-										
-									}
-									
-								}
-								
-								//once all subjects have been populated, we then insert the total score into the database using this query.
-								
-								$this->input->actionf = 'set_total';
-								$this->input->total = $total;
-								
-								$this->load->model('academics/academic');
-								$this->academic->spreadsheets($this->input);
-								
-								$total = NULL;	//after inserting the total score we reset the static variable $score to make it ready for the next iteration.
-							
-							}
-							
-							$this->input->actionf = 'sort_table';
-							
-							$this->load->model('academics/academic');
-							$task = $this->academic->spreadsheets($this->input); //this sql orders the spreadsheet table by the totals field in descending order.
-							
-							if($task)
-							{
-								//once the table has been sorted successfully, we select * from it and assign the result object to the variable $object and the pass this to the view
-								
-								$this->input->actionf = 'select_table';
-								
-								$this->load->model('academics/academic');
-								$data['object'] = $this->academic->spreadsheets($this->input);
-								
-								$class_['class'] = $_SESSION['output']->class;
-								
-								$this->load->library('grading', $class_);
-								
-								$this->load->view('academics/header');
-								$this->load->view('academics/spreadsheets/spreadsheet', $data);
-								$this->load->view('academics/footer');
-							
-							}
-						
-						}
-					
-					}
-				
-				}
-			
-			}
-		}
-	
-	}
-	
-	//this method will handle all reports related 
 	public function reports()
 	{
-		//we will need to send these variables to the model so we intialize them to empty. The values will come from the uri segments
-		
-		$default_keys = array('class', 'stream', 'term', 'year', 'adm', 'name');
-		$variables = $this->uri->uri_to_assoc(3, $default_keys);
-		
-		if($this->uri->segment(3) === FALSE)
+		if(!$this->input->post())
 		{
-			//if no uri segment has been defined it means this method is being called for the first time so we get the classes and display them.
-			$this->input->actionf = 'step0';
-			$this->input->class = 'classes';
-			
-			$this->load->model('academics/academic');
-			$data['classes'] = $this->academic->reports($this->input);
-			
 			$this->load->view('academics/header');
-			$this->load->view('academics/reports/classes', $data);
-			$this->load->view('academics/footer');
-		
-		}
-	
-		if( $variables['class'] != FALSE)
-		{
-			//if the class has been chosen we get the streams.
-			$this->input->class = $variables['class'];
-			$this->input->stream = 'streams';
-			$this->input->actionf = 'get_streams';
-			
-			$this->load->model('academics/academic');
-			$data['streams'] = $this->academic->reports($this->input);
-			
-			$_SESSION['output']->class = $this->input->class; 	//assign chosen class to a session variable.
-			
-			$this->load->view('academics/header');
-			$this->load->view('academics/reports/streams', $data);
+			$this->load->view('academics/report');
 			$this->load->view('academics/footer');
 		
 		}
 		
-		if($variables['stream'] != FALSE)
+		if($this->input->post())
 		{
-			//once the class has been chosen we get the years.
-			$_SESSION['output']->stream = $variables['stream'];	//assign chosen stream to a session variable.
-			$this->input->year = 'years';
-			$this->input->actionf = 'get_years';
+			//get spreadsheetArray
+			$tableName = $this->db_prefix.'.options';
+			$data['spreadsheetArray'] = $this->db->get_where($tableName, array( 'class' => $this->input->post('class') ) );
 			
-			$this->load->model('academics/academic');
-			$data['years'] = $this->academic->reports($this->input);
+			//get exams Array
+			$tableName = $this->db_prefix.'.2014_examinations';
+			$studentRecords = $this->db->get_where($tableName, array( 'class' => $this->input->post('class') ) );
 			
-			$this->load->view('academics/header');
-			$this->load->view('academics/reports/years', $data);
-			$this->load->view('academics/footer');
-		
-		}
-		
-		if($variables['year'] != FALSE)
-		{
-			//once year is chosen we get the terms.
-			$_SESSION['output']->year = $variables['year'];	//assign chosen year to a session variable.
-			$this->input->term = 'terms';
-			$this->input->actionf = 'get_terms';
+			//define the totalAverageScores array
+			$totalAverageScores = array();
+			$subjectTotalsArray = array();
 			
-			$this->load->model('academics/academic');
-			$data['terms'] = $this->academic->reports($this->input);
+			$totalEnglish = 0;
+			$totalKiswahili = 0;
+			$totalSocialStudies = 0;
+			$totalMaths = 0;
+			$totalScience = 0;
 			
-			$this->load->view('academics/header');
-			$this->load->view('academics/reports/terms', $data);
-			$this->load->view('academics/footer');
-		
-		}
-		
-		if( $variables['term'] != FALSE)
-		{
-			//once the term has been chosen we generate the class list so that the use can choose the student for whom he wants to generate the report.
-			$_SESSION['output']->term = $variables['term'];	//assign the chosen term to a session variable.
+			$resultsArray = array();
 			
-			$this->input->actionf = 'get_class_list';
+			$noOfStudents = $studentRecords->num_rows();
 			
-			//we reassign the session variables to the respective variables so that we then pass them to the model.
-			
-			$this->input->class = $_SESSION['output']->class;
-			$this->input->stream = $_SESSION['output']->stream;
-			$this->input->year = $_SESSION['output']->year;
-			
-			$this->load->model('academics/academic');
-			$class_list = $this->academic->reports($this->input);
-			
-			$no_of_students = $class_list->num_rows();	//the number of students will help us in filling the position out of file in the report form.
-				
-			$_SESSION['output']->no_of_students = $no_of_students;
-			
-			$data['class_list'] = $class_list;
-			
-			$this->load->view('academics/header');
-			$this->load->view('academics/reports/class_list', $data);
-			$this->load->view('academics/footer');
-			
-		}
-		
-		if($variables['adm'] != FALSE)
-		{
-			//when the user selects on a student, the admission number is passed through a uri segment.
-			//the admission number, as a unique value, is then used to get the report. The result object from the model is assigned to a session variable and 
-			//then accessed in the view via the session userdata at display.
-			$_SESSION['output']->adm = $variables['adm'];
-			$_SESSION['output']->name = $variables['name'];
-			
-			$this->input->actionf = 'get_report';
-			$this->input->adm = $variables['adm'];
-			
-			$this->load->model('academics/academic');
-			$res = $this->academic->reports($this->input);
-			
-			if($res)
+			foreach($studentRecords->result() as $studentRecord)
 			{
-				$class_['class'] = $_SESSION['output']->class;
-				$this->load->library('grading', $class_);	//we initialize the grading library with this particular class for use in the view to get grade and remarks.
+				$resultsArray[$studentRecord->adm]['f_name'] = $studentRecord->f_name;
+				$resultsArray[$studentRecord->adm]['m_name'] = $studentRecord->m_name;
+				$resultsArray[$studentRecord->adm]['l_name'] = $studentRecord->l_name;
+				$resultsArray[$studentRecord->adm]['stream'] = $studentRecord->stream;
+				$resultsArray[$studentRecord->adm]['class'] = $studentRecord->class;
+				$resultsArray[$studentRecord->adm]['marks'] = unserialize(stripslashes($studentRecord->exams));
 				
-				$this->load->view('academics/header');
-				$this->load->view('academics/reports/report');
-				$this->load->view('academics/footer');
-			
-			}
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['AVG']['LANG'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['TEST1']['LANG'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['TEST2']['LANG'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['TEST3']['LANG']) / 3);
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['AVG']['COMP'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['TEST1']['COMP'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['TEST2']['COMP'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['TEST3']['COMP']) / 3);
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['AVG']['PERCENTAGE'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['AVG']['LANG'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['AVG']['COMP']) / 90 * 100);
+				
+				$totalEnglish += $resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['AVG']['PERCENTAGE'];
+				
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['AVG']['LUG'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['TEST1']['LUG'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['TEST2']['LUG'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['TEST3']['LUG']) / 3);
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['AVG']['INS'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['TEST1']['INS'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['TEST2']['INS'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['TEST3']['INS']) / 3);
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['AVG']['PERCENTAGE'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['AVG']['LUG'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['AVG']['INS']) / 90 * 100);
+				
+				$totalKiswahili += $resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['AVG']['PERCENTAGE'];
+				
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['AVG']['SST'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['TEST1']['SST'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['TEST2']['SST'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['TEST3']['SST']) / 3);
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['AVG']['CRE'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['TEST1']['CRE'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['TEST2']['CRE'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['TEST3']['CRE']) / 3);
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['AVG']['PERCENTAGE'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['AVG']['SST'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['AVG']['CRE']) / 90 * 100);
+				
+				$totalSocialStudies += $resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['AVG']['PERCENTAGE'];
+				
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['MATHS']['AVG'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['MATHS']['TEST1'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['MATHS']['TEST2'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['MATHS']['TEST3']) / 3);
+				
+				$totalMaths += $resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['MATHS']['AVG'];
+				
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SCIENCE']['AVG'] =  round((@$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SCIENCE']['TEST1'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SCIENCE']['TEST2'] + @$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SCIENCE']['TEST3']) / 3);
+				
+				$totalSocialStudies += $resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SCIENCE']['AVG'];
+				
+				$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['AVG']['TOTAL'] =  
+					$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['MATHS']['AVG'] +
+					$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SCIENCE']['AVG'] +
+					$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['SOCIALSTUDIES']['AVG']['PERCENTAGE'] +
+					$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['KISWAHILI']['AVG']['PERCENTAGE'] +			
+					$resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['ENGLISH']['AVG']['PERCENTAGE'] ;
+				
 
-		}
+				$totalAverageScores[] = $resultsArray[$studentRecord->adm]['marks'][$this->input->post('year')][$this->input->post('term')]['AVG']['TOTAL'];
+
+				
+			}
+			
+			@$averageEngScore = round($totalEnglish / $noOfStudents);
+			@$averageKisScore = round($totalKiswahili / $noOfStudents);
+			@$averageSSTScore = round($totalSocialStudies / $noOfStudents);
+			@$averageSciScore = round($totalScience / $noOfStudents);
+			@$averageMathsScore = round($totalMaths / $noOfStudents);
+			
+			@$subjectTotalsArray = array($averageEngScore, $averageKisScore, $averageMathsScore, $averageSSTScore, $averageSciScore);
+			array_multisort($subjectTotalsArray, SORT_DESC);
+			array_multisort($totalAverageScores, SORT_DESC);
+			
+			$classQ = $this->input->post('class');
+			$term = $this->input->post('term');
+			$year = $this->input->post('year');
+			$data['noOfStudents'] = $noOfStudents;
+			$data['averageEngScore'] = $averageEngScore;
+			$data['averageKisScore'] = $averageKisScore;
+			$data['averageSSTScore'] = $averageSSTScore;
+			$data['averageSciScore'] = $averageSciScore;
+			$data['averageMathsScore'] = $averageMathsScore;
+			$data['subjectTotalsArray'] = $subjectTotalsArray;
+			$data['totalAverageScores'] = $totalAverageScores;
+			$data['resultsArray'] = $resultsArray;
+			
+			$class['class'] = $this->input->post('class');
+			$this->load->library('grading',$class);
 		
-	}
-	
-	//this method will handle all setting related requests.
-	public function settings()
-	{
-		//we will need these variables to pass to the model so we intialize them as empty. Their values however, will come as uri segments.
-		
-		
-		$default_keys = array('id', 'action', 'grade', 'points', 'class', 'name');
-		$var = $this->uri->uri_to_assoc(3, $default_keys);
-		
-		//the id variable is used to trigger an action, when absent, it means this method is being called for the first time so we load the home page so the user can begin selecting options.
-		if($var['id'] === FALSE)
-		{
+		/*
 			$this->load->view('academics/header');
-			$this->load->view('academics/settings/home');
+			$this->load->view('academics/report', $data);
 			$this->load->view('academics/footer');
 		
-		}
 		
-		if($var['id'] == 'new_grade')
-		{
-			$this->load->view('academics/header');
-			$this->load->view('academics/settings/grades/addnew');
-			$this->load->view('academics/footer');
+		*/
 		
-		}
+			$this->load->library('tcpdf/tcpdf');
+		 
+			// create new PDF document
+			$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);   
+		 
+			// set document information
+			$pdf->SetCreator(PDF_CREATOR);
+			$pdf->SetAuthor($this->session->userdata('client_name'));
+			$pdf->SetTitle('End Term Spreadsheets');
+			$pdf->SetSubject('SPREADSHEET');
+			$pdf->SetKeywords('SPREADSHEET, PDF, END TERM, MARKS, RANKING');  
+		 
+		 
+			// remove default header/footer
+			$pdf->setPrintHeader(false);
+			$pdf->setPrintFooter(false);		 
+		 
+		 
+		/*
+			// set default header data
+			$pdf->SetHeaderData('','' , $this->session->userdata('client_name'), '', array(0,64,255), array(0,64,128));
+			$pdf->setFooterData(array(0,64,0), array(0,64,128));
+		 
+			// set header and footer fonts
+			$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+			$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
+		 
+		*/
+		 
+			// set default monospaced font
+			$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+		 
+			// set margins
+			$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+			$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+			$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);   
+		 
+			// set auto page breaks
+			$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+		 
+			// set image scale factor
+			$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
+		 
+			// set some language-dependent strings (optional)
+			if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+				require_once(dirname(__FILE__).'/lang/eng.php');
+				$pdf->setLanguageArray($l);
+			}  
+		 
+			// ---------------------------------------------------------   
+		 
+			// set default font subsetting mode
+			$pdf->setFontSubsetting(true);  
+		 
+			// Set font
+			// dejavusans is a UTF-8 Unicode font, if you only need to
+			// print standard ASCII chars, you can use core fonts like
+			// helvetica or times to reduce file size.
+			$pdf->SetFont('times', '', 14, '', true);  
+		 
+			// Add a page
+			// This method has several options, check the source code documentation for more information.
+			$pdf->AddPage();
+		 
+			// set text shadow effect
+			//$pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));   
+		 
+			// Set some content to print
+			
+			
+			
+								foreach($resultsArray as $admissionNumber => $moreInfo)
+								{
+									
+									$pos = array_search($moreInfo['marks'][$year][$term]['AVG']['TOTAL'], $totalAverageScores) + 1 ;
+									$html = '<style> p.header {text-align: center; font-size:18px;} p.footer { font-size: 14px; }td, th { font-size: 14px; }</style>';
+									
+									$html .= '<p class="header">'.$this->session->userdata('client_name').'<br />';
+									$html .= 'END OF '.$term.' '.$year.' REPORT<br />';
+									$html .= 'NAME : '.$moreInfo['f_name'].' '.$moreInfo['l_name'].' ADM NO :  '.$admissionNumber.' '.$classQ.'</p>';
+									
+									$html .= '<table border="1" cellspacing="0" cellpadding="2" border-collapse="collapse">';
+									$html .=  '<tr><td colspan="4">SUBJECT</td><td>TEST 1</td><td>TEST 2</td><td>TEST 3</td><td>AVG</td><td>GRADE</td><td  colspan="2">REMARKS</td></tr>';
+									$html .=  '<tr><td colspan="4">ENGLISH LANGUAGE</td><td>'.@$moreInfo['marks'][$year][$term]['ENGLISH']['TEST1']['LANG'].'</td><td>'.@$moreInfo['marks'][$year][$term]['ENGLISH']['TEST2']['LANG'].'</td><td>'.@$moreInfo['marks'][$year][$term]['ENGLISH']['TEST3']['LANG'].'</td><td>'.@$moreInfo['marks'][$year][$term]['ENGLISH']['AVG']['LANG'].'</td><td></td><td colspan="2"></td></tr>';
+									$html .=  '<tr><td colspan="4">ENGLISH COMPOSITION</td><td>'.@$moreInfo['marks'][$year][$term]['ENGLISH']['TEST1']['COMP'].'</td><td>'.@$moreInfo['marks'][$year][$term]['ENGLISH']['TEST2']['COMP'].'</td><td>'.@$moreInfo['marks'][$year][$term]['ENGLISH']['TEST3']['COMP'].'</td><td>'.@$moreInfo['marks'][$year][$term]['ENGLISH']['AVG']['COMP'].'</td><td></td><td colspan="2"></td></tr>';
+									$html .=  '<tr><td colspan="4" style="text-align:right;">%</td><td>'.@$moreInfo['marks'][$year][$term]['ENGLISH']['TEST1']['PERCENTAGE'].'</td><td>'.@$moreInfo['marks'][$year][$term]['ENGLISH']['TEST2']['PERCENTAGE'].'</td><td>'.@$moreInfo['marks'][$year][$term]['ENGLISH']['TEST3']['PERCENTAGE'].'</td><td>'.@$moreInfo['marks'][$year][$term]['ENGLISH']['AVG']['PERCENTAGE'].'</td><td>'.@$this->grading->getGrade($moreInfo['marks'][$year][$term]['ENGLISH']['AVG']['PERCENTAGE']).'</td><td colspan="2">'.@$this->grading->getRemarks($moreInfo['marks'][$year][$term]['ENGLISH']['AVG']['PERCENTAGE']).'</td></tr>';
+									$html .=  '<tr><td colspan="4">KISWAHILI LUGHA</td><td>'.@$moreInfo['marks'][$year][$term]['KISWAHILI']['TEST1']['LUG'].'</td><td>'.@$moreInfo['marks'][$year][$term]['KISWAHILI']['TEST2']['LUG'].'</td><td>'.@$moreInfo['marks'][$year][$term]['KISWAHILI']['TEST3']['LUG'].'</td><td>'.@$moreInfo['marks'][$year][$term]['KISWAHILI']['AVG']['LUG'].'</td><td></td><td colspan="2"></td></tr>';
+									$html .=  '<tr><td colspan="4">KISWAHILI INSHA</td><td>'.@$moreInfo['marks'][$year][$term]['KISWAHILI']['TEST1']['INS'].'</td><td>'.@$moreInfo['marks'][$year][$term]['KISWAHILI']['TEST2']['INS'].'</td><td>'.@$moreInfo['marks'][$year][$term]['KISWAHILI']['TEST3']['INS'].'</td><td>'.@$moreInfo['marks'][$year][$term]['KISWAHILI']['AVG']['INS'].'</td><td></td><td colspan="2"></td></tr>';
+									$html .=  '<tr><td colspan="4"style="text-align:right;">%</td><td>'.@$moreInfo['marks'][$year][$term]['KISWAHILI']['TEST1']['PERCENTAGE'].'</td><td>'.@$moreInfo['marks'][$year][$term]['KISWAHILI']['TEST2']['PERCENTAGE'].'</td><td>'.@$moreInfo['marks'][$year][$term]['KISWAHILI']['TEST3']['PERCENTAGE'].'</td><td>'.@$moreInfo['marks'][$year][$term]['KISWAHILI']['AVG']['PERCENTAGE'].'</td><td>'.@$this->grading->getGrade($moreInfo['marks'][$year][$term]['KISWAHILI']['AVG']['PERCENTAGE']).'</td><td colspan="2">'.@$this->grading->getRemarks($moreInfo['marks'][$year][$term]['KISWAHILI']['AVG']['PERCENTAGE']).'</td></tr>';
+									$html .=  '<tr><td colspan="4">MATHEMATICS</td><td>'.@$moreInfo['marks'][$year][$term]['MATHS']['TEST1'].'</td><td>'.@$moreInfo['marks'][$year][$term]['MATHS']['TEST2'].'</td><td>'.@$moreInfo['marks'][$year][$term]['MATHS']['TEST3'].'</td><td>'.@$moreInfo['marks'][$year][$term]['MATHS']['AVG'].'</td><td>'.@$this->grading->getGrade($moreInfo['marks'][$year][$term]['MATHS']['AVG']).'</td><td colspan="2">'.@$this->grading->getRemarks($moreInfo['marks'][$year][$term]['MATHS']['AVG']).'</td></tr>';
+									$html .=  '<tr><td colspan="4">SOCIAL STUDIES</td><td>'.@$moreInfo['marks'][$year][$term]['SOCIALSTUDIES']['TEST1']['SST'].'</td><td>'.@$moreInfo['marks'][$year][$term]['SOCIALSTUDIES']['TEST2']['SST'].'</td><td>'.@$moreInfo['marks'][$year][$term]['SOCIALSTUDIES']['TEST3']['SST'].'</td><td>'.@$moreInfo['marks'][$year][$term]['SOCIALSTUDIES']['AVG']['SST'].'</td><td></td><td colspan="2"></td></tr>';
+									$html .=  '<tr><td colspan="4">C . R . E .</td><td>'.@$moreInfo['marks'][$year][$term]['SOCIALSTUDIES']['TEST1']['CRE'].'</td><td>'.@$moreInfo['marks'][$year][$term]['SOCIALSTUDIES']['TEST2']['CRE'].'</td><td>'.@$moreInfo['marks'][$year][$term]['SOCIALSTUDIES']['TEST3']['CRE'].'</td><td>'.@$moreInfo['marks'][$year][$term]['SOCIALSTUDIES']['AVG']['CRE'].'</td><td></td><td colspan="2"></td></tr>';
+									$html .=  '<tr><td colspan="4"style="text-align:right;">%</td><td>'.@$moreInfo['marks'][$year][$term]['SOCIALSTUDIES']['TEST1']['PERCENTAGE'].'</td><td>'.@$moreInfo['marks'][$year][$term]['SOCIALSTUDIES']['TEST2']['PERCENTAGE'].'</td><td>'.@$moreInfo['marks'][$year][$term]['SOCIALSTUDIES']['TEST3']['PERCENTAGE'].'</td><td>'.@$moreInfo['marks'][$year][$term]['SOCIALSTUDIES']['AVG']['PERCENTAGE'].'</td><td>'.@$this->grading->getGrade($moreInfo['marks'][$year][$term]['SOCIALSTUDIES']['AVG']['PERCENTAGE']).'</td><td colspan="2">'.@$this->grading->getRemarks($moreInfo['marks'][$year][$term]['SOCIALSTUDIES']['AVG']['PERCENTAGE']).'</td></tr>';
+									$html .=  '<tr><td colspan="4">SCIENCE</td><td>'.@$moreInfo['marks'][$year][$term]['SCIENCE']['TEST1'].'</td><td>'.@$moreInfo['marks'][$year][$term]['SCIENCE']['TEST2'].'</td><td>'.@$moreInfo['marks'][$year][$term]['SCIENCE']['TEST3'].'</td><td>'.@$moreInfo['marks'][$year][$term]['SCIENCE']['AVG'].'</td><td>'.@$this->grading->getGrade($moreInfo['marks'][$year][$term]['SCIENCE']['AVG']).'</td><td colspan="2">'.@$this->grading->getRemarks($moreInfo['marks'][$year][$term]['SCIENCE']['AVG']).'</td></tr>';
+									$html .=  '<tr><td colspan="4">TOTAL </td><td>'.@$moreInfo['marks'][$year][$term]['TEST1']['TOTAL'].'</td><td>'.@$moreInfo['marks'][$year][$term]['TEST2']['TOTAL'].'</td><td>'.@$moreInfo['marks'][$year][$term]['TEST3']['TOTAL'].'</td><td>'.@$moreInfo['marks'][$year][$term]['AVG']['TOTAL'].'</td><td></td><td colspan="2"></td></tr>';
+									$html .=  '<tr><td colspan="4">OUT OF </td><td>500</td><td>500</td><td>500</td><td>500</td><td></td><td colspan="2"></td></tr>';
+									$html .=  '<tr><td colspan="4">CLASS POSITION </td><td>'.@$moreInfo['marks'][$year][$term]['TEST1']['POS'].'</td><td>'.@$moreInfo['marks'][$year][$term]['TEST2']['POS'].'</td><td>'.@$moreInfo['marks'][$year][$term]['TEST3']['POS'].'</td><td>'.@$pos.'</td><td></td><td colspan="2"></td></tr>';
+									$html .=  '<tr><td colspan="4">OUT OF </td><td>'.@$noOfStudents.'</td><td>'.@$noOfStudents.'</td><td>'.@$noOfStudents.'</td><td>'.@$noOfStudents.'</td><td></td><td colspan="2"></td></tr>';
+									
+									$html .= '</table>';
+									
+									$html .=  '<p class="footer"> CLASS TEACHER\'S REMARKS <br />
+									...........................................................................................................................................................
+									............................................................................................................................................................</p>';
+									$html .=  '<p class="footer">HEAD TEACHER\'S REMARKS <br />
+									.............................................................................................................................................................
+									.............................................................................................................................................................</p>';
+									$html .=  '<p class="footer"> PARENT/GUARDIAN SIGN.....................DATE.....................REMARKS................................................</p>';
+									$html .=  '<p class="footer">CLOSING DATE ...................................NEXT TERM OPENS ON.........................................................</p>';
+									
+									
+									/*$html .=  $this->session->userdata('p_address').'</p>';
+									
+									$html .=  '<p> CLASS TEACHER\'S REMARKS <br />
+									...........................................................................................................................................................
+									............................................................................................................................................................</p>';
+									$html .=  '<p>HEAD TEACHER\'S REMARKS <br />
+									.............................................................................................................................................................
+									.............................................................................................................................................................</p>';
+									$html .=  '<p> PARENT/GUARDIAN SIGN.....................DATE.....................REMARKS................................................</p>';
+									$html .=  '<p>CLOSING DATE ...................................NEXT TERM OPENS ON.........................................................</p>';
+									
+									*/
+									
+									$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);  
+								
+									// reset pointer to the last page
+									$pdf->lastPage();
+
+									// - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+									// Print all HTML colors
+
+									// add a page
+									$pdf->AddPage();								
+								
+								}
+			
+			
+			
+
+		 
+			// Print text using writeHTMLCell()
+		 
+			// ---------------------------------------------------------   
+		 
+			// Close and output PDF document
+			// This method has several options, check the source code documentation for more information.
+			$pdf->Output('example_001.pdf', 'I');   
+		 
+			//============================================================+
+			// END OF FILE
+			//============================================================+
+			
 		
-		if($var['id'] == 'grades')		//this enables us to set different grades and their respective points.
-		{
-			if($var['action'] === FALSE)	//action has not been set yet so we get the grades from the database and display them to the user.
-			{
-				$input['actionf'] = 'get_grades';
-				
-				$this->load->model('academics/academic');
-				$data['grades'] = $this->academic->get($input);
-				
-				$this->load->view('academics/header');
-				$this->load->view('academics/settings/grades/grade1', $data);
-				$this->load->view('academics/footer');
-			
-			}
-			
-			if($var['action'] == 'addnew')	//this action would enable adding new grades into the database. Once new grade has been added, the page with grades is reloaded to reflect the new addition.
-			{
-				$input['grade'] = $_POST['grade'];
-				$input['points'] = $_POST['points'];
-				$input['actionf'] = 'grade_points';
-				
-				$this->load->model('academics/academic');
-				$res = $this->academic->insert_grades($input);
-				
-				if($res)
-				{
-					$input['actionf'] = 'get_grades';
-					
-					$this->load->model('academics/academic');
-					$data['grades'] = $this->academic->get($input);
-				
-					$this->load->view('academics/header');
-					$this->load->view('academics/settings/grades/grade1', $data);
-					$this->load->view('academics/footer');
-				
-				}
-			}
-			
-			if($var['action'] == 'edit')		//this action enables editing of grades that have already been inserted into the database.
-			{
-				if( $var['points'] !== FALSE)	//chose the grade to edit and then display the editing page.
-				{
-					$data['grade'] = $var['grade'];
-					$data['points'] = $var['points'];
-				
-					$this->load->view('academics/header');
-					$this->load->view('academics/settings/grades/edit_grade_point', $data);
-					$this->load->view('academics/footer');
-				
-				}
-				
-				else	//editing has been done and there are new values to be entered into the database.
-				{
-					$input['grade_'] = $var['grade'];
-					$input['points'] = $_POST['point'];
-					$input['actionf'] = 'grade_points';
-					
-					$this->load->model('academics/academic');
-					$res = $this->academic->insert_grades($input);
-					
-					if($res)
-					{
-						$input['actionf'] = 'get_grades';
-				
-						$this->load->model('academics/academic');
-						$data['grades'] = $this->academic->get($input);
-				
-						$this->load->view('academics/header');
-						$this->load->view('academics/settings/grades/grade1', $data);
-						$this->load->view('academics/footer');
-					
-					}
-				
-				}
-				
-			}
+		 
+		/* End of file c_test.php */
+		/* Location: ./application/controllers/c_test.php */			
 		
-		}
 		
-		if($var['id'] == 'grading')		//this helps us to set the grading criteria for various classes.
-		{
-			if($var['action'] === FALSE)	//no action yet so get classes so that the user can choose an action.
-			{
-				$input['actionf'] = 'get_classes';	//this actionf value is used to trigger a model to get list of available classes.
-				
-				$this->load->model('academics/academic');
-				$data['classes'] = $this->academic->get($input);
-				
-				$this->load->view('academics/header');
-				$this->load->view('academics/settings/grading/home', $data);
-				$this->load->view('academics/footer');
-				
-			}
-			
-			if($var['action'] == 'get_class')
-			{
-				$this->session->set_userdata('class', $var['class']);	//assign the chosen class to a session variable.
-				
-				$input['actionf'] = 'get_grading';	//class has been chosen so get the grading criteria already set for this particular class.
-				
-				$this->load->model('academics/academic');
-				$data['grading'] = $this->academic->get($input);
-				
-				$this->load->view('academics/header');
-				$this->load->view('academics/settings/grading/grade2', $data);
-				$this->load->view('academics/footer');
-			
-			}
-			
-			if($var['action'] == 'add_grading')	//load the page to set a new grading criteria.
-			{
-			
-				$this->load->view('academics/header');
-				$this->load->view('academics/settings/grading/grade1');
-				$this->load->view('academics/footer');
-			
-			}
-			
-			if($var['action'] == 'addnew')		//gets the new grading criteria set from the form and inserts into database.
-			{
-				$input['grade'] = $_POST['grade'];
-				$input['from'] = $_POST['from'];
-				$input['to'] = $_POST['to'];
-				$input['remarks'] = $_POST['remarks'];
-				$input['actionf'] = 'grading';
-				
-				$this->load->model('academics/academic');
-				$res = $this->academic->insert_grades($input);
-				
-				if($res)
-				{
-					$input['actionf'] = 'get_grading';
-				
-					$this->load->model('academics/academic');
-					$data['grading'] = $this->academic->get($input);
-				
-					$this->load->view('academics/header');
-					$this->load->view('academics/settings/grading/grade2', $data);
-					$this->load->view('academics/footer');
-				
-				}
-				
-			}
-			
-			if($var['action'] == 'edit')	//this enables us to edit existing grading criteria.
-			{
-				if( !$_POST)		//no user submitted data yet, so we load the grading criteria editing page for the particular grading chosen.
-				{
-					$data['grade'] = $var['grade'];
-					$data['from'] = $var['from'];
-					$data['to'] = $var['to'];
-					$data['remarks'] = $var['remarks'];
-				
-					$this->load->view('academics/header');
-					$this->load->view('academics/settings/grading/edit_grading', $data);
-					$this->load->view('academics/footer');
-				
-				}
-				
-				else		//user has submitted a form, so we get the post data and insert into the database.
-				{
-					$input['grade_'] = $var['grade'];
-					$input['from'] = $_POST['from'];
-					$input['to'] = $_POST['to'];
-					$input['remarks'] = $_POST['remarks'];
-					
-					$input['actionf'] = 'grading';
-					
-					$this->load->model('academics/academic');
-					$res = $this->academic->insert_grades($input);
-					
-					if($res)
-					{
-						$input['actionf'] = 'get_grading';
-				
-						$this->load->model('academics/academic');
-						$data['grading'] = $this->academic->get($input);
-				
-						$this->load->view('academics/header');
-						$this->load->view('academics/settings/grading/grade2', $data);
-						$this->load->view('academics/footer');
-					
-					}
-				
-				}
-				
-			}
+		
 		
 		}
+		
 	}
-	
-	public function test()
-	{
-		$val = 'CLASS1';
-		$class['class'] = $val;
-		$this->load->library('grading', $class);
-		
-		$score = '69';
-		
-		echo $this->grading->get_grade($score)."&nbsp&nbsp&nbsp";
-		echo $this->grading->get_remarks($score)."&nbsp&nbsp&nbsp";
-		
-	
-	}
-	
- }
- 
+
+}

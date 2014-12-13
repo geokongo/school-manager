@@ -1,0 +1,38 @@
+<card>
+# Post Links Using the Graph API
+
+This example covers posting a link to the current user's timeline using the Graph API and Facebook SDK for PHP.
+
+It assumes that you've already obtained an access token from one of the helpers found [here](/docs/php/reference#helpers). You must have requested the `publish_actions` permission when logging in the user for this to work.
+
+For more information, see the documentation for [`Facebook`](/docs/php/Facebook), [`GraphObject`](/docs/php/GraphObject), and [`FacebookResponseException`](/docs/php/FacebookResponseException).
+</card>
+
+<card>
+
+~~~~
+use Facebook\Exceptions\FacebookResponseException;
+
+$fb = new Facebook\Facebook([
+  'app_id' => '{app-id}',
+  'app_secret' => '{app-secret}',
+  ]);
+
+$linkData = [
+  'link' => 'http://www.example.com',
+  'message' => 'User provided message',
+  ];
+
+try {
+  $response = $fb->post('/me/feed', $linkData, '{access-token}');
+  $graphObject = $response->getGraphObject();
+
+  echo 'Posted with id: ' . $graphObject['id'];
+
+} catch(FacebookResponseException $e) {
+  echo 'There was an error: ' . $e->getMessage();
+}
+~~~~
+
+Note that the 'message' field must come from the user, as pre-filled content is forbidden by the [Platform Policies](https://developers.intern.facebook.com/policy/#control) (2.3).
+</card>

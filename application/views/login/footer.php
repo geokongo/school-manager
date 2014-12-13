@@ -1,10 +1,12 @@
+	
+	</div>
+	<!-- Close the Page Container -->
+	
+    <!-- jQuery Version 2.1.1 -->
+	<script src="<?php echo base_url(); ?>bootstrap/js/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
 
-<footer>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="<?php echo base_url(); ?>bootstrap/js/bootstrap.min.js"></script>
 
-<?php 
-
-echo "copyright(c) Darlington Inc.</p>";
-
-?>
-
-</footer>
+</body>
+</html>

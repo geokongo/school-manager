@@ -2,81 +2,78 @@
 
 class Grading {
 
-	private $tablename;
-	private $bt = '_';
-	private $value = 'grading';
-
-	private $class;
+	private $variable;
 	private $class_grading;
 	private $grade_points;
 	
-    public function __construct($class_)
+    public function __construct($class)
     {
 		
-		$this->class = $class_['class'];
-		$this->tablename = $this->class.$this->bt.$this->value;
+		$this->variable['class'] = $class['class'];
 		
 		$CI = &get_instance();
 		
-		$CI->load->model('academics/academic');
-		$this->class_grading = $CI->academic->grading_model($this->tablename);
-		
-		$this->tablename = 'grade_points';
-		
-		$CI->load->model('academics/academic');
-		$this->grade_points = $CI->academic->grading_model($this->tablename);
+		$CI->load->model('academic');
+		$this->class_grading = $CI->academic->grading_model($this->variable);
 		
     }
 	
 	
-	
-	public function get_grade($score)
+	public function getGrade($averageScore)
 	{
+		$grading;
 		$grade;
 		$from;
 		$to;
 		
 		foreach($this->class_grading->result() as $row)
 		{
+			$this->grading = unserialize($row->grading);
 			
-			
-			$this->grade = $row->GRADE;
-			$this->from = $row->FROM_;
-			$this->to = $row->TO_;
-			
-			if($score >= $this->from && $score <= $this->to )
+			foreach($this->grading as $gradeName => $gradeParam)
 			{
+				$this->grade = $gradeName;
+				$this->from = $gradeParam['from'];
+				$this->to = $gradeParam['to'];
 				
-				return $this->grade;
+				if($averageScore >= $this->from && $averageScore <= $this->to )
+				{
+					return $this->grade;
+				
+				}
 			
 			}
-		
+			
 		}
 	
 	}
 	
-	public function get_remarks($score)
+	public function getRemarks($averageScore)
 	{
+		$grading;
 		$remarks;
 		$from;
 		$to;
 		
 		foreach($this->class_grading->result() as $row)
 		{
+			$this->grading = unserialize($row->grading);
 			
-			
-			$this->remarks = $row->REMARKS;
-			$this->from = $row->FROM_;
-			$this->to = $row->TO_;
-			
-			if($score >= $this->from && $score <= $this->to )
+			foreach($this->grading as $gradeName => $gradeParam)
 			{
-				return $this->remarks;
+				$this->remarks = $gradeParam['remarks'];
+				$this->from = $gradeParam['from'];
+				$this->to = $gradeParam['to'];
+				
+				if($averageScore >= $this->from && $averageScore <= $this->to )
+				{
+					return $this->remarks;
+				
+				}
 			
 			}
-		
+			
 		}
-		
 	
 	}
 	

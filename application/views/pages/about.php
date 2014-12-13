@@ -1,1 +1,0 @@
-<p>This is about Geoffrey Bernard, the tech guru who is really concerned about producing real clean reusable code that definitely provides solution to the world of programming.</p>

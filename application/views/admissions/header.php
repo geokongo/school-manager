@@ -1,380 +1,269 @@
 <!DOCTYPE html>
 <html>
-<head><title></title>
-<?php
-echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".base_url()."style/css.css\">";
-?>
-<script src="<?php echo base_url(); ?>scripts/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="<?php echo base_url(); ?>scripts/js.js" type="text/javascript" charset="utf-8"></script>
+
+<head>
+
+	
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>School Manager </title>
+
+
+    <!-- Bootstrap Core CSS -->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>bootstrap/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>bootstrap/css/sb-admin.css" >
+	
+    <!-- myCustom CSS -->
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>style/customCss.css" >
+	
+	
+	<!-- jquery-ui css -->
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>style/jquery-ui.min.css" >
+
+    <!-- Morris Charts CSS -->
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>bootstrap/css/plugins/morris.css" >
+
+    <!-- Custom Fonts -->
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>bootstrap/font-awesome-4.1.0/css/font-awesome.min.css" >
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- jQuery Version 2.1.1 -->
+	<script src="<?php echo base_url(); ?>bootstrap/js/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	
+    <!-- tablesorter.min.js -->
+	<script src="<?php echo base_url(); ?>scripts/jquery.tablesorter.min.js" type="text/javascript" charset="utf-8"></script>
+	
+	<!-- jQuery User Interface JS-->
+	<script src="<?php echo base_url(); ?>scripts/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
 </head>
+
 <body>
-<header>
 
-<script type="text/javascript">
-$(document).ready( function() {
-	
-	$("body").on('click', 'li.button > a', function() {
-		$('#main').remove();
-		$('#loader').show();
-		
+    <div id="wrapper">
 
-	});
-		
-	$("#content").on('submit', 'form#step1', function() {
-		var action = $('input[type=hidden]').val();
-		var url = $('form').attr('action');
-		var form_data = {
-			is_ajax: 1,
-			adm: $('#adm').val(),
-			f_name: $('#f_name').val(),
-			m_name: $('#m_name').val(),
-			l_name: $('#l_name').val(),
-			actionflag: action
-		};
-		
-		ajax(action, url, form_data);
-		
-	});
-	
-	$("#content").on('change', 'select#caa', function() {
-		var actionf = 'get_streams';
-		var form_data = {
-			class1: $('#caa').val(),
-			actionf: actionf,
-			actionflag: $('input[type=hidden]').val()
-
-		};
-		
-		$.ajax({
-			url: $('form').attr('action'),
-			type: 'POST',
-			data: form_data,
-			success: function(msg) {
-				$('div#streams').html(msg);
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="<?php echo base_url(); ?>home" ><?php echo $this->session->userdata('client_name'); ?></a>
+            </div>
+            <!-- Top Menu Items -->
+            <ul class="nav navbar-right top-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
+                    <ul class="dropdown-menu message-dropdown">
+                        <li class="message-preview">
+                            <a href="#">
+                                <div class="media">
+                                    <span class="pull-left">
+                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
+                                    </span>
+                                    <div class="media-body">
+                                        <h5 class="media-heading"><strong><?php echo $this->session->userdata('f_name').' '.$this->session->userdata('l_name'); ?></strong>
+                                        </h5>
+                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
+                                        <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="message-preview">
+                            <a href="#">
+                                <div class="media">
+                                    <span class="pull-left">
+                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
+                                    </span>
+                                    <div class="media-body">
+                                        <h5 class="media-heading"><strong><?php echo $this->session->userdata('f_name').' '.$this->session->userdata('l_name'); ?></strong>
+                                        </h5>
+                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
+                                        <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="message-preview">
+                            <a href="#">
+                                <div class="media">
+                                    <span class="pull-left">
+                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
+                                    </span>
+                                    <div class="media-body">
+                                        <h5 class="media-heading"><strong><?php echo $this->session->userdata('f_name').' '.$this->session->userdata('l_name'); ?></strong>
+                                        </h5>
+                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
+                                        <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="message-footer">
+                            <a href="#">Read All New Messages</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <b class="caret"></b></a>
+                    <ul class="dropdown-menu alert-dropdown">
+                        <li>
+                            <a href="#">Alert Name <span class="label label-default">Alert Badge</span></a>
+                        </li>
+                        <li>
+                            <a href="#">Alert Name <span class="label label-primary">Alert Badge</span></a>
+                        </li>
+                        <li>
+                            <a href="#">Alert Name <span class="label label-success">Alert Badge</span></a>
+                        </li>
+                        <li>
+                            <a href="#">Alert Name <span class="label label-info">Alert Badge</span></a>
+                        </li>
+                        <li>
+                            <a href="#">Alert Name <span class="label label-warning">Alert Badge</span></a>
+                        </li>
+                        <li>
+                            <a href="#">Alert Name <span class="label label-danger">Alert Badge</span></a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">View All</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?php echo $this->session->userdata('f_name').' '.$this->session->userdata('l_name'); ?> <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="<?php echo base_url(); ?>settings/profile"><i class="fa fa-fw fa-user"></i> Profile</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo base_url(); ?>settings/termDates"><i class="fa fa-fw fa-gear"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="<?php echo base_url(); ?>login/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
 			
-			}
+			<!-- activate tooltip plugin -->
+			<script>
+			   $(function () { $("[data-toggle='tooltip']").tooltip(); });
+			</script>
 			
-		});
-		
-		
-	});
-
-
-	$("#content").on('submit', 'form#step2', function() {
-			var action = $('input[type=hidden]').val();
-			var url = $('form').attr('action');
-			var form_data = {
-				dob: $('#dob').val(),
-				pob: $('#pob').val(),
-				doa: $('#doa').val(),
-				caa: $('#caa').val(),
-				stream: $('#stream').val(),
-				county: $('#county').val(),
-				gender: $('#gender').val(),
-				nationality: $('#nationality').val(),
-				actionflag: action,
-				is_ajax: 1
-			};
-			
-		ajax(action, url, form_data);
-		
-	});
-	
-	$('#content').on('submit', 'form#step3', function() {
-			var action = $('input[type=hidden]').val();
-			var url = $('form').attr('action');
-			var form_data = {
-				pa: $('#pa').val(),
-				pc: $('#pc').val(),
-				town: $('#town').val(),
-				actionflag: action,
-				is_ajax: 1
-			};
-		
-		ajax(action, url, form_data);
-	
-	});
-	
-	$('#content').on('submit', 'form#step4', function() {
-			var action = $('input[type=hidden]').val();
-			var url = $('form').attr('action');
-			var form_data = {
-				actionflag: action,
-				is_ajax: 1
-			
-			};
-		
-		ajax(action, url, form_data);
-	
-	});
-	
-	$('#content').on('submit', 'form#step5', function() {
-			var action = $('input[type=hidden]').val();
-			var url = $('form').attr('action');
-			var form_data = {
-				actionflag: action,
-				f_name: $('#f_name').val(),
-				l_name: $('#l_name').val(),
-				paddress: $('#paddress').val(),
-				pcode: $('#pcode').val(),
-				phone: $('#phone').val(),
-				email: $('#email').val(),
-				is_ajax: 1
-			
-			};
-		
-		ajax(action, url, form_data);
-	
-	});
-	
-	$('#content').on('submit', 'form#step6', function() {
-		var action = $('input[type=hidden]').val();
-		var url = $('form').attr('action');
-		var form_data = {
-				actionflag: action,
-				f_name: $('#f_name').val(),
-				l_name: $('#l_name').val(),
-				paddress: $('#paddress').val(),
-				pcode: $('#pcode').val(),
-				phone: $('#phone').val(),
-				email: $('#email').val(),
-				is_ajax: 1
-			
-			};
-		
-		ajax(action, url, form_data);
-	
-	});
-	
-	$('#content').on('submit', 'form#step7', function() {
-		var action = $('input[type=hidden]').val();
-		var url = $('form').attr('action');
-		var form_data = {
-				actionflag: action,
-				f_name: $('#f_name').val(),
-				l_name: $('#l_name').val(),
-				paddress: $('#paddress').val(),
-				pcode: $('#pcode').val(),
-				phone: $('#phone').val(),
-				email: $('#email').val(),
-				is_ajax: 1
-			
-			};
-		
-		ajax(action, url, form_data);
-	
-	});
-	
-});
-</script>
-<script type="text/javascript">
-$(document).ready(function() {
-	
-	$('#content').on('submit', 'form#view1', function() {
-			
-			var action = $('input[type=hidden]').val();
-			var url = $('form').attr('action');
-			var form_data = {
-				actionflag: action,
-				is_ajax: 1,
-				adm: $('#adm').val()
-			
-			};
-		ajax(action, url, form_data);
-	
-	});
-	
-	$('#content').on('submit', 'form#view2', function() {
-		
-			var action = $('input[type=hidden]').val();
-			var url = $('form').attr('action');
-			var form_data = {
-				actionflag: action,
-				is_ajax: 1,
-				pdetails: $('#pdetails').val(),
-				pgdetails: $('#pgdetails').val()
+			<!-- activate the date picker -->
+			<script>
+			$(function(){
+				$('#datepicker').datepicker({
+					changeMonth:true,
+					changeYear:true,
+					yearRange: "-100:+0",
+					dateFormat:"DD, MM d, yy",
+					altField: "#dob",
+					altFormat: "@",
+					appendText: "(yyyy-mm-dd)"
+				});
 				
-			};
+				
+			});
+			</script>
+				
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse" >
+                <ul class="nav navbar-nav side-nav" style="background : rgba(255,255,255,0.1); ">
+                    <li class="active" style="background : rgba(255,255,255,0.1); "><a href="javascript: ;" data-toggle="collapse" data-target="#reg_options"><i class="fa fa-fw fa-edit"></i> Registration</a>
+						<ul id="reg_options" class="collapse" style="background : rgba(255,255,255,0.1); ">
+						<?php 
+						if($this->session->userdata('usertype') != 'admin' && $this->session->userdata('usertype') != 'admissions')
+						{
+						?>
+							<li><a href="<?php echo base_url(); ?>admissions/records">View Records</a></li>
+							<li><a href="<?php echo base_url(); ?>admissions/classes">Classes</a></li>
+						<?php
+						}
+						else
+						{
+						?>
+							<li><a href="<?php echo base_url(); ?>admissions/addNewStudent">Add New Student</a></li>
+							<li ><a href="<?php echo base_url(); ?>admissions/records">View Records</a></li>
+							<li ><a href="<?php echo base_url(); ?>admissions/edit_records">Edit Records</a></li>
+							
+						
+						<?php
+						}
+						
+						?>
+						</ul>
+					</li>
+					<li class="active"><a href="javascript: ;" data-toggle="collapse" data-target="#academics_options"><i class="fa fa-fw fa-file"></i> Examinations</a>
+						<ul id="academics_options" class="collapse">
+						<?php
+						if($this->session->userdata('usertype') != 'admin' && $this->session->userdata('usertype') != 'academics')
+						{
+						?>
+							<li><a href="<?php echo base_url(); ?>academics/spreadsheets">Spreadsheets</a></li>
+							<li><a href="<?php echo base_url(); ?>academics/reports">Reports</a></li>
+						<?php
+						}
+						else
+						{
+						?>
+							<li><a href="<?php echo base_url(); ?>academics/enter_marks/enter_marks">Enter Marks</a></li>
+							<li><a href="<?php echo base_url(); ?>academics/enter_marks/get_marks">View/Edit Marks</a></li>
+							<li><a href="<?php echo base_url(); ?>academics/spreadsheets">Spreadsheets</a></li>
+							<li><a href="<?php echo base_url(); ?>academics/reports">Reports</a></li>
+							<li><a href="<?php echo base_url(); ?>academics/grading">Set Grading</a></li>
+						<?php
+						}
+						?>
+						</ul>
+					</li>
+					<li class="active"><a href="javascript: ;" data-toggle="collapse" data-target="#system_options"><i class="fa fa-fw fa-wrench"></i>System </a>
+						<ul id="system_options" class="collapse">
+						<?php
+						if($this->session->userdata('usertype') == 'admin')
+						{
+						?>
+							<li><a href="<?php echo base_url(); ?>settings/addNewUser">Add Users</a></li>
+							<li><a href="<?php echo base_url(); ?>settings/manageUsers">Manage Users</a></li>
+						<?php
+						}
+						else
+						{
+						?>
+							<li><a href="<?php echo base_url(); ?>settings/profile">Update Profile</a></li>
+						
+						<?php
+						}
+						?>
+						</ul>
+					</li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
 		
-		ajax(action, url, form_data);
-	
-	});
+		<div id="page-wrapper">
 
-
-});
-
-</script>
-<script type="text/javascript">
-$(document).ready(function() {
-
-	$('#content').on('submit', 'form#update_step1', function() {
-			var action = $('input[type=hidden]').val();
-			var url = $('form').attr('action');
-			var form_data = {
-				actionflag: action,
-				adm: $('#adm').val(),
-				is_ajax: 1
-			};
-		
-		ajax(action, url, form_data);
-	
-	});
-	
-	$('#content').on('submit', 'form#update_step2', function() {
-			var action = $('input[type=hidden]').val();
-			var url = $('form').attr('action');
-			var form_data = {
-				actionflag: action,
-				pdetails: $('#pdetails').val(),
-				pgdetails: $('#pgdetails').val(),
-				is_ajax: 1
-			};
-			
-		ajax(action, url, form_data);
-		
-	});
-	
-	$('#content').on('submit', 'form#basic_up', function() {
-			var action = $('input[type=hidden]').val();
-			var url = $('form').attr('action');
-			var form_data = {
-				f_name: $('#f_name').val(),
-				m_name: $('#m_name').val(),
-				l_name: $('#l_name').val(),
-				is_ajax: 1
-			};
-		
-		ajax(action, url, form_data);
-	
-	});
-	
-	$('#content').on('submit', 'form#personal_up', function() {
-			var action = $('input[type=hidden]').val();
-			var url = $('form').attr('action');
-			var form_data = {
-				dob: $('#dob').val(),
-				pob: $('#pob').val(),
-				doa: $('#doa').val(),
-				caa: $('#caa').val(),
-				county: $('#county').val(),
-				gender: $('#gender').val(),
-				nationality: $('#nationality').val(),
-				is_ajax: 1
-			
-			};
-			
-		ajax(action, url, form_data);
-	
-	});
-	
-	$('#content').on('submit', 'form#contacts_up', function() {
-			var action = $('input[type=hidden]').val();
-			var url = $('form').attr('action');
-			var form_data = {
-				paddress: $('#paddress').val(),
-				pcode: $('#pcode').val(),
-				town: $('#town').val(),
-				is_ajax: 1
-			
-			};
-		
-		ajax(action, url, form_data);
-		
-	});
-	
-	$('#content').on('submit', 'form#fdetails_up', function() {
-			var action = $('input[type=hidden]').val();
-			var url = $('form').attr('action');
-			var form_data = {
-				f_name: $('#f_name').val(),
-				l_name: $('#l_name').val(),
-				paddress: $('#paddress').val(),
-				pcode: $('#pcode').val(),
-				phone: $('#phone').val(),
-				email: $('#email').val(),
-				is_ajax: 1
-			
-			};
-			
-		ajax(action, url, form_data);
-	
-	});
-
-		$('#content').on('submit', 'form#mdetails_up', function() {
-			var action = $('input[type=hidden]').val();
-			var url = $('form').attr('action');
-			var form_data = {
-				f_name: $('#f_name').val(),
-				l_name: $('#l_name').val(),
-				paddress: $('#paddress').val(),
-				pcode: $('#pcode').val(),
-				phone: $('#phone').val(),
-				email: $('#email').val(),
-				is_ajax: 1
-			
-			};
-			
-		ajax(action, url, form_data);
-	
-	});
-
-		$('#content').on('submit', 'form#gdetails_up', function() {
-			var action = $('input[type=hidden]').val();
-			var url = $('form').attr('action');
-			var form_data = {
-				f_name: $('#f_name').val(),
-				l_name: $('#l_name').val(),
-				paddress: $('#paddress').val(),
-				pcode: $('#pcode').val(),
-				phone: $('#phone').val(),
-				email: $('#email').val(),
-				is_ajax: 1
-			
-			};
-			
-		ajax(action, url, form_data);
-	
-	});
-
-});
-
-</script>
-<script type="text/javascript">
-$(document).ready(function() {
-	
-	$('#content').on('click', 'a', function() {
-		
-		$('#loader').show();
-	
-	});
-
-
-});
-
-</script>
-
-
-
-<div id="logout"><p><a href="<?php echo base_url(); ?>logout">Logout</a></p></div>
-<?php
-
-echo "<p>".NAME."</p>";
-
-echo "<ul><li class=\"button\"><a href=\"";
-echo base_url();
-echo "admissions\"";
-echo ">Dashboard</a></li>";
-?>
-<li class="button"><a href="<?php echo base_url(); ?>admissions/addnew">Admission</a></li>
-<li class="button"><a href="<?php echo base_url(); ?>admissions/view">Student Details</a></li>
-<li class="button"><a href="<?php echo base_url(); ?>admissions/update">Update Records</a></li>
-
-</ul>
-
-
-</header>
-<div class="space"></div>
-
-<div id="loader">
-<div id="ajaxloader"></div>
-</div>
+            <div class="container-fluid">

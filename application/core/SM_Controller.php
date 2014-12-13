@@ -4,10 +4,11 @@ class SM_Controller extends CI_Controller {
 	public function __construct()
     {
         parent::__construct();
-        $this->load->library('session');
 
-        if (!$this->session->userdata('usertype')){
+        if (!$this->session->userdata('usertype'))
+		{
             redirect('login','refresh');
+			
         } 
 		
     }

@@ -14,7 +14,8 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/schoolmanager';
+$config['base_url']	= 'http://localhost/schoolmanager/';
+
 
 /*
 |--------------------------------------------------------------------------
@@ -44,7 +45,20 @@ $config['index_page'] = '';
 | 'ORIG_PATH_INFO'	Uses the ORIG_PATH_INFO
 |
 */
-$config['uri_protocol']	= 'REQUEST_URI';
+$config['uri_protocol']	= 'AUTO';
+
+
+$config['facebook']['api_id'] = '1563588553853090';
+$config['facebook']['app_secret'] = '21ae87bddc5bc508d91ccace40db7b63';
+$config['facebook']['redirect_url'] = 'http://www.schoolmanager.or.ke/academics';
+$config['facebook']['permissions'] = array(
+											'email',
+											'user_location',
+											'user_birthday'
+	);
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -57,7 +71,7 @@ $config['uri_protocol']	= 'REQUEST_URI';
 | http://codeigniter.com/user_guide/general/urls.html
 */
 
-$config['url_suffix'] = '.aspx';
+$config['url_suffix'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -106,7 +120,7 @@ $config['enable_hooks'] = FALSE;
 | http://codeigniter.com/user_guide/general/creating_libraries.html
 |
 */
-$config['subclass_prefix'] = 'SM_';
+$config['subclass_prefix'] = 'MY_';
 
 
 /*
@@ -357,15 +371,6 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
-/*
-| -------------------------------------------------------------------
-|  Native Auto-load
-| -------------------------------------------------------------------
-| 
-| Nothing to do with cnfig/autoload.php, this allows PHP autoload to work
-| for base controllers and some third-party libraries.
-|
-*/
 function __autoload($class)
 {
 	if(strpos($class, 'CI_') !== 0)
@@ -375,6 +380,7 @@ function __autoload($class)
 	}
 	
 }
+
 
 
 /* End of file config.php */
